@@ -6,8 +6,20 @@ using HCB.SplineMovementSystem;
 
 public class DoughTrigger : MonoBehaviour
 {
+
+    [SerializeField] private GameObject dough;
+
     private void OnTriggerEnter(Collider other)
     {
+            
             Debug.Log("DoughSpilled");
     }
+
+
+    public void EnableDough()
+    {
+        dough.SetActive(true);
+    }
+
+
 }
