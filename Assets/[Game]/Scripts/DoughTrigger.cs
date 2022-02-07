@@ -11,8 +11,8 @@ public class DoughTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-            
-            Debug.Log("DoughSpilled");
+        Debug.Log("DoughSpilled");
+        EnableDough();
     }
 
 
