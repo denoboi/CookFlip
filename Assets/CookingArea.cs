@@ -45,7 +45,10 @@ public class CookingArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(!isExited)
+        controller = stats.GetComponent<SplineCharacterMovementController>();
+
+
+        if (!isExited)
         {
             Debug.Log("Exited");
             isExited = true;

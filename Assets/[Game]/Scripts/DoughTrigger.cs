@@ -11,8 +11,10 @@ public class DoughTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         Debug.Log("DoughSpilled");
-        EnableDough();
+        if(other.CompareTag("PancakeDoughBone"))
+            EnableDough();
     }
 
 
