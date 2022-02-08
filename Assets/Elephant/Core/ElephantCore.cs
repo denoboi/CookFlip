@@ -32,7 +32,7 @@ namespace ElephantSDK
         private static bool debug = true;
         private const string ELEPHANT_BASE_URL = "http://localhost:3100/v2";
 #elif UNITY_EDITOR
-        private static bool debug = false;
+        private static bool debug = true;
         private const string ELEPHANT_BASE_URL = "https://newapi.rollic.gs/v2";
 #else
         private static bool debug = true;
@@ -329,8 +329,7 @@ namespace ElephantSDK
             var versionCheckUtils = VersionCheckUtils.GetInstance();
             var versionData = new VersionData(Application.version, ElephantVersion.SDK_VERSION,
                 SystemInfo.operatingSystem, versionCheckUtils.AdSdkVersion,
-                versionCheckUtils.MopubVersion, versionCheckUtils.UnityVersion,
-                versionCheckUtils.NetworkVersions);
+                versionCheckUtils.MediationVersion, versionCheckUtils.UnityVersion, versionCheckUtils.Mediation);
 
             var parameters = Params.New()
                 .CustomString(JsonUtility.ToJson(versionData));
