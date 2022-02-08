@@ -107,7 +107,7 @@ namespace HCB.SplineMovementSystem
                 OnTouchGround();
             }
         }
-        private void SetSpeed(float value)
+        public void SetSpeed(float value)
         {
             DOTween.Kill(_speedTweenId);
             DOTween.To(() => _currentSpeed, x => _currentSpeed = x, value, MovementData.SpeedBlendDuration).SetId(_speedTweenId);

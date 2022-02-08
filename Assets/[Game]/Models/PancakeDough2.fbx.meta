@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 666eeb70070569746ba4a2c19d449969
+guid: 9d233a23b6a11f742a3bcb7d14b91b16
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: 4781951162920444690
-    second: Armature|ArmatureAction
+      74: 1626000766899758328
+    second: Pancake_2
   - first:
-      74: 201331091764964868
-    second: Armature|Pancake_Flow
+      74: -7482739267291641541
+    second: Armature|Pancake_2
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -38,11 +38,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|ArmatureAction
-      takeName: Armature|ArmatureAction
+      name: Pancake_2
+      takeName: Pancake_2
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -67,11 +67,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Pancake_Flow
-      takeName: Armature|Pancake_Flow
+      name: Armature|Pancake_2
+      takeName: Armature|Pancake_2
       internalID: 0
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -98,7 +98,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 4
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -149,7 +149,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 4
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

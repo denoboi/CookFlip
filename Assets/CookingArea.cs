@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HCB.SplineMovementSystem;
+using HCB.Core;
 
 public class CookingArea : MonoBehaviour
 {
@@ -9,10 +10,14 @@ public class CookingArea : MonoBehaviour
 
     private bool isEntered = false;
     private bool isExited = false;
+    SplineCharacterMovementController controller;
+    PancakeStats stats;
 
     // Start is called before the first frame update
     void Start()
     {
+        stats = PancakeStats.Instance;
+        
         
     }
 
@@ -24,15 +29,16 @@ public class CookingArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
 
 
+        controller = stats.GetComponent<SplineCharacterMovementController>();
 
-
-        if(!isEntered)
+        if (!isEntered)
         {
             Debug.Log("Entered");
             isEntered = true;
-            SplineCharacterMovementController controller = GetComponent<SplineCharacterMovementController>();
+            controller.SetSpeed(controller.MovementData.CookingSpeed);
 
         }
     }
@@ -41,7 +47,9 @@ public class CookingArea : MonoBehaviour
     {
         if(!isExited)
         {
+            Debug.Log("Exited");
             isExited = true;
+            controller.SetSpeed(controller.MovementData.DefaultSpeed);
             
         }
     }
