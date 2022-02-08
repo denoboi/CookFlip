@@ -1,14 +1,8 @@
 fileFormatVersion: 2
-guid: 666eeb70070569746ba4a2c19d449969
+guid: 767fbf8b2b0486b49ac5fb2cf964c5d0
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable:
-  - first:
-      74: 4781951162920444690
-    second: Armature|ArmatureAction
-  - first:
-      74: 201331091764964868
-    second: Armature|Pancake_Flow
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
     materialImportMode: 2
