@@ -45,6 +45,8 @@ public class CookingArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+
+        PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
         controller = stats.GetComponent<SplineCharacterMovementController>();
 
 
@@ -53,6 +55,7 @@ public class CookingArea : MonoBehaviour
             Debug.Log("Exited");
             isExited = true;
             controller.SetSpeed(controller.MovementData.DefaultSpeed);
+            
             
         }
     }
