@@ -32,6 +32,6 @@ EditorBuildSettings:
       - JumpTest.unity
     guid: 52d4740816082704f8718703ded27154
   - enabled: 1
-    path: Assets/[Game]/Level1.unity
+    path: Assets/[Game]/Scenes/Level1.unity
     guid: dea0747cef1ab174eb0d9c046a875d7e
   m_configObjects: {}
