@@ -7,25 +7,32 @@ public class OvenTrigger : MonoBehaviour
     [SerializeField] private GameObject pancake;
     [SerializeField] private float delay = 2f;
     [SerializeField] private float cookLevel = 0;
+    private Coroutine cookingCoroutine;
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Cooking");
         //EnablePancake();
         Cooking();
-
-
     }
 
-    public void EnablePancake()
+    private void OnTriggerExit(Collider other)
     {
-        StartCoroutine(EnableCo(pancake));
+        StopCoroutine(cookingCoroutine);
     }
+
+
+    
+
+    //public void EnablePancake()
+    //{
+    //    StartCoroutine(EnableCo(pancake));
+    //}
 
 
     public void Cooking()
     {
-        StartCoroutine(CookingLevel());
+        cookingCoroutine = StartCoroutine(CookingLevel());
     }
 
     private IEnumerator EnableCo(GameObject pancake)
@@ -56,6 +63,7 @@ public class OvenTrigger : MonoBehaviour
             {
                 Debug.Log("burned");
             }
+
         }
             
         
