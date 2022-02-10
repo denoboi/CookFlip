@@ -23,5 +23,13 @@ public class DoughTrigger : MonoBehaviour
         dough.SetActive(true);
     }
 
+    private void Update()
+    {
+        if(Input.GetMouseButtonUp(0))
+        {
+            Debug.Log("flip");
+        }
+    }
+
 
 }

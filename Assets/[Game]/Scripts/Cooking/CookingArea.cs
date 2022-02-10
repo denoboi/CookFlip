@@ -17,8 +17,8 @@ public class CookingArea : MonoBehaviour
     void Start()
     {
         stats = PancakeStats.Instance;
-        
-        
+        controller = stats.GetComponent<SplineCharacterMovementController>();
+
     }
 
     // Update is called once per frame
@@ -30,9 +30,9 @@ public class CookingArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
+        
 
 
-        controller = stats.GetComponent<SplineCharacterMovementController>();
 
         if (!isEntered)
         {
@@ -48,6 +48,7 @@ public class CookingArea : MonoBehaviour
 
         PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
         controller = stats.GetComponent<SplineCharacterMovementController>();
+
 
 
         if (!isExited)
