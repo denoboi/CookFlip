@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -63,6 +63,45 @@ namespace ToonyColorsPro
 				return null;
 			}
 
+			/// <summary>
+			/// Generate a solid color texture using the alpha channel of the source
+			/// </summary>
+			public static Texture2D TextureCustomColor(Texture2D source, Color color)
+			{
+				int hash = source.GetHashCode() + color.GetHashCode();
+				if (customColorTextures.ContainsKey(hash))
+				{
+					if (customColorTextures[hash] != null)
+					{
+						return customColorTextures[hash];
+					}
+					else
+					{
+						customColorTextures.Remove(hash);
+					}
+				}
+
+				var tex2D = new Texture2D(source.width, source.height, source.format, false);
+				tex2D.name = source.name + " " + color;
+				tex2D.hideFlags = HideFlags.DontUnloadUnusedAsset;
+				var pixels = source.GetPixels32();
+				var color32 = (Color32)color;
+
+				for (int i = 0; i < pixels.Length; i++)
+				{
+					color32.a = pixels[i].a;
+					pixels[i] = color32;
+				}
+
+				tex2D.SetPixels32(pixels);
+				tex2D.Apply(false, true);
+
+				customColorTextures.Add(hash, tex2D);
+
+				return tex2D;
+			}
+			static Dictionary<int, Texture2D> customColorTextures = new Dictionary<int, Texture2D>();
+
 			private static GUIStyle _EnabledLabel;
 			private static GUIStyle EnabledLabel
 			{
@@ -102,10 +141,8 @@ namespace ToonyColorsPro
 					{
 						_ContextualHelpBox = new GUIStyle(EditorStyles.helpBox);
 						_ContextualHelpBox.normal.background = GetCustomTexture("TCP2_ContextualHelpBox");
-						_ContextualHelpBox.normal.textColor = EditorGUIUtility.isProSkin ? new Color32(150, 170, 200, 255) : new Color32(80, 90, 100, 255);
+						_ContextualHelpBox.normal.textColor = EditorGUIUtility.isProSkin ? new Color32(120, 130, 150, 255) : new Color32(80, 90, 100, 255);
 						_ContextualHelpBox.richText = true;
-						_ContextualHelpBox.alignment = TextAnchor.MiddleLeft;
-						_ContextualHelpBox.padding = new RectOffset(6, 6, 4, 4);
 					}
 					return _ContextualHelpBox;
 				}
@@ -388,8 +425,8 @@ namespace ToonyColorsPro
 						_HeaderDropDownBold = new GUIStyle(HeaderDropDown);
 						_HeaderDropDownBold.fontStyle = FontStyle.Bold;
 
-						var gray1 = EditorGUIUtility.isProSkin ? 0.7f : 0.3f;
-						var gray2 = EditorGUIUtility.isProSkin ? 0.6f : 0.45f;
+						var gray1 = EditorGUIUtility.isProSkin ? 0.6f : 0.3f;
+						var gray2 = EditorGUIUtility.isProSkin ? 0.5f : 0.45f;
 
 						var textColor = new Color(gray1, gray1, gray1);
 						var textColorActive = new Color(gray2, gray2, gray2);
@@ -424,6 +461,64 @@ namespace ToonyColorsPro
 						_HeaderDropDownBoldGray.onActive.textColor = textColorActive;
 					}
 					return _HeaderDropDownBoldGray;
+				}
+			}
+
+			private static GUIStyle _HeaderDropDownBoldError;
+			public static GUIStyle HeaderDropDownBoldError
+			{
+				get
+				{
+					if (_HeaderDropDownBoldError == null)
+					{
+						_HeaderDropDownBoldError = new GUIStyle(HeaderDropDownBold);
+						var textColor = EditorGUIUtility.isProSkin ? new Color(0.85f, 0.1f, 0) : new Color(0.8f, 0, 0);
+						var textColorActive = EditorGUIUtility.isProSkin ? new Color(0.7f, 0.1f, 0) : new Color(1.0f, 0, 0);
+
+						_HeaderDropDownBoldError.normal.textColor = textColor;
+						_HeaderDropDownBoldError.onNormal.textColor = textColor;
+						_HeaderDropDownBoldError.focused.textColor = textColor;
+						_HeaderDropDownBoldError.onFocused.textColor = textColor;
+						_HeaderDropDownBoldError.active.textColor = textColorActive;
+						_HeaderDropDownBoldError.onActive.textColor = textColorActive;
+					}
+					return _HeaderDropDownBoldError;
+				}
+			}
+
+			private static GUIStyle _HeaderDropDownHighlighted;
+			private static GUIStyle HeaderDropDownHighlighted
+			{
+				get
+				{
+					if (_HeaderDropDownHighlighted == null)
+					{
+						_HeaderDropDownHighlighted = new GUIStyle(HeaderDropDownBold);
+
+						var textColor = EditorGUIUtility.isProSkin ? new Color(0.0f, 0.574f, 0.488f) : new Color(0.0f, 0.5f, 0.4f);
+						var textColorActive = EditorGUIUtility.isProSkin ? new Color(0.03f, 0.46f, 0.4f) : new Color(0.0f, 0.6f, 0.55f);
+
+						var arrowRight = TextureCustomColor(GetCustomTexture("TCP2_FoldoutArrowRightUnity"), textColor);
+						var arrowDown = TextureCustomColor(GetCustomTexture("TCP2_FoldoutArrowDownUnity"), textColor);
+						var arrowRightActive = TextureCustomColor(GetCustomTexture("TCP2_FoldoutArrowRightUnity"), textColorActive);
+						var arrowDownActive = TextureCustomColor(GetCustomTexture("TCP2_FoldoutArrowDownUnity"), textColorActive);
+
+						_HeaderDropDownHighlighted.normal.background = arrowRight;
+						_HeaderDropDownHighlighted.focused.background = _HeaderDropDownHighlighted.normal.background;
+						_HeaderDropDownHighlighted.active.background = arrowRightActive;
+
+						_HeaderDropDownHighlighted.onNormal.background = arrowDown;
+						_HeaderDropDownHighlighted.onFocused.background = _HeaderDropDownHighlighted.onNormal.background;
+						_HeaderDropDownHighlighted.onActive.background = arrowDownActive;
+
+						_HeaderDropDownHighlighted.normal.textColor = textColor;
+						_HeaderDropDownHighlighted.onNormal.textColor = textColor;
+						_HeaderDropDownHighlighted.focused.textColor = textColor;
+						_HeaderDropDownHighlighted.onFocused.textColor = textColor;
+						_HeaderDropDownHighlighted.active.textColor = textColorActive;
+						_HeaderDropDownHighlighted.onActive.textColor = textColorActive;
+					}
+					return _HeaderDropDownHighlighted;
 				}
 			}
 
@@ -529,30 +624,6 @@ namespace ToonyColorsPro
 				}
 
 				return null;
-			}
-
-			static Color hoverColor = new Color(0, 0, 0, 0.05f);
-			static Color hoverColorDark = new Color(1, 1, 1, 0.05f);
-			static Color HoverColor
-			{
-				get { return EditorGUIUtility.isProSkin ? hoverColorDark : hoverColor; }
-			}
-
-			public static void DrawHoverRect(Rect rect,
-#if UNITY_2019_3_OR_NEWER
-				float inset = 2
-#else
-				float inset = 0
-#endif
-				)
-			{
-				var mouseRect = rect;
-				mouseRect.yMax -= inset;
-				mouseRect.yMin += inset;
-				if (mouseRect.Contains(Event.current.mousePosition))
-				{
-					EditorGUI.DrawRect(rect, HoverColor);
-				}
 			}
 
 			//--------------------------------------------------------------------------------------------------
@@ -718,63 +789,26 @@ namespace ToonyColorsPro
 					EditorGUI.LabelField(position, header, HeaderLabel);
 			}
 
-			public static bool HeaderFoldout(bool foldout, GUIContent guiContent, bool drawHover = false)
+			public static bool HeaderFoldout(bool foldout, GUIContent guiContent)
 			{
-				var position = GUILayoutUtility.GetRect(EditorGUIUtility.fieldWidth, EditorGUIUtility.fieldWidth, EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight, HeaderDropDownBold);
-				if (drawHover)
-				{
-					DrawHoverRect(position);
-				}
-				return HeaderFoldout(position, foldout, guiContent);
-			}
-
-			public static bool HeaderFoldout(Rect position, bool foldout, GUIContent guiContent)
-			{
-				foldout = EditorGUI.Foldout(position, foldout, guiContent, true, HeaderDropDownBold);
+				foldout = EditorGUILayout.Foldout(foldout, guiContent, true, HeaderDropDownBold);
 				return foldout;
 			}
 
 			public static bool HeaderFoldoutHighlight(bool foldout, GUIContent guiContent, bool highlighted)
 			{
-				var position = GUILayoutUtility.GetRect(EditorGUIUtility.fieldWidth, EditorGUIUtility.fieldWidth, EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight, HeaderDropDownBold);
-				return HeaderFoldoutHighlight(position, foldout, guiContent, highlighted);
-			}
-
-			public static bool HeaderFoldoutHighlight(Rect position, bool foldout, GUIContent guiContent, bool highlighted)
-			{
-				if (highlighted)
-				{
-					var highlightColor = EditorGUIUtility.isProSkin ? new Color(0.0f, 0.574f, 0.488f, 0.2f) : new Color(0.0f, 0.5f, 0.4f, 0.2f);
-					EditorGUI.DrawRect(position, highlightColor);
-				}
-
-				foldout = EditorGUI.Foldout(position, foldout, guiContent, true, HeaderDropDownBold);
+				foldout = EditorGUILayout.Foldout(foldout, guiContent, true, highlighted ? HeaderDropDownHighlighted : HeaderDropDownBold);
 				return foldout;
 			}
 
 			public static bool HeaderFoldoutHighlightErrorGray(bool foldout, GUIContent guiContent, bool error, bool highlighted)
 			{
-				var position = GUILayoutUtility.GetRect(EditorGUIUtility.fieldWidth, EditorGUIUtility.fieldWidth, EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight, HeaderDropDownBold);
-				return HeaderFoldoutHighlightErrorGrayPosition(position, foldout, guiContent, error, highlighted);
-			}
+				var style = error ? HeaderDropDownBoldError :
+					(highlighted ? HeaderDropDownHighlighted : HeaderDropDownBold);
 
-			public static bool HeaderFoldoutHighlightErrorGrayPosition(Rect position, bool foldout, GUIContent guiContent, bool error, bool highlighted)
-			{
-				if (error)
-				{
-					var highlightColor = EditorGUIUtility.isProSkin ? new Color(0.85f, 0.1f, 0, 0.2f) : new Color(0.8f, 0, 0, 0.2f);
-					EditorGUI.DrawRect(position, highlightColor);
-				}
-				else if (highlighted)
-				{
-					var highlightColor = EditorGUIUtility.isProSkin ? new Color(0.0f, 0.574f, 0.488f, 0.2f) : new Color(0.0f, 0.5f, 0.4f, 0.2f);
-					EditorGUI.DrawRect(position, highlightColor);
-				}
-
-				foldout = EditorGUI.Foldout(position, foldout, guiContent, true, HeaderDropDownBold);
+				foldout = EditorGUILayout.Foldout(foldout, guiContent, true, style);
 				return foldout;
 			}
-
 
 			public static void SubHeaderGray(string header, string tooltip = null, bool expandWidth = false)
 			{
@@ -865,14 +899,7 @@ namespace ToonyColorsPro
 
 			public static void ContextualHelpBoxLayout(string message, bool canHover = false)
 			{
-				var style = canHover ? ContextualHelpBoxHover : ContextualHelpBox;
-				var globalFont = GUI.skin.font;
-				GUI.skin.font = null;
-				int indentLevel = EditorGUI.indentLevel;
-				EditorGUI.indentLevel = 0;
-				EditorGUILayout.LabelField(GUIContent.none, TempContent(message, GetCustomTexture("TCP2_ContextIcon")), style);
-				EditorGUI.indentLevel = indentLevel;
-				GUI.skin.font = globalFont;
+				EditorGUILayout.LabelField(GUIContent.none, TempContent(message, GetCustomTexture("TCP2_ContextIcon")), canHover ? ContextualHelpBoxHover : ContextualHelpBox);
 			}
 
 			//----------------------
@@ -1244,7 +1271,7 @@ namespace ToonyColorsPro
 				bool hdr = (prop.flags & MaterialProperty.PropFlags.HDR) != MaterialProperty.PropFlags.None;
 				bool showAlpha = false;
 #if UNITY_2018_1_OR_NEWER
-				Color colorValue = EditorGUI.ColorField(position, label, prop.colorValue, true, showAlpha, hdr);
+		Color colorValue = EditorGUI.ColorField(position, label, prop.colorValue, true, showAlpha, hdr);
 #else
 				Color colorValue = EditorGUI.ColorField(position, label, prop.colorValue, true, showAlpha, hdr, null);
 #endif

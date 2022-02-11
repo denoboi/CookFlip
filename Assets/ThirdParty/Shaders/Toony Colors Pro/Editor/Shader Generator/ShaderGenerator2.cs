@@ -1,5 +1,5 @@
 // Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace ToonyColorsPro
 	{
 		public class ShaderGenerator2 : EditorWindow
 		{
-			internal const string TCP2_VERSION = "2.4.3";
+			internal const string TCP2_VERSION = "2.4.1";
 			internal const string DOCUMENTATION_URL = "https://jeanmoreno.com/unity/toonycolorspro/shader_generator_2_beta/documentation";
 			internal const string OUTPUT_PATH = "/JMO Assets/Toony Colors Pro/Shaders Generated/";
 
@@ -47,7 +47,6 @@ namespace ToonyColorsPro
 			//Only one window at a time, so this should always be the correct value.
 			//Used to create communication between Shader Properties and Custom Material Properties
 			internal static Config CurrentConfig { get; private set; }
-			internal static string TemplateID { get; private set; }
 			internal static VertexToFragmentVariablesManager VariablesManager { get; private set; }
 			internal static ShaderProperty.ProgramType CurrentProgram = ShaderProperty.ProgramType.Undefined;
 			internal static bool IsInLightingFunction = false;
@@ -58,36 +57,7 @@ namespace ToonyColorsPro
 			internal static bool showDynamicTooltip;
 			internal static string dynamicTooltip;
 
-			internal static int _GlobalUniqueId = 100;
-			internal static int GlobalUniqueId
-			{
-				get
-				{
-					int id = _GlobalUniqueId;
-					_GlobalUniqueId++;
-					return id;
-				}
-			}
-
 			static ShaderGenerator2 instance;
-
-			//--------------------------------------------------------------------------------------------------
-
-			public static bool UpdateShader(Shader shader, bool progressBar, bool overwrite)
-			{
-				var config = Config.CreateFromShader(shader);
-				if (config != null)
-				{
-					var template = new Template();
-					template.TryLoadTextAsset(config);
-					if (template.valid)
-					{
-						Compile(config, shader, template, progressBar, !overwrite);
-						return true;
-					}
-				}
-				return false;
-			}
 
 			//--------------------------------------------------------------------------------------------------
 
@@ -137,82 +107,11 @@ namespace ToonyColorsPro
 
 			void LoadNewTemplate(TextAsset newTemplate = null)
 			{
-				// Fetch Shader Properties from previous Template
-				List<ShaderProperty> oldShaderProperties = null;
-				if (this.template != null)
-				{
-					oldShaderProperties = new List<ShaderProperty>(this.template.shaderProperties);
-				}
-
-				// Load new Template
 				if (newTemplate != null)
 				{
-					currentConfig.ClearShaderProperties();
 					this.template.SetTextAsset(newTemplate);
 				}
 
-				// Copy old Shader Properties to new Template, if any, to retain user changes even when loading a new template
-				if (oldShaderProperties != null)
-				{
-					for (int i = 0; i < this.template.shaderProperties.Length; i++)
-					{
-						var match = oldShaderProperties.Find(oldSp => oldSp.Name == this.template.shaderProperties[i].Name);
-						if (match != null)
-						{
-							// ----------------------------------------------------------------
-							// Very specific cases for Albedo/Main Color because of URP new variable names...
-							bool restorePropertyName = false;
-							string newPropertyName = null;
-							if (match.Name == "Albedo")
-							{
-								var defImp = match.implementations.Count >= 1 ? match.implementations[0] as ShaderProperty.Imp_MaterialProperty_Texture : null;
-								if (defImp != null && defImp.PropertyName == "_MainTex" || defImp.PropertyName == "_BaseMap")
-								{
-									newPropertyName = (this.template.shaderProperties[i].implementations[0] as ShaderProperty.Imp_MaterialProperty).PropertyName;
-									restorePropertyName = true;
-								}
-							}
-							if (match.Name == "Main Color")
-							{
-								var defImp = match.implementations.Count >= 1 ? match.implementations[0] as ShaderProperty.Imp_MaterialProperty_Color : null;
-								if (defImp != null && defImp.PropertyName == "_Color" || defImp.PropertyName == "_BaseColor")
-								{
-									newPropertyName = (this.template.shaderProperties[i].implementations[0] as ShaderProperty.Imp_MaterialProperty).PropertyName;
-									restorePropertyName = true;
-								}
-							}
-
-							// ----------------------------------------------------------------
-
-							var originalImplementations = this.template.shaderProperties[i].implementations;
-							this.template.shaderProperties[i].implementations = match.implementations;
-
-							// Hook implementations shouldn't change
-							for (int j = 0; j < this.template.shaderProperties[i].implementations.Count; j++)
-							{
-								if (this.template.shaderProperties[i].implementations[j] is ShaderProperty.Imp_Hook)
-								{
-									this.template.shaderProperties[i].implementations[j] = originalImplementations[j];
-								}
-							}
-
-							if (restorePropertyName)
-							{
-								(this.template.shaderProperties[i].implementations[0] as ShaderProperty.Imp_MaterialProperty).PropertyName = newPropertyName;
-							}
-
-							this.template.shaderProperties[i].CheckHash();
-							this.template.shaderProperties[i].CheckErrors();
-						}
-					}
-
-					for (int i = 0; i < this.template.shaderProperties.Length; i++)
-					{
-						this.template.shaderProperties[i].ResolveShaderPropertyReferences();
-					}
-				}
-
-				// Apply keywords, update Shader Properties
 				if (currentConfig != null)
 				{
 					this.template.ApplyKeywords(currentConfig);
@@ -416,20 +315,6 @@ namespace ToonyColorsPro
 				// push initial state
 				lashUndoHash = 0;
 				pushUndoState();
-
-				// initialize custom font to use Roboto
-				if (!ProjectOptions.data.CustomFontInitialized)
-				{
-					ProjectOptions.data.CustomFontInitialized = true;
-					var roboto = AssetDatabase.LoadAssetAtPath<Font>(AssetDatabase.GUIDToAssetPath("8a406076b7de34849be1f35585875a66"));
-					if (roboto != null)
-					{
-#if UNITY_2019_3_OR_NEWER
-						ProjectOptions.data.UseCustomFont = true;
-#endif
-						ProjectOptions.data.CustomFont = roboto;
-					}
-				}
 			}
 
 			void OnDisable()
@@ -454,19 +339,6 @@ namespace ToonyColorsPro
 			}
 
 			virtual protected void OnGUI()
-			{
-				var font = GUI.skin.font;
-				if (ProjectOptions.data.UseCustomFont && ProjectOptions.data.CustomFont != null)
-				{
-					GUI.skin.font = ProjectOptions.data.CustomFont;
-				}
-
-				OnGUI_Internal();
-
-				GUI.skin.font = font;
-			}
-
-			void OnGUI_Internal()
 			{
 				TCP2_GUI.UseNewHelpIcon = true;
 
@@ -494,7 +366,7 @@ namespace ToonyColorsPro
 				{
 					GUI.color *= new Color(1.0f, 0.6f, 0.6f);
 				}
-				var newTemplate = EditorGUILayout.ObjectField(TCP2_GUI.TempContent("Template:"), template.textAsset, typeof(TextAsset), false) as TextAsset;
+				var newTemplate = EditorGUILayout.ObjectField("Template:", template.textAsset, typeof(TextAsset), false) as TextAsset;
 				GUI.color = guiColor;
 				if (newTemplate != template.textAsset)
 				{
@@ -502,12 +374,12 @@ namespace ToonyColorsPro
 				}
 
 				//Load template button
-				if (GUILayout.Button(TCP2_GUI.TempContent("Load", TCP2_GUI.GetCustomTexture("TCP2_DropDownArrow")), EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
+				if (GUILayout.Button("Load ▼", EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
 				{
 					ShowTemplatesMenu();
 				}
 
-				if (GUILayout.Button(TCP2_GUI.TempContent("Reload"), EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
+				if (GUILayout.Button("Reload", EditorStyles.miniButton, GUILayout.ExpandWidth(false)))
 				{
 					//Twice to prevent bug with used variable names
 					LoadNewTemplate(template.textAsset);
@@ -551,34 +423,31 @@ namespace ToonyColorsPro
 				//Copy/Load/New buttons
 				EditorGUILayout.BeginHorizontal();
 				{
+
 					//Small yellow label if unsaved changes
 					if (unsavedChanges)
 					{
 						GUILayout.Space(EditorGUIUtility.labelWidth + 4);
 						var guiContent = TCP2_GUI.TempContent("Unsaved changes");
-						var rect = GUILayoutUtility.GetRect(guiContent, EditorStyles.helpBox, GUILayout.Height(EditorGUIUtility.singleLineHeight));
-#if !UNITY_2019_3_OR_NEWER
-						rect.y -= 1;
-#endif
+						var rect = GUILayoutUtility.GetRect(guiContent, EditorStyles.helpBox, GUILayout.Height(16));
+						rect.y -= 2;
 						GUI.Label(rect, guiContent, EditorStyles.helpBox);
 					}
-					else
-					{
-						GUILayout.FlexibleSpace();
-					}
+
+					GUILayout.FlexibleSpace();
 
 					using (new EditorGUI.DisabledScope(currentShader == null))
 					{
-						if (GUILayout.Button(TCP2_GUI.TempContent("Copy"), EditorStyles.miniButtonLeft, GUILayout.Width(60f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+						if (GUILayout.Button("Copy", EditorStyles.miniButtonLeft, GUILayout.Width(60f), GUILayout.Height(16)))
 						{
 							CopyShader();
 						}
 					}
-					if (GUILayout.Button(TCP2_GUI.TempContent("Load", TCP2_GUI.GetCustomTexture("TCP2_DropDownArrow")), EditorStyles.miniButtonMid, GUILayout.Width(60f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+					if (GUILayout.Button("Load ▼", EditorStyles.miniButtonMid, GUILayout.Width(60f), GUILayout.Height(16)))
 					{
 						ShowShadersMenu();
 					}
-					if (GUILayout.Button("New", EditorStyles.miniButtonRight, GUILayout.Width(60f), GUILayout.Height(EditorGUIUtility.singleLineHeight)))
+					if (GUILayout.Button("New", EditorStyles.miniButtonRight, GUILayout.Width(60f), GUILayout.Height(16)))
 					{
 						NewShader();
 					}
@@ -754,7 +623,6 @@ namespace ToonyColorsPro
 
 							currentConfig.templateFile = template.textAsset.name;
 							currentConfig.OnBeforeGenerateShader();
-							_GlobalUniqueId = 100;
 
 							Shader generatedShader = null;
 							try
@@ -816,7 +684,7 @@ namespace ToonyColorsPro
 				//########################################################################################################
 				// OPTIONS
 
-				GlobalOptions.data.ShowOptions = TCP2_GUI.HeaderFoldout(GlobalOptions.data.ShowOptions, TCP2_GUI.TempContent("OPTIONS"), true);
+				GlobalOptions.data.ShowOptions = TCP2_GUI.HeaderFoldout(GlobalOptions.data.ShowOptions, TCP2_GUI.TempContent("OPTIONS"));
 
 				if (GlobalOptions.data.ShowOptions)
 				{
@@ -862,19 +730,6 @@ namespace ToonyColorsPro
 					}
 
 					GlobalOptions.data.DockableWindow = GUILayout.Toggle(GlobalOptions.data.DockableWindow, TCP2_GUI.TempContent("Dockable Window", "Makes the Shader Generator 2 window dockable in the Editor UI (close and reopen the tool to apply)"), GUILayout.ExpandWidth(false));
-
-					EditorGUILayout.BeginHorizontal();
-					{
-						ProjectOptions.data.UseCustomFont = GUILayout.Toggle(ProjectOptions.data.UseCustomFont, TCP2_GUI.TempContent("Use Custom Font", "Use a custom font for the Shader Geneator 2"), GUILayout.ExpandWidth(false));
-						GUILayout.Space(10f);
-						EditorGUI.BeginDisabledGroup(!ProjectOptions.data.UseCustomFont);
-						{
-							ProjectOptions.data.CustomFont = (Font)EditorGUILayout.ObjectField(ProjectOptions.data.CustomFont, typeof(Font), false);
-						}
-						EditorGUI.EndDisabledGroup();
-					}
-					EditorGUILayout.EndHorizontal();
-					GUILayout.Space(4f);
 				}
 
 				TCP2_GUI.UseNewHelpIcon = false;
@@ -911,16 +766,9 @@ namespace ToonyColorsPro
 				}
 			}
 
-			public delegate void OnProjectChangeCallback();
-			static public OnProjectChangeCallback onProjectChange;
-
 			void OnProjectChange()
 			{
 				shouldReloadUserShaders = true;
-				if (onProjectChange != null)
-				{
-					onProjectChange();
-				}
 			}
 
 			public void GenerateOrUpdateShader()
@@ -1071,7 +919,7 @@ namespace ToonyColorsPro
 
 				try
 				{
-					var rootPath = (ProjectOptions.data.LoadAllShaders ? Application.dataPath : GetOutputPath());
+					var rootPath = Application.dataPath + (ProjectOptions.data.LoadAllShaders ? "" : GetOutputPath());
 					if (Directory.Exists(rootPath))
 					{
 						var paths = Utils.GetFilesSafe(rootPath, "*.shader");
@@ -1257,19 +1105,15 @@ namespace ToonyColorsPro
 				return path;
 			}
 
-			static Shader Compile(Config config, Shader existingShader, Template template, bool showProgressBar = true, bool overwritePrompt = true, bool externallyModifiedPrompt = true)
+			static Shader Compile(Config config, Shader existingShader, Template template, bool showProgressBar = true, bool overwritePrompt = true)
 			{
-				return Compile(config, existingShader, template, showProgressBar ? 0f : -1f, overwritePrompt, externallyModifiedPrompt);
+				return Compile(config, existingShader, template, showProgressBar ? 0f : -1f, overwritePrompt);
 			}
-			static Shader Compile(Config config, Shader existingShader, Template template, float progress, bool overwritePrompt, bool externallyModifiedPrompt)
+			static Shader Compile(Config config, Shader existingShader, Template template, float progress, bool overwritePrompt)
 			{
 				//UI
 				if (progress >= 0f)
 					EditorUtility.DisplayProgressBar("Hold On", "Generating Shader: " + config.ShaderName, progress);
-
-				// Set up statics
-				ShaderGenerator2.CurrentConfig = config;
-				ShaderGenerator2.TemplateID = template.id;
 
 				//Generate source
 				var source = GenerateShaderSource(config, template, existingShader);
@@ -1281,7 +1125,7 @@ namespace ToonyColorsPro
 				}
 
 				//Save to disk
-				var shader = SaveShader(config, existingShader, source, overwritePrompt, externallyModifiedPrompt && config.isModifiedExternally);
+				var shader = SaveShader(config, existingShader, source, overwritePrompt, config.isModifiedExternally);
 
 				//Special configs
 				if (template.templateType == "terrain")
@@ -1731,7 +1575,7 @@ namespace ToonyColorsPro
 									}
 								}
 
-								if (textureImp != null && !textureImp.UseScreenSpaceUV && !textureImp.UseWorldPosUV)
+								if (textureImp != null && !textureImp.UseScreenSpaceUV)
 								{
 									AddUvChannelUsage(usedUvChannelsVertex, textureImp.UvChannel, 2);
 
@@ -1963,119 +1807,54 @@ namespace ToonyColorsPro
 									isInIncludeBlock = true;
 									goto case "VARIABLES";
 								case "VARIABLES":
-									// Custom Material Properties
-									// If in CGINCLUDE block, print *all* Custom Material Properties
-									if (isInIncludeBlock)
+									//custom material properties
+									if (currentPassUsedCustomMaterialProperties != null && currentPassUsedCustomMaterialProperties.Count > 0)
 									{
-										var allCustomMaterialProperties = new List<CustomMaterialPropertyUsage>();
-										foreach (var list in usedCustomMaterialProperties)
-										{
-											foreach (var cmp in list)
-											{
-												if (!allCustomMaterialProperties.Contains(cmp))
-												{
-													allCustomMaterialProperties.Add(cmp);
-												}
-											}
-										}
-
 										var hashset = new HashSet<ShaderProperty.CustomMaterialProperty>();
-										foreach (var ctUsage in allCustomMaterialProperties)
+										foreach (var ctUsage in currentPassUsedCustomMaterialProperties)
 										{
-											if (!ctUsage.customMaterialProperty.IsGpuInstanced
-												&& !hashset.Contains(ctUsage.customMaterialProperty)
-												&& !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
+											if (!ctUsage.customMaterialProperty.IsGpuInstanced && !hashset.Contains(ctUsage.customMaterialProperty) && !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
 											{
 												replacement += indent + ctUsage.customMaterialProperty.PrintVariablesDeclare(false, indent) + "\n" + indent;
 
 												hashset.Add(ctUsage.customMaterialProperty);
-												cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
-											}
-										}
-									}
-									else
-									{
-										if (currentPassUsedCustomMaterialProperties != null && currentPassUsedCustomMaterialProperties.Count > 0)
-										{
-											var hashset = new HashSet<ShaderProperty.CustomMaterialProperty>();
-											foreach (var ctUsage in currentPassUsedCustomMaterialProperties)
-											{
-												if (!ctUsage.customMaterialProperty.IsGpuInstanced && !hashset.Contains(ctUsage.customMaterialProperty) && !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
+												if (isInIncludeBlock)
 												{
-													replacement += indent + ctUsage.customMaterialProperty.PrintVariablesDeclare(false, indent) + "\n" + indent;
-
-													hashset.Add(ctUsage.customMaterialProperty);
-													if (isInIncludeBlock)
-													{
-														cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
-													}
+													cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
 												}
 											}
 										}
 									}
-
 									if (!string.IsNullOrEmpty(replacement))
 									{
 										replacement = "\n" + indent + "// Custom Material Properties\n" + replacement;
 									}
 
-									// Shader Properties
+									//shader properties
 									tempString = "";
-									// If in CGINCLUDE block, print *all* Shader Properties
-									if (isInIncludeBlock)
+									if (usedShaderPropertiesPerPass[passIndex] != null && usedShaderPropertiesPerPass[passIndex].Count > 0)
 									{
-										var allUsedShaderProperties = new List<ShaderProperty>();
-										foreach (var list in usedShaderPropertiesPerPass)
+										foreach (var sp in usedShaderPropertiesPerPass[passIndex])
 										{
-											foreach (var sp in list)
+											if (cgIncludeShaderProperties.Contains(sp))
 											{
-												if (!allUsedShaderProperties.Contains(sp))
-												{
-													allUsedShaderProperties.Add(sp);
-												}
+												continue;
 											}
-										}
 
-										foreach (var sp in allUsedShaderProperties)
-										{
 											var prop = sp.PrintVariableDeclare(false, indent);
-											if (!string.IsNullOrEmpty(prop) && !cgIncludeShaderProperties.Contains(sp))
+											if (!string.IsNullOrEmpty(prop))
 											{
 												tempString += indent + prop + "\n";
-												cgIncludeShaderProperties.Add(sp);
-											}
-										}
-									}
-									else
-									{
-										// Regular pass, print this pass's Shader Properties
-										if (usedShaderPropertiesPerPass[passIndex] != null && usedShaderPropertiesPerPass[passIndex].Count > 0)
-										{
-											foreach (var sp in usedShaderPropertiesPerPass[passIndex])
-											{
-												if (cgIncludeShaderProperties.Contains(sp))
-												{
-													continue;
-												}
 
-												var prop = sp.PrintVariableDeclare(false, indent);
-												if (!string.IsNullOrEmpty(prop))
+												if (isInIncludeBlock)
 												{
-													tempString += indent + prop + "\n";
-
-													if (isInIncludeBlock)
-													{
-														cgIncludeShaderProperties.Add(sp);
-													}
+													cgIncludeShaderProperties.Add(sp);
 												}
 											}
 										}
 									}
-
 									if (!string.IsNullOrEmpty(tempString))
-									{
 										replacement += "\n" + indent + "// Shader Properties\n" + tempString;
-									}
 
 									replacement = replacement.TrimEnd();
 									isInIncludeBlock = false;
@@ -2087,122 +1866,54 @@ namespace ToonyColorsPro
 								case "VARIABLES_GPU_INSTANCING":
 
 									var indentPlusOne = indent + "\t";
-
-
-									// Custom Material Properties
-									// If in CGINCLUDE block, print *all* Custom Material Properties
-									if (isInIncludeBlock)
+									//custom material properties
+									if (currentPassUsedCustomMaterialProperties != null && currentPassUsedCustomMaterialProperties.Count > 0)
 									{
-										var allCustomMaterialProperties = new List<CustomMaterialPropertyUsage>();
-										foreach (var list in usedCustomMaterialProperties)
-										{
-											foreach (var cmp in list)
-											{
-												if (!allCustomMaterialProperties.Contains(cmp))
-												{
-													allCustomMaterialProperties.Add(cmp);
-												}
-											}
-										}
-
 										var hashset = new HashSet<ShaderProperty.CustomMaterialProperty>();
-										foreach (var ctUsage in allCustomMaterialProperties)
+										foreach (var ctUsage in currentPassUsedCustomMaterialProperties)
 										{
-											if (ctUsage.customMaterialProperty.IsGpuInstanced
-												&& !hashset.Contains(ctUsage.customMaterialProperty)
-												&& !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
+											if (ctUsage.customMaterialProperty.IsGpuInstanced && !hashset.Contains(ctUsage.customMaterialProperty) && !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
 											{
 												replacement += indentPlusOne + ctUsage.customMaterialProperty.PrintVariablesDeclare(true, indentPlusOne) + "\n" + indentPlusOne;
 
 												hashset.Add(ctUsage.customMaterialProperty);
-												cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
-											}
-										}
-									}
-									else
-									{
-										if (currentPassUsedCustomMaterialProperties != null && currentPassUsedCustomMaterialProperties.Count > 0)
-										{
-											var hashset = new HashSet<ShaderProperty.CustomMaterialProperty>();
-											foreach (var ctUsage in currentPassUsedCustomMaterialProperties)
-											{
-												if (ctUsage.customMaterialProperty.IsGpuInstanced && !hashset.Contains(ctUsage.customMaterialProperty) && !cgIncludeCustomMaterialProperties.Contains(ctUsage.customMaterialProperty))
+												if (isInIncludeBlock)
 												{
-													replacement += indentPlusOne + ctUsage.customMaterialProperty.PrintVariablesDeclare(true, indentPlusOne) + "\n" + indentPlusOne;
-
-													hashset.Add(ctUsage.customMaterialProperty);
-													if (isInIncludeBlock)
-													{
-														cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
-													}
+													cgIncludeCustomMaterialProperties.Add(ctUsage.customMaterialProperty);
 												}
 											}
 										}
 									}
-
-
 									if (!string.IsNullOrEmpty(replacement))
 									{
 										replacement = indentPlusOne + "// Custom Material Properties\n" + replacement;
 									}
 
-									// Shader Properties
+									//shader properties
 									tempString = "";
-									// If in CGINCLUDE block, print *all* Shader Properties
-									if (isInIncludeBlock)
+									if (usedShaderPropertiesPerPass[passIndex] != null && usedShaderPropertiesPerPass[passIndex].Count > 0)
 									{
-										var allUsedShaderProperties = new List<ShaderProperty>();
-										foreach (var list in usedShaderPropertiesPerPass)
+										foreach (var sp in usedShaderPropertiesPerPass[passIndex])
 										{
-											foreach (var sp in list)
+											if (cgIncludeShaderProperties.Contains(sp))
 											{
-												if (!allUsedShaderProperties.Contains(sp))
-												{
-													allUsedShaderProperties.Add(sp);
-												}
+												continue;
 											}
-										}
 
-										foreach (var sp in allUsedShaderProperties)
-										{
 											var prop = sp.PrintVariableDeclare(true, indentPlusOne);
-											if (!string.IsNullOrEmpty(prop) && !cgIncludeShaderProperties.Contains(sp))
+											if (!string.IsNullOrEmpty(prop))
 											{
 												tempString += indentPlusOne + prop + "\n";
-												cgIncludeShaderProperties.Add(sp);
-											}
-										}
-									}
-									else
-									{
-										// Regular pass, print this pass's Shader Properties
-										if (usedShaderPropertiesPerPass[passIndex] != null && usedShaderPropertiesPerPass[passIndex].Count > 0)
-										{
-											foreach (var sp in usedShaderPropertiesPerPass[passIndex])
-											{
-												if (cgIncludeShaderProperties.Contains(sp))
-												{
-													continue;
-												}
 
-												var prop = sp.PrintVariableDeclare(true, indentPlusOne);
-												if (!string.IsNullOrEmpty(prop))
+												if (isInIncludeBlock)
 												{
-													tempString += indentPlusOne + prop + "\n";
-
-													if (isInIncludeBlock)
-													{
-														cgIncludeShaderProperties.Add(sp);
-													}
+													cgIncludeShaderProperties.Add(sp);
 												}
 											}
 										}
 									}
-
 									if (!string.IsNullOrEmpty(tempString))
-									{
 										replacement += indentPlusOne + "// Shader Properties\n" + tempString;
-									}
 
 									replacement = replacement.TrimEnd();
 
@@ -2296,20 +2007,20 @@ namespace ToonyColorsPro
 
 										if (isVertex)
 										{
-											replacement += string.Format("{0}.texcoord{1}.xy = {0}.texcoord{1}.xy{2}{3}{4}{5};\n{6}", inputSource, uv, globalTiling, globalScrolling, globalOffset, globalRandomOffset, indent);
+											replacement += string.Format("{0}.texcoord{1}.xy = ({0}.texcoord{1}.xy{2}){3}{4}{5};\n{6}", inputSource, uv, globalScrolling, globalTiling, globalOffset, globalRandomOffset, indent);
 										}
 										else
 										{
 											// if necessary, first print without the modifiers to copy all channels
 											if (uvChannelsDimensions[uv] > 2 || !hasModifiers)
 											{
-												replacement += string.Format("{0}.{1} = {2}.texcoord{3}.xy;\n{4}", outputSource, variablesManager.GetVariable("texcoord" + uv), inputSource, uv, indent);
+												replacement += string.Format("{0}.{1} = {2}.texcoord{3};\n{4}", outputSource, variablesManager.GetVariable("texcoord" + uv), inputSource, uv, indent);
 											}
 
 											// then handle the .xy with modifiers, if any
 											if (hasModifiers)
 											{
-												replacement += string.Format("{0}.{1}.xy = {2}.texcoord{3}.xy{4}{5}{6}{7};\n{8}", outputSource, variablesManager.GetVariable("texcoord" + uv), inputSource, uv, globalTiling, globalScrolling, globalOffset, globalRandomOffset, indent);
+												replacement += string.Format("{0}.{1}.xy = ({2}.texcoord{3}.xy{4}){5}{6}{7};\n{8}", outputSource, variablesManager.GetVariable("texcoord" + uv), inputSource, uv, globalScrolling, globalTiling, globalOffset, globalRandomOffset, indent);
 											}
 										}
 									};
@@ -2565,8 +2276,7 @@ namespace ToonyColorsPro
 				stringBuilder.AppendLine(config.GetSerializedData());
 
 				//Calculate hash
-				string normalizedLineEndings = stringBuilder.ToString().Replace("\r\n", "\n");
-				var hash = GetHash(normalizedLineEndings);
+				var hash = GetHash(stringBuilder.ToString());
 				stringBuilder.AppendLine(string.Format(Config.kHashPrefix + hash + Config.kHashSuffix));
 
 				//Convert line endings to current OS format
@@ -2734,9 +2444,7 @@ namespace ToonyColorsPro
 				bool hasLink = !string.IsNullOrEmpty(helpTopic);
 
 				if (GlobalOptions.data.ShowContextualHelp)
-				{
 					TCP2_GUI.ContextualHelpBoxLayout(message, hasLink);
-				}
 
 				if (hasLink)
 				{

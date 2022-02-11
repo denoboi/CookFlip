@@ -1,5 +1,5 @@
 ﻿// Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,6 @@ namespace ToonyColorsPro
 			public static class Constants
 			{
 				public const string screenSpaceUVLabel = "Screen Space";
-				public const string worldPosUVLabel = "World Position";
 
 				public static readonly string[] DefaultTextureValues =
 				{
@@ -39,8 +38,7 @@ namespace ToonyColorsPro
 					"texcoord1",
 					"texcoord2",
 					"texcoord3",
-					screenSpaceUVLabel,
-					worldPosUVLabel
+					screenSpaceUVLabel
 				};
 
 				public static readonly string[] UvChannelOptionsVertex =
@@ -97,10 +95,9 @@ namespace ToonyColorsPro
 							_GrayMiniLabel = new GUIStyle("ShurikenLabel")
 							{
 								fixedHeight = 13,
-								padding = new RectOffset(2, 4, 0, 0),
-								fontSize = shurikenFontSize
+								padding = new RectOffset(2, 4, 0, 0)
 							};
-							var c = EditorGUIUtility.isProSkin ? .7f : .3f;
+							var c = EditorGUIUtility.isProSkin ? .5f : .3f;
 							_GrayMiniLabel.normal.textColor = new Color(c, c, c, 1.0f);
 						}
 						return _GrayMiniLabel;
@@ -282,93 +279,6 @@ namespace ToonyColorsPro
 						return _LineStyle;
 					}
 				}
-
-				// ----------------------------------------------------------------
-				// SHURIKEN STYLES OVERRIDES
-
-				const int shurikenFontSize = 11;
-
-				static GUIStyle _ShurikenValue;
-				internal static GUIStyle ShurikenValue
-				{
-					get
-					{
-						if (_ShurikenValue == null)
-						{
-							_ShurikenValue = new GUIStyle("ShurikenValue")
-							{
-								fontSize = shurikenFontSize
-							};
-						}
-						return _ShurikenValue;
-					}
-				}
-
-				static GUIStyle _ShurikenPopup;
-				internal static GUIStyle ShurikenPopup
-				{
-					get
-					{
-						if (_ShurikenPopup == null)
-						{
-							_ShurikenPopup = new GUIStyle("ShurikenPopup")
-							{
-								fontSize = shurikenFontSize
-							};
-						}
-						return _ShurikenPopup;
-					}
-				}
-
-				static GUIStyle _ShurikenToggle;
-				internal static GUIStyle ShurikenToggle
-				{
-					get
-					{
-						if (_ShurikenToggle == null)
-						{
-							_ShurikenToggle = new GUIStyle("ShurikenToggle")
-							{
-								fontSize = shurikenFontSize
-							};
-						}
-						return _ShurikenToggle;
-					}
-				}
-
-				static GUIStyle _ShurikenTextArea;
-				internal static GUIStyle ShurikenTextArea
-				{
-					get
-					{
-						if (_ShurikenTextArea == null)
-						{
-							_ShurikenTextArea = new GUIStyle(ShurikenValue)
-							{
-								fixedHeight = 0,
-								alignment = TextAnchor.UpperLeft
-							};
-						}
-						return _ShurikenTextArea;
-					}
-				}
-
-				static GUIStyle _ShurikenObjectField;
-				internal static GUIStyle ShurikenObjectField
-				{
-					get
-					{
-						if (_ShurikenObjectField == null)
-						{
-							_ShurikenObjectField = new GUIStyle(EditorStyles.objectField)
-							{
-								fixedHeight = 13,
-								fontSize = shurikenFontSize
-							};
-						}
-						return _ShurikenObjectField;
-					}
-				}
 			}
 
 			//--------------------------------------------------------------------------------------------------------------------------------
@@ -434,10 +344,10 @@ namespace ToonyColorsPro
 				return GenericSwizzle(selected, channelsCount, "XYZW");
 			}
 
-			public static string GenericSwizzle(string selected, int channelsCount, string options, float width = 50, bool showAvailableChannels = true)
+			public static string GenericSwizzle(string selected, int channelsCount, string options, float width = 50)
 			{
 				EditorGUI.BeginChangeCheck();
-				var newSelected = EditorGUILayout.DelayedTextField(selected, Styles.ShurikenValue, GUILayout.Width(width));
+				var newSelected = EditorGUILayout.DelayedTextField(selected, (GUIStyle)"ShurikenValue", GUILayout.Width(width));
 				if(EditorGUI.EndChangeCheck())
 				{
 					// not enough characters
@@ -463,22 +373,18 @@ namespace ToonyColorsPro
 					}
 				}
 
-				if (showAvailableChannels)
-				{
-					GUILayout.Space(4);
-					GUILayout.Label(string.Format("(available channels: {0})", options), Styles.GrayMiniLabel);
-				}
-
+				GUILayout.Space(4);
+				GUILayout.Label(string.Format("(available channels: {0})", options), Styles.GrayMiniLabel);
 				return newSelected.ToUpperInvariant();
 			}
 
 			public static bool Foldout(bool foldout, string label, string tooltip = null, bool highlighted = false)
 			{
-				return Foldout(foldout, TCP2_GUI.TempContent(label, tooltip), highlighted);
+				return Foldout(foldout, new GUIContent(label, tooltip), highlighted);
 			}
 			public static bool Foldout(bool foldout, string label, bool highlighted)
 			{
-				return Foldout(foldout, TCP2_GUI.TempContent(label), highlighted);
+				return Foldout(foldout, new GUIContent(label), highlighted);
 			}
 
 			public static bool Foldout(bool foldout, GUIContent label, bool highlighted = false, float width = 130)
@@ -490,11 +396,11 @@ namespace ToonyColorsPro
 
 			public static void InlineLabel(string label, string tooltip = null, bool highlight = false)
 			{
-				InlineLabel(TCP2_GUI.TempContent(label, tooltip), highlight);
+				InlineLabel(new GUIContent(label, tooltip), highlight);
 			}
 			public static void InlineLabel(string label, bool highlight)
 			{
-				InlineLabel(TCP2_GUI.TempContent(label), highlight);
+				InlineLabel(new GUIContent(label), highlight);
 			}
 			public static void InlineLabel(GUIContent label, bool highlight = false, float width = 130)
 			{
@@ -505,7 +411,7 @@ namespace ToonyColorsPro
 
 			public static void InlineHeader(string label, string tooltip = null)
 			{
-				InlineHeader(TCP2_GUI.TempContent(label, tooltip));
+				InlineHeader(new GUIContent(label, tooltip));
 			}
 			public static void InlineHeader(GUIContent label)
 			{
@@ -516,19 +422,9 @@ namespace ToonyColorsPro
 			}
 
 			//Property fields for Shader Property: UI is harmonized and easy to update
-			public static Enum EnumPopup(Enum enm) { return EditorGUILayout.EnumPopup(enm, Styles.ShurikenPopup, GUILayout.MinWidth(248)); }
-			public static int Popup(int index, string[] values) { return EditorGUILayout.Popup(index, values, Styles.ShurikenPopup, GUILayout.MinWidth(248)); }
-			public static string TextField(string str, bool delayed = false)
-			{
-				if (delayed)
-				{
-					return EditorGUILayout.DelayedTextField(GUIContent.none, str, Styles.ShurikenValue, GUILayout.MinWidth(248));
-				}
-				else
-				{
-					return EditorGUILayout.TextField(GUIContent.none, str, Styles.ShurikenValue, GUILayout.MinWidth(248));
-				}
-			}
+			public static Enum EnumPopup(Enum enm) { return EditorGUILayout.EnumPopup(enm, "ShurikenPopup", GUILayout.MinWidth(248)); }
+			public static int Popup(int index, string[] values) { return EditorGUILayout.Popup(index, values, "ShurikenPopup", GUILayout.MinWidth(248)); }
+			public static string TextField(string str) { return EditorGUILayout.TextField(GUIContent.none, str, "ShurikenValue", GUILayout.MinWidth(248)); }
 			public static string TextFieldShaderVariable(string str)
 			{
 				//special version with that only accepts alphanumerical and underscore
@@ -540,47 +436,10 @@ namespace ToonyColorsPro
 				return result;
 			}
 
-			public static string TextArea(string str, float height = 0)
-			{
-				return height > 0 ?
-					EditorGUILayout.TextArea(str, Styles.ShurikenTextArea, GUILayout.MinWidth(248), GUILayout.Height(height)) :
-					EditorGUILayout.TextArea(str, Styles.ShurikenTextArea, GUILayout.MinWidth(248));
-			}
-			public static T ObjectField<T>(T obj) where T : UnityEngine.Object
-			{
-				//return DrawProObjectField<T>(obj);
-				return (T)EditorGUILayout.ObjectField(GUIContent.none, obj, typeof(T), false, GUILayout.MinWidth(248), GUILayout.Height(13));
-			}
-
-			public static T DrawProObjectField<T>(T obj, params GUILayoutOption[] options) where T : UnityEngine.Object
-			{
-				int pickerID = "ShurikenObjectField".GetHashCode();
-
-				var rect = EditorGUILayout.GetControlRect(false, 13, Styles.ShurikenValue, options);
-				var btnRect = rect;
-				btnRect.width = 20;
-				rect.xMax -= btnRect.width;
-				btnRect.x += rect.width;
-
-				GUI.Label(rect, TCP2_GUI.TempContent(obj != null ? obj.name : "None (" + typeof(T).ToString() + ")"), Styles.ShurikenValue);
-				if (GUI.Button(btnRect, "...", "MiniToolbarButton"))
-				{
-					EditorGUIUtility.ShowObjectPicker<T>(obj, false, "", pickerID);
-				}
-				if (Event.current.commandName == "ObjectSelectorUpdated")
-				{
-					if (EditorGUIUtility.GetObjectPickerControlID() == pickerID)
-					{
-						obj = EditorGUIUtility.GetObjectPickerObject() as T;
-					}
-				}
-				return obj;
-			}
-
-			public static bool ButtonPopup(string label) { return GUILayout.Button(label, Styles.ShurikenPopup, GUILayout.MinWidth(248), GUILayout.MinHeight(16)); }
-			public static int IntField(int value) { return EditorGUILayout.IntField(value, Styles.ShurikenValue); }
-			public static int IntField(int value, int min, int max) { return Mathf.Clamp(EditorGUILayout.IntField(value, Styles.ShurikenValue), min, max); }
-			public static float FloatField(float value) { return EditorGUILayout.FloatField(value, Styles.ShurikenValue); }
+			public static bool ButtonPopup(string label) { return GUILayout.Button(label, "ShurikenPopup", GUILayout.MinWidth(248), GUILayout.MinHeight(16)); }
+			public static int IntField(int value) { return EditorGUILayout.IntField(value, "ShurikenValue"); }
+			public static int IntField(int value, int min, int max) { return Mathf.Clamp(EditorGUILayout.IntField(value, "ShurikenValue"), min, max); }
+			public static float FloatField(float value) { return EditorGUILayout.FloatField(value, "ShurikenValue"); }
 			public static Vector2 Vector2Field(Vector2 v2) { return VectorFieldCustomStyle(v2, 2); }
 			public static Vector3 Vector3Field(Vector3 v3) { return VectorFieldCustomStyle(v3, 3); }
 			public static Vector4 Vector4Field(Vector4 v4) { return VectorFieldCustomStyle(v4, 4); }
@@ -600,8 +459,8 @@ namespace ToonyColorsPro
 			}
 			public static bool Toggle(bool toggle)
 			{
-				var rect = EditorGUILayout.GetControlRect(false, 16, Styles.ShurikenToggle, GUILayout.MinWidth(248));
-				return EditorGUI.Toggle(rect, GUIContent.none, toggle, Styles.ShurikenToggle);
+				var rect = EditorGUILayout.GetControlRect(false, 16, "ShurikenToggle", GUILayout.MinWidth(248));
+				return EditorGUI.Toggle(rect, GUIContent.none, toggle, "ShurikenToggle");
 			}
 
 			static Vector4 VectorFieldCustomStyle(Vector4 vec, int channels)

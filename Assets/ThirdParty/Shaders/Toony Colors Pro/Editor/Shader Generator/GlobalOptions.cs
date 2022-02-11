@@ -1,5 +1,5 @@
 ﻿// Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System.Collections.Generic;
 using System.IO;
@@ -66,10 +66,6 @@ namespace ToonyColorsPro
 				public string CustomOutputPath = ShaderGenerator2.OUTPUT_PATH;
 				public string LastImplementationExportImportPath = Application.dataPath;
 				public List<string> OpenedFoldouts = new List<string>();
-				public bool UseCustomFont = false;
-				public Font CustomFont = null;
-
-				public bool CustomFontInitialized = false;
 			}
 			static Data _data;
 			public static Data data

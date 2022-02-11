@@ -104,9 +104,9 @@ Material:
     - _EnableDepthTexture: 1
     - _FoamOpacity: 0.1
     - _FoamSize: 0
-    - _FoamSmooth: 0.182
+    - _FoamSmooth: 0.054
     - _FoamSpeed: 0.1
-    - _FoamSpread: 0.48
+    - _FoamSpread: 2.11
     - _FoamStrength: 0.673
     - _FoamTiling: 0.15
     - _GlossMapScale: 1
@@ -122,8 +122,8 @@ Material:
     - _NormalTiling: 0.39999992
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RampSmooth: 1
-    - _RampThreshold: 0.568
+    - _RampSmooth: 0.074
+    - _RampThreshold: 1
     - _ReflRoughness: 0
     - _ReflStrength: 0.339
     - _RimMax: 1
@@ -157,15 +157,15 @@ Material:
     - __dummy__: 0
     m_Colors:
     - _BumpSpeed: {r: 5, g: 5, b: 5, a: 5}
-    - _Color: {r: 0.0038714937, g: 0.5318569, b: 0.8207547, a: 0.59607846}
+    - _Color: {r: 0.44925174, g: 0.4438857, b: 0.990566, a: 0.59607846}
     - _DepthColor: {r: 0.3820755, g: 0.6915154, b: 1, a: 1}
     - _EmissionColor: {r: 0.23251157, g: 0.5188679, b: 0.50799036, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _FoamSpeed: {r: 0, g: 1, b: 0, a: 2}
-    - _HColor: {r: 0.13318796, g: 0.2866713, b: 0.38679248, a: 1}
+    - _HColor: {r: 1, g: 1, b: 1, a: 1}
     - _MaskedColor: {r: 1, g: 0, b: 0, a: 1}
     - _RimColor: {r: 0, g: 0.7329843, b: 1, a: 0.7529412}
-    - _SColor: {r: 0.6226415, g: 0.6226415, b: 0.6226415, a: 1}
+    - _SColor: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _WaterColor: {r: 0.11764705, g: 0.62426394, b: 1, a: 0}
     - _WaterShallowColor: {r: 0.10893556, g: 0.23276556, b: 0.4528302, a: 1}

@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 // This template requires "Curved World" by Davit Naskidashvili
 // from the Unity Asset Store
@@ -198,7 +198,7 @@ dd_end
 dd_start	lbl=TRANSPARENCY/BLENDING
 ---
 sngl	lbl=Alpha Blending				kw=ALPHA
-sngl	lbl=Dithered Shadows			kw=DITHERED_SHADOWS		needs=ALPHA					indent	nohelp		tt=Enables dithered shadows for transparent materials
+sngl	lbl=Dithered Shadows			kw=DITHERED_SHADOWS		needs=ALPHA		indent	nohelp		tt=Enables dithered shadows for transparent materials
 sngl	lbl=Alpha Testing (Cutout)		kw=CUTOUT
 sngl	lbl=Dithered Transparency		kw=CUTOUT_DITHER		needs=CUTOUT				indent	nohelp	tt=Dithered transparency (alternate between transparent and opaque pixels in screen-space)
 sngl	lbl=Alpha-to-Coverage			kw=ALPHA_TO_COVERAGE										nohelp	tt=Alpha-to-coverage transparency (better cutout anti-aliasing when using MSAA)
@@ -219,7 +219,6 @@ keyword	lbl=Shader Target	kw=SHADER_TARGET	forceKeyword=true	values=2.0 (Old har
 warning	msgType=info		lbl=Use <b>Shader Target 2.5</b> for maximum compatibility across mobile devices.  Increase the number if the shader fails to compile (not enough instructions or interpolators).
 dd_end
 dd_start	lbl=SURFACE SHADER FLAGS
----
 flag	lbl=Add Shadow Passes			kw=addshadow													tt=Force the shader to have the Shadow Caster and Collector passes.\nCan help if shadows don't work properly with the shader
 flag	lbl=Full Forward Shadows		kw=fullforwardshadows											tt=Enable support for all shadow types in Forward rendering path
 flag	lbl=Disable Shadows				kw=noshadow														tt=Disables all shadow receiving support in this shader
@@ -2087,7 +2086,7 @@ Shader "@%SHADER_NAME%@"
 	///
 	/// IF BYPASS_SPOT_FALLOFF
 		#if SPOT
-			ramp *= step(0.0001, ndl);
+			ramp *= ndl;
 		#endif
 	///
 	/// IF BYPASS_POINT_FALLOFF

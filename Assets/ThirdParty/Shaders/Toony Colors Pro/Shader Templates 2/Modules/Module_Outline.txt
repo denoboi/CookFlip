@@ -1,18 +1,17 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 // Shader Generator Module: Outline Pass
 // Note: only handles UI, implementation is made in the templates directly
 
 #FEATURES
 sngl	lbl="Outline"		kw=OUTLINE					tt="Add an outline around the model using the inverted hull method"
-sngl	lbl="URP Renderer Feature"	kw=OUTLINE_URP_FEATURE		needs=OUTLINE	templates=TEMPLATE_URP	indent		tt="Set the outline pass to be used as a Renderer Feature (see documentation)"
 mult	lbl="Blending"		kw=Inherit|,Opaque|OUTLINE_OPAQUE,Custom|OUTLINE_BLENDING		needs=OUTLINE	indent		tt="How the outline will be blended with the scene"
 mult	lbl="Space"			kw=Object Space|,Clip Space|OUTLINE_CLIP_SPACE					indent		tt="In which space should the outline mesh vertices be moved"
 #legacy:
 mult	lbl="Outline behind model"	kw=Off|,Depth Buffer|OUTLINE_BEHIND_DEPTH,Stencil Buffer|OUTLINE_BEHIND_STENCIL		needs=OUTLINE	templates=TEMPLATE_DEFAULT	indent		tt="Show outline behind model"
 #lwrp:
-mult	lbl="Outline behind model"	kw=Off|,Stencil Buffer|OUTLINE_BEHIND_STENCIL		needs=OUTLINE	templates=TEMPLATE_LWRP,TEMPLATE_URP	indent		tt="Show outline behind model"
+mult	lbl="Outline behind model"	kw=Off|,Stencil Buffer|OUTLINE_BEHIND_STENCIL		needs=OUTLINE	templates=TEMPLATE_LWRP	indent		tt="Show outline behind model"
 sngl	lbl="Depth Pass"				kw=OUTLINE_DEPTH	needs=OUTLINE	needs=OUTLINE_BEHIND_DEPTH	templates=TEMPLATE_DEFAULT	indent=2	tt="Adds a depth writing pass for the outline behind model: this can solve issues with sorting and drawing order"
 sngl	lbl="Constant-size"			kw=OUTLINE_CONSTANT_SIZE	needs=OUTLINE								indent		tt="Constant-size outline independent from the camera distance"
 sngl	lbl="Pixel-Perfect"			kw=OUTLINE_PIXEL_PERFECT	needs=OUTLINE	needs=OUTLINE_CLIP_SPACE,OUTLINE_CONSTANT_SIZE	indent=2		tt="Pixel-perfect outline width (needs Outline in Clip Space)"
@@ -24,7 +23,7 @@ mult	lbl="Outline as fake rim"		kw=Off|,Based on Main Directional Light|OUTLINE_
 sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TEMPLATE_DEFAULT		indent		tt="Adds a shadow caster pass based on the outline vertices. This will ensure that the cast shadows include the thickness of the outline, and also that the outline is included in the depth texture (e.g. for post effects like depth of field)"
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_NEW
 /// IF OUTLINE
@@ -63,12 +62,12 @@ sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TE
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #KEYWORDS
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_BLOCK
 /// IF OUTLINE
@@ -112,19 +111,12 @@ sngl	lbl="Shadow/Depth Pass"		kw=OUTLINE_SHADOWCASTER	needs=OUTLINE	templates=TE
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VARIABLES
-/// IF LWRP
-
-	// Built-in renderer (CG) to SRP (HLSL) bindings
-	#define UnityObjectToClipPos TransformObjectToHClip
-	#define _WorldSpaceLightPos0 _MainLightPosition
-
-///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #INPUT
 half4 vcolor;
@@ -139,7 +131,7 @@ float3 worldPos;
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VERTEX(struct v, struct output, float4 outputClipPos)
 /// IF OUTLINE
@@ -220,7 +212,7 @@ float3 worldPos;
 
 	#if !defined(SHADOWCASTER_PASS)
 /// IF OUTLINE_CLIP_SPACE
-		output.vertex = UnityObjectToClipPos(v.vertex.xyz);
+		output.vertex = UnityObjectToClipPos(v.vertex);
 	/// IF !OUTLINE_FAKE_RIM_DIRLIGHT && !OUTLINE_FAKE_RIM
 		normal = mul(unity_ObjectToWorld, float4(normal, 0)).xyz;
 	///
@@ -239,7 +231,7 @@ float3 worldPos;
 		output.vertex.z += [[VALUE:Outline ZSmooth]] * 0.0001;
 ///
 /// ELSE
-		output.vertex = UnityObjectToClipPos(v.vertex.xyz + normal * [[VALUE:Outline Width]] * size * 0.01);
+		output.vertex = UnityObjectToClipPos(v.vertex + float4(normal,0) * [[VALUE:Outline Width]] * size * 0.01);
 ///
 	#else
 		v.vertex = v.vertex + float4(normal,0) * [[VALUE:Outline Width]] * size * 0.01;
@@ -250,7 +242,7 @@ float3 worldPos;
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #FRAGMENT(struct input)
 /// IF OUTLINE

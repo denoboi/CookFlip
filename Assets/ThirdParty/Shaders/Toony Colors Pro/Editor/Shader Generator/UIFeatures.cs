@@ -1,5 +1,5 @@
 // Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -367,7 +367,7 @@ namespace ToonyColorsPro
 				for (int j = 0; j < uiFeaturesArray.Length; j++)
 				{
 					var uiFeature = uiFeaturesArray[j];
-					if (uiFeature.indentLevel == 0 && !(uiFeature is UIFeature_Header) && !(uiFeature is UIFeature_Warning) && !uiFeature.inline)
+					if (uiFeature.indentLevel == 0)
 					{
 						lastParent = uiFeature;
 					}
@@ -898,7 +898,7 @@ namespace ToonyColorsPro
 
 					//Only enforce keyword if feature is enabled
 					if(Enabled(config))
-						config.SetKeyword(keyword, currentValue.ToString("0.0###############", CultureInfo.InvariantCulture));
+						config.SetKeyword(keyword, currentValue.ToString("0.0###############"));
 				}
 
 				EditorGUI.BeginChangeCheck();
@@ -908,7 +908,7 @@ namespace ToonyColorsPro
 				{
 					if(newValue != currentValue)
 					{
-						config.SetKeyword(keyword, newValue.ToString("0.0###############", CultureInfo.InvariantCulture));
+						config.SetKeyword(keyword, newValue.ToString("0.0###############"));
 					}
 				}
 			}
@@ -1073,15 +1073,8 @@ namespace ToonyColorsPro
 				EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 				GUI.color = color;
 				EditorGUI.BeginChangeCheck();
-				{
-					var rect = GUILayoutUtility.GetRect(EditorGUIUtility.fieldWidth, EditorGUIUtility.fieldWidth, EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight, TCP2_GUI.HeaderDropDownBold);
-
-					// hover
-					TCP2_GUI.DrawHoverRect(rect);
-
-					foldout = TCP2_GUI.HeaderFoldoutHighlight(rect, foldout, guiContent, hasToggledFeatures);
-					FoldoutStack.Push(foldout);
-				}
+				foldout = TCP2_GUI.HeaderFoldoutHighlight(foldout, guiContent, hasToggledFeatures);
+				FoldoutStack.Push(foldout);
 				if(EditorGUI.EndChangeCheck())
 				{
 					UpdatePersistentState();

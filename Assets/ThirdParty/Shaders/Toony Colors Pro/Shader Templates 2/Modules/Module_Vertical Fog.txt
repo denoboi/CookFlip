@@ -1,101 +1,115 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 // Shader Generator Module: Vertical Fog
 
 #FEATURES
-sngl	lbl="Vertical Fog"					kw=VERTICAL_FOG																		tt="Vertical Fog support based on the world position"
-sngl	lbl="Use Alpha for Transparency"	kw=VERTICAL_FOG_ALPHA							needs=VERTICAL_FOG		indent		tt="Use the fog color alpha to set the fog transparency"
-sngl	lbl="Use Lighting Settings Color"	kw=VERTICAL_FOG_COLOR							needs=VERTICAL_FOG		indent		tt="Use the global fog color from the Lighting Settings window"
-mult	lbl="Color Interpolation"			kw=Linear|,Smooth|VERTICAL_FOG_SMOOTHSTEP		needs=VERTICAL_FOG		indent		tt="How to interpolate between colors according to the threshold/smoothness values (i.e. using smoothstep or lerp)"
-sngl	lbl="Relative to Camera"			kw=VERTICAL_FOG_CAM								needs=VERTICAL_FOG		indent		tt="Position threshold will be relative to the camera's Y world position"
+sngl	lbl="Vertical Fog"					kw=VERTICAL_FOG															nohelp				tt="Vertical Fog support based on the world position"
+mult	lbl="Color Interpolation"				kw=Linear|,Smooth|VERTICAL_FOG_SMOOTHSTEP		needs=VERTICAL_FOG		nohelp	indent		tt="How to interpolate between colors according to the min-max values"
+sngl	lbl="Use Lighting Settings Color"		kw=VERTICAL_FOG_COLOR	needs=VERTICAL_FOG								nohelp	indent		tt="Use the global fog color from the Lighting Settings window"
+sngl	lbl="Relative to Camera"				kw=VERTICAL_FOG_CAM		needs=VERTICAL_FOG								nohelp	indent		tt="Position threshold will be relative to the camera's Y world position"
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_NEW
-/// IF VERTICAL_FOG
-		header			Vertical Fog
-		float			Vertical Fog Threshold		lighting, imp(float, label = "Y Threshold", default = 0.0)
-		float			Vertical Fog Smoothness		lighting, imp(float, label = "Smoothness", default = 0.5)
-	/// IF !VERTICAL_FOG_COLOR
-		color_rgba		Vertical Fog Color			lighting, imp(color, label = "Fog Color", default = (0.5, 0.5, 0.5, 1))
+/// IF SUBSURFACE_SCATTERING
+	header			Subsurface Scattering
+	color			Subsurface Color			lighting, imp(color, label = "Color", default = (0.5, 0.5, 0.5, 1))
+	color			Subsurface Ambient Color	lighting, imp(color, label = "Ambient Color", default = (0.5, 0.5, 0.5, 1))
+	float			Subsurface Distortion		lighting, imp(range, label = "Distortion", default = 0.2, min = 0, max = 2)
+	float			Subsurface Power			lighting, imp(range, label = "Power", default = 3.0, min = 0.1, max = 16)
+	float			Subsurface Scale			lighting, imp(float, label = "Scale", default = 1.0)
+	float			Subsurface Thickness		lighting, imp(constant, default = 1.0)
+	/// IF SS_SCREEN_INFLUENCE && (SS_DIR_LIGHTS || SS_ALL_LIGHTS)
+		float		Subsurface Screen Space Influence		lighting, imp(range, label = Screen-space Influence, default = 0.5, min = 0, max = 10)
 	///
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #KEYWORDS
-/// IF VERTICAL_FOG
-	feature_on		USE_WORLD_POSITION_FRAGMENT
-///
-
-#Vertical Fog
-/// IF VERTICAL_FOG
+/// IF SUBSURFACE_SCATTERING
+	feature_on		USE_VIEW_DIRECTION_FRAGMENT
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_BLOCK
-/// IF VERTICAL_FOG
+/// IF SUBSURFACE_SCATTERING
 
-	[TCP2HeaderHelp(Vertical Fog)]
-		[[PROP:Vertical Fog Threshold]]
-		[[PROP:Vertical Fog Smoothness]]
-	/// IF !VERTICAL_FOG_COLOR
-		[[PROP:Vertical Fog Color]]
+		[TCP2HeaderHelp(Subsurface Scattering)]
+		[[PROP:Subsurface Distortion]]
+		[[PROP:Subsurface Power]]
+		[[PROP:Subsurface Scale]]
+		[[PROP:Subsurface Color]]
+	/// IF SUBSURFACE_AMB_COLOR
+		[[PROP:Subsurface Ambient Color]]
 	///
-	[TCP2Separator]
+		[TCP2Separator]
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VARIABLES
+/// IF SUBSURFACE_SCATTERING && SS_SCREEN_INFLUENCE && (SS_DIR_LIGHTS || SS_ALL_LIGHTS)
+
+		//Subsurface Scattering directional light screen-space influence
+        half subsurfaceScreenInfluence(half3 lightDir, half3 viewDir, half size)
+        {
+            half3 delta = lightDir + viewDir;
+            half dist = length(delta);
+            half spot = 1.0 - smoothstep(0.0, size, dist);
+            return spot * spot;
+        }
+///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #INPUT
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VERTEX
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
-#LIGHTING(float3 color, float3 worldPos)
-/// IF VERTICAL_FOG
+#LIGHTING(float4 color, float3 normal, float3 viewDir, float3 albedo, float3 lightColor, float3 lightDir, float atten)
+/// IF SUBSURFACE_SCATTERING
 
-		//Vertical Fog
-		half vertFogThreshold = worldPos.y;
-	/// IF VERTICAL_FOG_CAM
-		vertFogThreshold -= _WorldSpaceCameraPos.y;
+		//Subsurface Scattering
+	/// IF SS_DIR_LIGHTS
+	#if !(POINT) && !(SPOT)
+	/// ELIF !SS_ALL_LIGHTS
+	#if (POINT || SPOT)
 	///
-		half verticalFogThreshold = [[VALUE:Vertical Fog Threshold]];
-		half verticalFogSmooothness = [[VALUE:Vertical Fog Smoothness]];
-		half verticalFogMin = verticalFogThreshold - verticalFogSmooothness;
-		half verticalFogMax = verticalFogThreshold + verticalFogSmooothness;
-	/// IF VERTICAL_FOG_COLOR
-		half4 fogColor = unity_FogColor;
+		half3 ssLight = lightDir + normal * [[VALUE:Subsurface Distortion]];
+		half ssDot = pow(saturate(dot(viewDir, -ssLight)), [[VALUE:Subsurface Power]]) * [[VALUE:Subsurface Scale]];
+	/// IF SUBSURFACE_AMB_COLOR
+		half3 ssColor = ((ssDot * [[VALUE:Subsurface Color]]) + [[VALUE:Subsurface Ambient Color]]) * [[VALUE:Subsurface Thickness]];
 	/// ELSE
-		half4 fogColor = [[VALUE:Vertical Fog Color]];
+		half3 ssColor = (ssDot * [[VALUE:Subsurface Color]]);
 	///
-	#if defined(UNITY_PASS_FORWARDADD)
-		fogColor.rgb = half3(0, 0, 0);
+	#if !defined(UNITY_PASS_FORWARDBASE)
+		ssColor *= atten;
+	/// IF SS_SCREEN_INFLUENCE && (SS_DIR_LIGHTS || SS_ALL_LIGHTS)
+	#else
+		ssColor *= subsurfaceScreenInfluence(lightDir, viewDir, [[VALUE:Subsurface Screen Space Influence]]);
+	///
 	#endif
-	/// IF VERTICAL_FOG_SMOOTHSTEP
-		half vertFogFactor = 1 - smoothstep(verticalFogMin, verticalFogMax, vertFogThreshold);
+	/// IF SS_MULTIPLICATIVE
+		color.rgb *= albedo * ssColor * lightColor;
 	/// ELSE
-		half vertFogFactor = 1 - saturate((vertFogThreshold - verticalFogMin) / (verticalFogMax - verticalFogMin));
+		color.rgb += albedo * ssColor * lightColor;
 	///
-	/// IF VERTICAL_FOG_ALPHA
-		vertFogFactor *= fogColor.a;
+	/// IF !SS_ALL_LIGHTS
+	#endif
 	///
-		color = lerp(color, fogColor.rgb, vertFogFactor);
 ///
 #END
