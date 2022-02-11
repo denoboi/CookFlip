@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - PancakeDoughBone
+  - Pancake
+  - Dough
   layers:
   - Default
   - TransparentFX
