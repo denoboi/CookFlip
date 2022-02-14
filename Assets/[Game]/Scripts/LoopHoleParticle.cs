@@ -5,6 +5,7 @@ using UnityEngine;
 public class LoopHoleParticle : MonoBehaviour
 {
     public ParticleSystem splashParticle;
+    public GameObject pancake;
 
 
     // Start is called before the first frame update
@@ -26,5 +27,13 @@ public class LoopHoleParticle : MonoBehaviour
             splashParticle.Play();
         }
     }
-   
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Pan"))
+        {
+            pancake.SetActive(true);
+        }
+    }
+
 }

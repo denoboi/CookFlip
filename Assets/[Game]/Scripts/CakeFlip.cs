@@ -23,6 +23,8 @@ public class CakeFlip : MonoBehaviour
             Debug.Log("cakeflip");
             anim.SetBool("CakeFlip", true);
 
+           
+
 
         }
         else if (Input.GetMouseButtonDown(0))
