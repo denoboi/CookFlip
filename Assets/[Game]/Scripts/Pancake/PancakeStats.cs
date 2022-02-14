@@ -14,6 +14,8 @@ public class PancakeStats : MonoBehaviour
     public static PancakeStats Instance;
 
     [SerializeField] public float cookLevel = 0;
+    [SerializeField] public GameObject pancakeFront;
+    [SerializeField] public GameObject pancakeBack;
 
     private const float MIN_COOKLEVEL = 0f;
     private const float MAX_COOKLEVEL = 70f;

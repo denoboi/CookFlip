@@ -65,6 +65,6 @@ public class DoughTrigger : MonoBehaviour
     private IEnumerator EnablePancakeCo(GameObject pancakeDough)
     {
         yield return new WaitForSeconds(delay);
-            pancakeDough.SetActive(true);
+        pancakeDough.SetActive(true);
     }
 }

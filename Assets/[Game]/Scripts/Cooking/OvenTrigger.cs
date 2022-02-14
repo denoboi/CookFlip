@@ -4,47 +4,37 @@ using UnityEngine;
 
 public class OvenTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject pancake;
-    [SerializeField] private float delay = 2f;
-    [SerializeField] private float cookLevel = 0;
-    private Coroutine cookingCoroutine;
+    [SerializeField] private GameObject _pancakeFront;
+    [SerializeField] private GameObject _pancakeBack;
+    [SerializeField] private float _delay = 2f;
+    
+    private Coroutine _cookingCoroutine;
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Cooking");
-        //EnablePancake();
-        Cooking();
+        
+        if(other.gameObject.CompareTag("Pan"))
+        {
+            Cooking();
+        }
+        
+            
     }
 
     private void OnTriggerExit(Collider other)
     {
-        StopCoroutine(cookingCoroutine);
+        StopCoroutine(_cookingCoroutine);
     }
 
-
-    
-
-    //public void EnablePancake()
-    //{
-    //    StartCoroutine(EnableCo(pancake));
-    //}
 
 
     public void Cooking()
     {
-        cookingCoroutine = StartCoroutine(CookingLevel());
+        _cookingCoroutine = StartCoroutine(CookingLevel());
     }
 
-    private IEnumerator EnableCo(GameObject pancake)
-    {
-        if(!pancake.activeSelf)
-        {
-            yield return new WaitForSeconds(delay);
-            pancake.SetActive(true);
-        }
-
-        
-    }
+    
 
     private IEnumerator CookingLevel()
     {
@@ -56,10 +46,9 @@ public class OvenTrigger : MonoBehaviour
 
             if (PancakeStats.Instance.cookLevel >= 50)
             {
-                
                 Debug.Log("cooked");
             }
-            if(PancakeStats.Instance.cookLevel >= 70)
+            if(PancakeStats.Instance.cookLevel >= 90)
             {
                 Debug.Log("burned");
             }
