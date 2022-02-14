@@ -2691,7 +2691,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637184075}
-  m_LocalRotation: {x: 0.2754136, y: -0.00050459104, z: 0.00014456209, w: 0.9613257}
+  m_LocalRotation: {x: 0.2754136, y: -0.000504558, z: 0.0001445526, w: 0.9613257}
   m_LocalPosition: {x: -0.94, y: 0.47000003, z: -9.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3065,7 +3065,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858300171}
-  m_LocalRotation: {x: 0.2754136, y: -0.00050459104, z: 0.00014456209, w: 0.9613257}
+  m_LocalRotation: {x: 0.2754136, y: -0.000504558, z: 0.0001445526, w: 0.9613257}
   m_LocalPosition: {x: -0.94, y: 0.47000003, z: -9.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4163,7 +4163,7 @@ PrefabInstance:
     - target: {fileID: 7761261453042112133, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
       propertyPath: pancakeDough
       value: 
-      objectReference: {fileID: 6001900008084637550}
+      objectReference: {fileID: 8796440475757216973}
     - target: {fileID: 7953765332668361848, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0.9071956
@@ -4492,6 +4492,11 @@ MonoBehaviour:
 --- !u!4 &8796440475757216972 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 691547410590146078, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
+  m_PrefabInstance: {fileID: 8796440475757216963}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8796440475757216973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8020286246515908756, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
   m_PrefabInstance: {fileID: 8796440475757216963}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &9215469983590997521
