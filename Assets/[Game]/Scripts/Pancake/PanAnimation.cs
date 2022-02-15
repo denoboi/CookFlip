@@ -7,6 +7,7 @@ using HCB.SplineMovementSystem;
 public class PanAnimation : MonoBehaviour
 {
     private Animator anim;
+    public Animator animator;
 
 
 
@@ -27,12 +28,14 @@ public class PanAnimation : MonoBehaviour
         {
             Debug.Log("flip");
             anim.SetBool("PanFlip", true);
+            animator.SetBool("CakeFlip", true);
 
 
         }
         else if (Input.GetMouseButtonDown(0))
         {
             anim.SetBool("PanFlip", false);
+            animator.SetBool("CakeFlip", false);
         }
     }
 
