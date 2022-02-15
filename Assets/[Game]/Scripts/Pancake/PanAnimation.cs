@@ -9,6 +9,8 @@ public class PanAnimation : MonoBehaviour
     private Animator anim;
     public Animator animator;
 
+    PancakeStats _stats;
+
 
 
     private void Start()
@@ -29,6 +31,9 @@ public class PanAnimation : MonoBehaviour
             Debug.Log("flip");
             anim.SetBool("PanFlip", true);
             animator.SetBool("CakeFlip", true);
+
+            _stats.cookingLevel.GetValue(1);
+            
 
 
         }

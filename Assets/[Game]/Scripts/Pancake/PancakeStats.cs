@@ -14,11 +14,13 @@ public class PancakeStats : MonoBehaviour
     public static PancakeStats Instance;
 
     [SerializeField] public float cookLevel = 0;
-    [SerializeField] public GameObject pancakeFront;
-    [SerializeField] public GameObject pancakeBack;
 
-    private const float MIN_COOKLEVEL = 0f;
-    private const float MAX_COOKLEVEL = 70f;
+     public int[] cookingLevel = new int[] { 0, 0 };
+     public int currentFace = 0;
+    
+
+     private const float MIN_COOKLEVEL = 0f;
+     private const float MAX_COOKLEVEL = 70f;
     
     
 
@@ -28,6 +30,39 @@ public class PancakeStats : MonoBehaviour
         {
             GameManager.Instance.CompeleteStage(false);
         }
+    }
+
+
+    public void ChangeFace()
+    {
+        if (currentFace == 0)
+            currentFace = 1;
+
+        else
+            currentFace = 0;
+    }
+
+    public void CookFace()
+    {
+        cookingLevel[currentFace] += 10;
+        if(CheckCooking())
+        {
+
+        }
+    }
+
+    private bool CheckCooking()
+    {
+        if(cookingLevel[0] >= 100 && cookingLevel[1] >= 100)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+        
     }
 
 }
