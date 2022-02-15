@@ -6,10 +6,14 @@ using HCB.Core;
 
 public class PancakeStats : MonoBehaviour
 {
+
+
     private void Awake()
     {
         Instance = this;
     }
+
+
 
     public static PancakeStats Instance;
 
@@ -21,6 +25,8 @@ public class PancakeStats : MonoBehaviour
 
      private const float MIN_COOKLEVEL = 0f;
      private const float MAX_COOKLEVEL = 70f;
+
+        public bool isCooked;
     
     
 
@@ -47,7 +53,7 @@ public class PancakeStats : MonoBehaviour
         cookingLevel[currentFace] += 10;
         if(CheckCooking())
         {
-
+            EventManager.OnPancakeCooked.Invoke();
         }
     }
 
@@ -55,13 +61,16 @@ public class PancakeStats : MonoBehaviour
     {
         if(cookingLevel[0] >= 100 && cookingLevel[1] >= 100)
         {
-            return true;
+            
+            return isCooked = true;
         }
 
         else
         {
             return false;
         }
+
+        
         
     }
 

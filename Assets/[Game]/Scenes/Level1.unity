@@ -3615,10 +3615,38 @@ PrefabInstance:
     - target: {fileID: 2770343874099065722, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
       propertyPath: pancake
       value: 
-      objectReference: {fileID: 8796440475757216966}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3072395379059740365, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258897213260753345, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.043
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258897213260753345, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.053
+      objectReference: {fileID: 0}
     - target: {fileID: 7407622954956241638, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
       propertyPath: m_Name
       value: PancakeMachine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7892264120827948829, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_Radius
+      value: 1.0330554
+      objectReference: {fileID: 0}
+    - target: {fileID: 7892264120827948829, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_Center.x
+      value: 0.9799904
+      objectReference: {fileID: 0}
+    - target: {fileID: 7892264120827948829, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_Center.y
+      value: -0.0000000061250134
+      objectReference: {fileID: 0}
+    - target: {fileID: 7892264120827948829, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
+      propertyPath: m_Center.z
+      value: -0.08040991
       objectReference: {fileID: 0}
     - target: {fileID: 7892269691182407772, guid: 10f06c30c259713468b0187b3bb09f55, type: 3}
       propertyPath: m_RootOrder
