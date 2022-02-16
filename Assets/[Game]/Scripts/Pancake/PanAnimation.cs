@@ -28,20 +28,30 @@ public class PanAnimation : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("flip");
-            anim.SetBool("PanFlip", true);
-            animator.SetBool("CakeFlip", true);
+            anim.SetTrigger("PanFlip");
 
-            //_stats.cookingLevel.GetValue(1);
+
+            if (PancakeStats.Instance.currentFace == 0)
+            {
+                animator.SetTrigger("BackFace");
+                
+            }
+
+            else
+            {
+                animator.SetTrigger("FrontFace");
+                
+            }
+
+            PancakeStats.Instance.ChangeFace();
+                
+
+            
             
 
 
         }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            anim.SetBool("PanFlip", false);
-            animator.SetBool("CakeFlip", false);
-        }
+        
     }
 
 }
