@@ -32,7 +32,7 @@ public class PanAnimation : MonoBehaviour
             anim.SetBool("PanFlip", true);
             animator.SetBool("CakeFlip", true);
 
-            _stats.cookingLevel.GetValue(1);
+            //_stats.cookingLevel.GetValue(1);
             
 
 

@@ -2548,8 +2548,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cookLevel: 0
-  pancakeFront: {fileID: 0}
-  pancakeBack: {fileID: 0}
+  cookingLevel: 0000000000000000
+  currentFace: 0
+  isCooked: 0
 --- !u!114 &8796440476388376601
 MonoBehaviour:
   m_ObjectHideFlags: 0
