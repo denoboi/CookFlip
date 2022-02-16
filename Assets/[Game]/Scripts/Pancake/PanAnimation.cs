@@ -33,13 +33,13 @@ public class PanAnimation : MonoBehaviour
 
             if (PancakeStats.Instance.currentFace == 0)
             {
-                animator.SetTrigger("BackFace");
+                animator.SetTrigger("FrontFace");
                 
             }
 
             else
             {
-                animator.SetTrigger("FrontFace");
+                animator.SetTrigger("BackFace");
                 
             }
 
