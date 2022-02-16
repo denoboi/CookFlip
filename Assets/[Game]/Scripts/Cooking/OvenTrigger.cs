@@ -47,6 +47,7 @@ public class OvenTrigger : MonoBehaviour
             if (PancakeStats.Instance.cookLevel >= 50)
             {
                 Debug.Log("cooked");
+                
             }
             if(PancakeStats.Instance.cookLevel >= 90)
             {
