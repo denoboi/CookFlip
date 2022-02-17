@@ -62,7 +62,7 @@ public class PancakeStats : MonoBehaviour
 
     private bool CheckCooking()
     {
-        if(cookingLevel[0] >= 100 && cookingLevel[1] >= 100)
+        if(cookingLevel[0] >= 30 && cookingLevel[1] >= 30)
         {
             
             return isCooked = true;

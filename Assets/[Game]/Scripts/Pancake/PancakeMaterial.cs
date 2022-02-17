@@ -15,8 +15,6 @@ public class PancakeMaterial : MonoBehaviour
     void Start()
     {
         meshRenderer = GetComponent<SkinnedMeshRenderer>();
-        
-        
     }
 
    

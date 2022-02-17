@@ -26,7 +26,7 @@ public class PanAnimation : MonoBehaviour
 
     void PanFlipAnimation()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false)
         {
             anim.SetTrigger("PanFlip");
 
