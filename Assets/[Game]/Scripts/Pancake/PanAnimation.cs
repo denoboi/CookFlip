@@ -51,6 +51,8 @@ public class PanAnimation : MonoBehaviour
 
 
         }
+
+        
         
     }
 
