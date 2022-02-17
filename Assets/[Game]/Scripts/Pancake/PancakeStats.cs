@@ -51,6 +51,9 @@ public class PancakeStats : MonoBehaviour
     public void CookFace()
     {
         cookingLevel[currentFace] += 10;
+        
+        
+        
         if(CheckCooking())
         {
             EventManager.OnPancakeCooked.Invoke();

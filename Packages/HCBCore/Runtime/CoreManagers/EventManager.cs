@@ -13,6 +13,7 @@ namespace HCB.Core
         public static CurrencyEvent OnCurrencyInteracted = new CurrencyEvent();
         public static UnityEvent OnPlayerHit = new UnityEvent();
         public static UnityEvent OnPancakeCooked = new UnityEvent();
+        public static UnityEvent OnPancakeCooking = new UnityEvent();
 
         #region Editor
         public static UnityEvent OnLevelDataChange = new UnityEvent();

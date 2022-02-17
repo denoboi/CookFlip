@@ -7,29 +7,31 @@ public class PancakeMaterial : MonoBehaviour
     public Material standardTexture, cookedTexture, burntTexture;
 
     [SerializeField] private GameObject pancake;
-    MeshRenderer meshRenderer;
+    SkinnedMeshRenderer meshRenderer;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<SkinnedMeshRenderer>();
+        
         
     }
 
    
 
-    public void changeStandard()
+    public void ChangeStandard()
     {
         meshRenderer.material = standardTexture;
     }
 
-    public void changeCooked()
+    public void ChangeCooked()
     {
         meshRenderer.material = cookedTexture;
     }
 
-    public void changeBurnt()
+    public void ChangeBurnt()
     {
         meshRenderer.material = burntTexture;
     }
