@@ -30,22 +30,32 @@ public class CookProcess : MonoBehaviour
 
     public void CookingCakes()
     {
-        PancakeStats.Instance.cookLevel += 10;
+        PancakeStats.Instance.CookFace();
         Debug.Log(PancakeStats.Instance.cookLevel);
 
-        if (PancakeStats.Instance.cookLevel >= 30)
+        if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 0)
         {
             Debug.Log("cooked");
 
-            pancakeMaterialScript.ChangeCooked();
-
+            pancakeMaterialScript.CookedUp();         
 
         }
-        if (PancakeStats.Instance.cookLevel >= 70)
+
+        else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 1)
+        {
+            pancakeMaterialScript.CookedDown();
+        }
+
+        if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 70 && PancakeStats.Instance.currentFace == 0) 
         {
             Debug.Log("burned");
 
-            pancakeMaterialScript.ChangeBurnt();
+            pancakeMaterialScript.BurntUp();
+        }
+
+        else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 70 && PancakeStats.Instance.currentFace == 1 )
+        {
+            pancakeMaterialScript.BurntDown();
         }
     }
 

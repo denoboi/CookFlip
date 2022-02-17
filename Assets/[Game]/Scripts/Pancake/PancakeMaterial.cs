@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PancakeMaterial : MonoBehaviour
 {
-    public Material standardTexture, cookedTexture, burntTexture;
+    public Material[] materials;
 
-    [SerializeField] private GameObject pancake;
+    
     SkinnedMeshRenderer meshRenderer;
 
 
@@ -23,17 +23,39 @@ public class PancakeMaterial : MonoBehaviour
 
     public void ChangeStandard()
     {
-        meshRenderer.material = standardTexture;
+        
     }
 
-    public void ChangeCooked()
+    public void CookedUp()
     {
-        meshRenderer.material = cookedTexture;
+        Material[] mats = meshRenderer.materials;
+        mats[1] = materials[1];
+
+        meshRenderer.materials = mats;
     }
 
-    public void ChangeBurnt()
+    public void CookedDown()
     {
-        meshRenderer.material = burntTexture;
+        Material[] mats = meshRenderer.materials;
+        mats[0] = materials[1];
+
+        meshRenderer.materials = mats;
+    }
+
+    public void BurntUp()
+    {
+        Material[] mats = meshRenderer.materials;
+        mats[1] = materials[2];
+
+        meshRenderer.materials = mats;
+    }
+
+    public void BurntDown()
+    {
+        Material[] mats = meshRenderer.materials;
+        mats[0] = materials[2];
+
+        meshRenderer.materials = mats;
     }
 
 }
