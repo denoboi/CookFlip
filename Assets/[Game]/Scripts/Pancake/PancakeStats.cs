@@ -27,6 +27,7 @@ public class PancakeStats : MonoBehaviour
      private const float MAX_COOKLEVEL = 70f;
 
         public bool isCooked;
+        public bool isBurnt;
     
     
 
@@ -51,9 +52,7 @@ public class PancakeStats : MonoBehaviour
     public void CookFace()
     {
         cookingLevel[currentFace] += 10;
-        
-        
-        
+ 
         if(CheckCooking())
         {
             EventManager.OnPancakeCooked.Invoke();
@@ -62,9 +61,8 @@ public class PancakeStats : MonoBehaviour
 
     private bool CheckCooking()
     {
-        if(cookingLevel[0] >= 30 && cookingLevel[1] >= 30)
+        if(cookingLevel[0] >= 30 && cookingLevel[0] <=70 && cookingLevel[1] >= 30 && cookingLevel[1] <= 70)
         {
-            
             return isCooked = true;
         }
 
@@ -73,8 +71,19 @@ public class PancakeStats : MonoBehaviour
             return false;
         }
 
-        
-        
+    }
+
+    private bool CheckBurnt()
+    {
+        if(cookingLevel[0] > 70 && cookingLevel[1] > 70)
+        {
+            return isBurnt = true;
+        }
+
+        else
+        {
+            return false;
+        }
     }
 
 }

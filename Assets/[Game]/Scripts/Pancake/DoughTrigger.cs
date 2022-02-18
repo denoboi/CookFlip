@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class DoughTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject pancakeDough;
+    [SerializeField] private GameObject creationPoint;
     [SerializeField] private GameObject dough;
     [SerializeField] private float delay;
+    [SerializeField] private GameObject panCakeDoughPrefab;
+    [SerializeField] private PanAnimation panAnimation;
+    [SerializeField] private Transform plate;
+    private GameObject pancake;
 
 
     private void OnTriggerEnter(Collider other)
@@ -34,7 +38,7 @@ public class DoughTrigger : MonoBehaviour
     //flippable dough
     public void EnablePancakeDough()
     {
-        StartCoroutine(EnablePancakeCo(pancakeDough));
+        StartCoroutine(EnablePancakeCo(creationPoint));
     }
 
     //basic dough
@@ -65,6 +69,26 @@ public class DoughTrigger : MonoBehaviour
     private IEnumerator EnablePancakeCo(GameObject pancakeDough)
     {
         yield return new WaitForSeconds(delay);
-        pancakeDough.SetActive(true);
+        pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
+        panAnimation.animator = pancake.GetComponent<Animator>();
+
+        
+        
+        
     }
+
+    private void Update()
+    {
+        //Invoked when a button is clicked.
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
+        {
+            pancake.transform.parent = plate.transform;
+            Debug.Log("Added to the plate");
+
+        }
+
+        //PancakeStats.Instance.isCooked = false;
+    }
+
+
 }

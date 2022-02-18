@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class AddingToPlate : MonoBehaviour
 {
-    public GameObject child;
+
+    DoughTrigger doughTrigger;
+    
 
     public Transform parent;
+
+    private void Start()
+    {
+       
+    }
 
 
     private void Update()
     {
         //Invoked when a button is clicked.
-        if(Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
-        {
-            MakeChild(parent);
-        }
+        //if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
+        //{
+        //    MakeChild(parent);
+
+        //}
+
+        ////PancakeStats.Instance.isCooked = false;
 
     }
 
@@ -23,7 +33,7 @@ public class AddingToPlate : MonoBehaviour
     public void MakeChild(Transform newParent)
     {
         // Sets "newParent" as the new parent of the child GameObject.
-        child.transform.SetParent(newParent);
+        //PanManager.Instance.CurrentPanCake.transform.SetParent(newParent);
 
         
 

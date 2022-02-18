@@ -22,6 +22,7 @@ public class PanAnimation : MonoBehaviour
     private void Update()
     {
         PanFlipAnimation();
+        
     }
 
     void PanFlipAnimation()
@@ -29,31 +30,27 @@ public class PanAnimation : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false)
         {
             anim.SetTrigger("PanFlip");
-
-
-            if (PancakeStats.Instance.currentFace == 0)
-            {
-                animator.SetTrigger("FrontFace");
-                
-            }
-
-            else
-            {
-                animator.SetTrigger("BackFace");
-                
-            }
-
-            PancakeStats.Instance.ChangeFace();
-                
-
-            
-            
-
-
+            PancakeFlipAnimation();
         }
 
         
         
+    }
+
+    void PancakeFlipAnimation()
+    {
+        if (PancakeStats.Instance.currentFace == 0)
+        {
+            animator.SetTrigger("FrontFace");     
+        }
+
+        else
+        {
+            animator.SetTrigger("BackFace");
+        }
+
+
+        PancakeStats.Instance.ChangeFace();
     }
 
 }
