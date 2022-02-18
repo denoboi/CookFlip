@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,6 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using ToonyColorsPro.Utilities;
-using System.Globalization;
 
 // Helper functions related to shader generation and file saving
 
@@ -863,7 +862,7 @@ namespace ToonyColorsPro
 
 			private static string GetShaderTarget(TCP2_Config config)
 			{
-				return (config.shaderTarget/10f).ToString("0.0", CultureInfo.InvariantCulture);
+				return (config.shaderTarget/10f).ToString("0.0");
 			}
 		}
 	}

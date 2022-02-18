@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 #define WRITE_UNCOMPRESSED_SERIALIZED_DATA
 
@@ -65,7 +65,6 @@ namespace ToonyColorsPro
 		{
 #pragma warning disable 414
 			[Serialization.SerializeAs("ver")] string tcp2version = ShaderGenerator2.TCP2_VERSION;
-			[Serialization.SerializeAs("unity")] string unityVersion { get { return Application.unityVersion; } }
 #pragma warning restore 414
 
 			internal const string kSerializationPrefix = "/* TCP_DATA ";
@@ -509,39 +508,21 @@ namespace ToonyColorsPro
 							{
 								sb.AppendLine(l);
 							}
-							string normalizedLineEndings = sb.ToString().Replace("\r\n", "\n");
-							var fileHash = ShaderGenerator2.GetHash(normalizedLineEndings);
+							var fileHash = ShaderGenerator2.GetHash(sb.ToString());
 
 							this.isModifiedExternally = string.Compare(fileHash, hash, StringComparison.Ordinal) != 0;
 						}
 
 						if (line.StartsWith(serializedPrefix) || line.StartsWith(serializedPrefixU))
 						{
-							string extractedData = line;
-							int j = i;
-							while (!extractedData.Contains(" */") && j < code.Length)
-							{
-								j++;
-								if (j < code.Length)
-								{
-									line = code[j].Trim();
-									extractedData += "\n" + line;
-								}
-								else
-								{
-									Debug.LogError(ShaderGenerator2.ErrorMsg("Incomplete serialized data in shader file."));
-									return false;
-								}
-							}
-
 							var serializedData = "";
-							if (extractedData.StartsWith(serializedPrefixU))
+							if (line.StartsWith(serializedPrefixU))
 							{
-								serializedData = extractedData.Substring(serializedPrefixU.Length, extractedData.Length - serializedPrefixU.Length - serializedSuffix.Length);
+								serializedData = line.Substring(serializedPrefixU.Length, line.Length - serializedPrefixU.Length - serializedSuffix.Length);
 							}
 							else
 							{
-								serializedData = extractedData.Substring(serializedPrefix.Length, extractedData.Length - serializedPrefix.Length - serializedSuffix.Length);
+								serializedData = line.Substring(serializedPrefix.Length, line.Length - serializedPrefix.Length - serializedSuffix.Length);
 								serializedData = UncompressString(serializedData);
 							}
 
@@ -850,12 +831,12 @@ namespace ToonyColorsPro
 				GUILayout.BeginHorizontal();
 
 				// Expand / Fold All
-				if (GUILayout.Button(TCP2_GUI.TempContent(" Expand All "), EditorStyles.miniButtonLeft))
+				if (GUILayout.Button(TCP2_GUI.TempContent("Expand All"), EditorStyles.miniButtonLeft))
 				{
 					ExpandAllGroups();
 				}
 
-				if (GUILayout.Button(TCP2_GUI.TempContent(" Fold All "), EditorStyles.miniButtonRight))
+				if (GUILayout.Button(TCP2_GUI.TempContent("Fold All"), EditorStyles.miniButtonRight))
 				{
 					FoldAllGroups();
 				}
@@ -874,7 +855,7 @@ namespace ToonyColorsPro
 				}
 				using (new EditorGUI.DisabledScope(!canReset))
 				{
-					if (GUILayout.Button(TCP2_GUI.TempContent(" Reset All "), EditorStyles.miniButton))
+					if (GUILayout.Button(TCP2_GUI.TempContent("Reset All"), EditorStyles.miniButton))
 					{
 						if (EditorUtility.DisplayDialog("Reset All Shader Properties", "All Custom Shader Properties will be cleared!\nThis can't be undone!\nProceed?", "Yes", "No"))
 						{
@@ -905,13 +886,7 @@ namespace ToonyColorsPro
 						if (group.header != null)
 						{
 							EditorGUI.BeginChangeCheck();
-
-							// hover rect as in 2019.3 UI
-							var rect = GUILayoutUtility.GetRect(group.header, EditorStyles.foldout, GUILayout.ExpandWidth(true));
-							TCP2_GUI.DrawHoverRect(rect);
-							rect.xMin += 4; // small left padding
-							headersExpanded[group.header.text] = TCP2_GUI.HeaderFoldoutHighlightErrorGrayPosition(rect, headersExpanded[group.header.text], group.header, group.hasErrors, group.hasModifiedShaderProperties);
-
+							headersExpanded[group.header.text] = TCP2_GUI.HeaderFoldoutHighlightErrorGray(headersExpanded[group.header.text], group.header, group.hasErrors, group.hasModifiedShaderProperties);
 							if (EditorGUI.EndChangeCheck())
 							{
 								// expand/fold all when alt/control is held
@@ -1058,12 +1033,6 @@ namespace ToonyColorsPro
 			ShaderProperty.CustomMaterialProperty CreateUniqueCustomTexture(Type impType)
 			{
 				return new ShaderProperty.CustomMaterialProperty(this.customMaterialPropertyShaderProperty, impType);
-			}
-
-			internal void ClearShaderProperties()
-			{
-				this.cachedShaderProperties.Clear();
-				this.visibleShaderProperties.Clear();
 			}
 
 			//Update available Shader Properties based on conditions

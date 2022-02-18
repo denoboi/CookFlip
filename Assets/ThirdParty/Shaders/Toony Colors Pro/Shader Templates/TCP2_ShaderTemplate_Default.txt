@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 #NAME=Default
 #FEATURES
 dd_start	lbl=LIGHTING
@@ -2131,7 +2131,7 @@ Shader "@%SHADER_NAME%@"
 	///
 	/// IF BYPASS_SPOT_FALLOFF
 		#if SPOT
-			ramp *= step(0.0001, ndl);
+			ramp *= ndl;
 		#endif
 	///
 	/// IF BYPASS_POINT_FALLOFF

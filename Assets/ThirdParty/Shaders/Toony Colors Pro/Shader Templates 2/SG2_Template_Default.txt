@@ -1,11 +1,11 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 #NAME=Default
 #ID=TEMPLATE_DEFAULT
 #SG2
 
-#================================================================
+#================================================================================================================================================================================================================================================================
 
 #MODULES
 
@@ -38,14 +38,12 @@ Outline
 
 # special effects:
 Dissolve
-Vertical Fog
 VertExmotion
 CurvedWorld
-Aura2
 
 #END
 
-#================================================================
+#================================================================================================================================================================================================================================================================
 
 #FEATURES
 
@@ -97,12 +95,10 @@ dd_start	lbl="STYLIZATION"
 dd_end
 dd_start	lbl="SPECIAL EFFECTS"
 ---
-sngl	lbl="Silhouette Pass"			kw=PASS_SILHOUETTE										tt="Adds a silhouette pass, to show the object when it is behind obstacles"
+sngl	lbl="Silhouette Pass"				kw=PASS_SILHOUETTE										tt="Adds a silhouette pass, to show the object when it is behind obstacles"
 sngl	lbl="Stencil Mask"				kw=SILHOUETTE_STENCIL	needs=PASS_SILHOUETTE	indent	tt="Use the Stencil Buffer as a mask for the silhouette, to prevent transparency issues with non-convex meshes or multiple meshes"
 ---
 [[MODULE:FEATURES:Dissolve]]
----
-[[MODULE:FEATURES:Vertical Fog]]
 dd_end
 dd_start	lbl="TRANSPARENCY/BLENDING"
 ---
@@ -117,8 +113,6 @@ space	space=4			needs=CUSTOM_BLENDING
 sngl	lbl="Depth pre-pass"		kw=DEPTH_PREPASS		tt="Adds a depth only shader pass, to prevent parts of the mesh from being visible through itself."
 ---
 sngl	lbl="Alpha Testing (Cutout)"	kw=ALPHA_TESTING
-sngl	lbl="Alpha to Coverage"			kw=ALPHA_TO_COVERAGE		needs=ALPHA_TESTING							indent		tt="Enables Alpha to Coverage, which allows MSAA anti-aliasing to be used with alpha testing"
-sngl	lbl="Disable alpha sharpening"	kw=ALPHA_TO_COVERAGE_RAW	needs=ALPHA_TESTING,ALPHA_TO_COVERAGE		indent=2	tt="Disables screen-space alpha sharpening, which is used to get proper anti-aliasing with Alpha to Coverage"
 dd_end
 dd_start	lbl="SHADER STATES"
 ---
@@ -158,12 +152,11 @@ dd_start	lbl="THIRD PARTY PLUGINS"
 ---
 [[MODULE:FEATURES:VertExmotion]]
 [[MODULE:FEATURES:CurvedWorld]]
-[[MODULE:FEATURES:Aura2]]
 dd_end
 
 #END
 
-#================================================================
+#================================================================================================================================================================================================================================================================
 
 #PROPERTIES_NEW
 header		Main Properties
@@ -212,7 +205,6 @@ color		Shadow Color		lighting, imp(color, label = "Shadow Color", variable = "_S
 [[MODULE:PROPERTIES_NEW:Sketch]]
 [[MODULE:PROPERTIES_NEW:Outline]]
 [[MODULE:PROPERTIES_NEW:Dissolve]]
-[[MODULE:PROPERTIES_NEW:Vertical Fog]]
 /// IF PASS_SILHOUETTE
 		header			Silhouette Pass
 		color_rgba		Silhouette Color				lighting, imp(color, label = "Silhouette Color", default = (0,0,0,0.33))
@@ -269,7 +261,6 @@ fixed_function_enum		Face Culling					fixed, imp(enum, enum_type = ToonyColorsPr
 header	Third Party
 [[MODULE:PROPERTIES_NEW:VertExmotion]]
 [[MODULE:PROPERTIES_NEW:CurvedWorld]]
-[[MODULE:PROPERTIES_NEW:Aura2]]
 header			Hooks					"Hooks are special Shader Properties that expose variables from the shader code that can then be freely modified"
 float3			Vertex Position			vertex, label = "Vertex Position (Object Space)", imp(hook, label = "v.vertex.xyz", toggles = HOOK_VERTEX_POSITION), help = "The object-space vertex position, e.g. to make your own vertex displacement function.  Make sure to enable <b>'Add Shadow/Depth Pass'</b> in the <b>'Surface Shader Flags'</b> for the shadows to get affected too."
 float3			Vertex Position World	vertex, label = "Vertex Position (World Space)", imp(hook, label = "worldPos.xyz", toggles = HOOK_VERTEX_POSITION_WORLD), help = "The world-space vertex position.  Make sure to enable <b>'Add Shadow/Depth Pass'</b> in the <b>'Surface Shader Flags'</b> for the shadows to get affected too."
@@ -277,7 +268,6 @@ float3			Main Light Direction			lighting, label = "Main Light Direction", imp(ho
 float3			Additional Lights Direction		lighting, label = "Additional Lights Direction", imp(hook, label = "lightDir", toggles = HOOK_OTHER_LIGHTS_DIR), help = "The direction of additional lights."
 color			Main Light Color				lighting, label = "Main Light Color", imp(hook, label = "lightColor", toggles = HOOK_MAIN_LIGHT_COLOR), help = "The color of the main directional light."
 color			Additional Lights Color			lighting, label = "Additional Lights Color", imp(hook, label = "lightColor", toggles = HOOK_OTHER_LIGHTS_COLOR), help = "The color of additional lights."
-color			Shading Ramp					lighting, label = "Shading Ramp", imp(hook, label = "ramp", toggles = HOOK_RAMP), help = "The colored ramp calculated, depending on the ramp settings, with the highlight and shadow colors."
 color			Main Light Attenuation			lighting, label = "Main Light Attenuation", imp(hook, label = "atten", toggles = HOOK_MAIN_LIGHT_ATTEN), help = "The attenuation of the main directional light (shadow map)."
 color			Additional Lights Attenuation	lighting, label = "Additional Lights Attenuation", imp(hook, label = "atten", toggles = HOOK_OTHER_LIGHTS_ATTEN), help = "The color of additional lights (shadow map and distance attenuation)."
 color			Final Albedo			fragment, imp(hook, label = "output.Albedo.rgb", toggles = HOOK_FINAL_ALBEDO), help = "The final albedo color used by the shader before lighting."
@@ -294,7 +284,7 @@ header		Misc
 ///
 #END
 
-#================================================================
+#================================================================================================================================================================================================================================================================
 
 #KEYWORDS
 
@@ -386,7 +376,7 @@ header		Misc
 
 #END
 
-#================================================================
+#================================================================================================================================================================================================================================================================
 
 Shader "@%SHADER_NAME%@"
 {
@@ -453,7 +443,6 @@ Shader "@%SHADER_NAME%@"
 		[[MODULE:PROPERTIES_BLOCK:NdotL Stylization]]
 		[[MODULE:PROPERTIES_BLOCK:Sketch]]
 		[[MODULE:PROPERTIES_BLOCK:Dissolve]]
-		[[MODULE:PROPERTIES_BLOCK:Vertical Fog]]
 /// IF PASS_SILHOUETTE
 		[TCP2HeaderHelp(Silhouette Pass)]
 		[[PROP:Silhouette Color]]
@@ -544,11 +533,131 @@ Shader "@%SHADER_NAME%@"
 		[[MODULE:VARIABLES:NoTile Sampling]]
 		[[MODULE:VARIABLES:VertExmotion]]
 		[[MODULE:VARIABLES:CurvedWorld]]
-		[[MODULE:VARIABLES:Aura2]]
 	#end_not_empty_block
 		ENDCG
 
 	#end_not_empty
+#PASS
+/// IF PASS_SILHOUETTE
+		//Silhouette Pass
+		Pass
+		{
+			Name "Silhouette"
+			Tags { "LightMode"="ForwardBase" }
+			Blend [[VALUE:Silhouette Blend Source]] [[VALUE:Silhouette Blend Destination]]
+			ZTest Greater
+			ZWrite Off
+	/// IF SILHOUETTE_STENCIL
+
+			Stencil
+			{
+				Ref [[VALUE:Silhouette Stencil Reference]]
+				Comp NotEqual
+				Pass Replace
+				ReadMask [[VALUE:Silhouette Stencil Reference]]
+				WriteMask [[VALUE:Silhouette Stencil Reference]]
+			}
+	///
+
+			CGPROGRAM
+			#pragma vertex vertex_silhouette
+			#pragma fragment fragment_silhouette
+			#pragma target @%SHADER_TARGET%@
+
+			#include "UnityCG.cginc"
+			#include "UnityLightingCommon.cginc"	// needed for LightColor
+
+			struct appdata_sil
+			{
+				float4 vertex : POSITION;
+				[[VERTEX_INPUT_TEXCOORDS]]
+	/// IF USE_VERTEX_COLORS_VERT
+				fixed4 vertexColor : COLOR;
+	///
+	/// IF VERTEXMOTION_NORMAL || CURVED_WORLD_NORMAL
+				float3 normal : NORMAL;
+				float4 tangent : TANGENT;
+	///
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+			};
+
+			struct v2f_sil
+			{
+				float4 vertex : SV_POSITION;
+				UNITY_VERTEX_OUTPUT_STEREO
+				[[INPUT_STRUCT_SEMANTICS:0]]
+#INPUT_VARIABLES
+	/// IF USE_VERTEX_COLORS_FRAG
+				fixed4 vertexColor;
+	///
+	/// IF USE_SCREEN_POSITION_FRAGMENT
+				float4 screenPosition;
+	///
+				[[MODULE:INPUT]]
+#END
+			};
+
+			[[VARIABLES]]
+			[[VARIABLES_GPU_INSTANCING]]
+
+#INPUT = v
+#OUTPUT = output
+#VERTEX
+			v2f_sil vertex_silhouette (appdata_sil v)
+			{
+				v2f_sil output;
+				UNITY_INITIALIZE_OUTPUT(v2f_sil, output);
+				UNITY_SETUP_INSTANCE_ID(v);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+
+				[[VERTEX_TEXCOORDS]]
+				[[SAMPLE_CUSTOM_PROPERTIES]]
+				[[SAMPLE_SHADER_PROPERTIES]]
+
+				[[MODULE:VERTEX:VertExmotion(v.vertex, v.normal, v.tangent)]]
+				[[MODULE:VERTEX:CurvedWorld(v.vertex, v.normal, v.tangent)]]
+
+	/// IF HOOK_VERTEX_POSITION
+				v.vertex.xyz = [[SAMPLE_VALUE_SHADER_PROPERTY:Vertex Position]];
+	///
+	/// IF HOOK_VERTEX_POSITION_WORLD
+				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				worldPos.xyz = [[SAMPLE_VALUE_SHADER_PROPERTY:Vertex Position World]];
+				v.vertex.xyz = mul(unity_WorldToObject, float4(worldPos, 1)).xyz;
+	///
+				output.vertex = UnityObjectToClipPos(v.vertex);
+	/// IF USE_VERTEX_COLORS_FRAG
+				output.vertexColor = v.vertexColor;
+	///
+	/// IF USE_CLIP_POSITION_VERTEX || USE_SCREEN_POSITION_FRAGMENT || USE_SCREEN_POSITION_VERTEX
+				float4 clipPos = output.vertex;
+	///
+	/// IF USE_SCREEN_POSITION_FRAGMENT || USE_SCREEN_POSITION_VERTEX
+
+				//Screen Position
+				float4 screenPos = ComputeScreenPos(clipPos);
+		/// IF USE_SCREEN_POSITION_FRAGMENT
+				output.screenPosition = screenPos;
+		///
+	///
+				[[MODULE:VERTEX:Screen Space UV(screenPos, clipPos, output)]]
+				return output;
+			}
+
+#INPUT = input
+#OUTPUT = no_output
+#FRAGMENT
+			half4 fragment_silhouette (v2f_sil input) : SV_Target
+			{
+				[[MODULE:FRAGMENT:Screen Space UV(input.screenPosition, input)]]
+				[[SAMPLE_CUSTOM_PROPERTIES]]
+				[[SAMPLE_SHADER_PROPERTIES]]
+				return [[VALUE:Silhouette Color]];
+			}
+			ENDCG
+		}
+
+///
 #PASS
 /// IF OUTLINE
 		// Outline Include
@@ -806,127 +915,6 @@ Shader "@%SHADER_NAME%@"
 		}
 ///
 #PASS
-/// IF PASS_SILHOUETTE
-		//Silhouette Pass
-		Pass
-		{
-			Name "Silhouette"
-			Tags { "LightMode"="ForwardBase" }
-			Blend [[VALUE:Silhouette Blend Source]] [[VALUE:Silhouette Blend Destination]]
-			ZTest Greater
-			ZWrite Off
-	/// IF SILHOUETTE_STENCIL
-
-			Stencil
-			{
-				Ref [[VALUE:Silhouette Stencil Reference]]
-				Comp NotEqual
-				Pass Replace
-				ReadMask [[VALUE:Silhouette Stencil Reference]]
-				WriteMask [[VALUE:Silhouette Stencil Reference]]
-			}
-	///
-
-			CGPROGRAM
-			#pragma vertex vertex_silhouette
-			#pragma fragment fragment_silhouette
-			#pragma target @%SHADER_TARGET%@
-
-			#include "UnityCG.cginc"
-			#include "UnityLightingCommon.cginc"	// needed for LightColor
-
-			struct appdata_sil
-			{
-				float4 vertex : POSITION;
-				[[VERTEX_INPUT_TEXCOORDS]]
-	/// IF USE_VERTEX_COLORS_VERT
-				fixed4 vertexColor : COLOR;
-	///
-	/// IF VERTEXMOTION_NORMAL || CURVED_WORLD_NORMAL
-				float3 normal : NORMAL;
-				float4 tangent : TANGENT;
-	///
-				UNITY_VERTEX_INPUT_INSTANCE_ID
-			};
-
-			struct v2f_sil
-			{
-				float4 vertex : SV_POSITION;
-				UNITY_VERTEX_OUTPUT_STEREO
-				[[INPUT_STRUCT_SEMANTICS:0]]
-#INPUT_VARIABLES
-	/// IF USE_VERTEX_COLORS_FRAG
-				fixed4 vertexColor;
-	///
-	/// IF USE_SCREEN_POSITION_FRAGMENT
-				float4 screenPosition;
-	///
-				[[MODULE:INPUT]]
-#END
-			};
-
-			[[VARIABLES]]
-			[[VARIABLES_GPU_INSTANCING]]
-
-#INPUT = v
-#OUTPUT = output
-#VERTEX
-			v2f_sil vertex_silhouette (appdata_sil v)
-			{
-				v2f_sil output;
-				UNITY_INITIALIZE_OUTPUT(v2f_sil, output);
-				UNITY_SETUP_INSTANCE_ID(v);
-				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-
-				[[VERTEX_TEXCOORDS]]
-				[[SAMPLE_CUSTOM_PROPERTIES]]
-				[[SAMPLE_SHADER_PROPERTIES]]
-
-				[[MODULE:VERTEX:VertExmotion(v.vertex, v.normal, v.tangent)]]
-				[[MODULE:VERTEX:CurvedWorld(v.vertex, v.normal, v.tangent)]]
-
-	/// IF HOOK_VERTEX_POSITION
-				v.vertex.xyz = [[SAMPLE_VALUE_SHADER_PROPERTY:Vertex Position]];
-	///
-	/// IF HOOK_VERTEX_POSITION_WORLD
-				float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				worldPos.xyz = [[SAMPLE_VALUE_SHADER_PROPERTY:Vertex Position World]];
-				v.vertex.xyz = mul(unity_WorldToObject, float4(worldPos, 1)).xyz;
-	///
-				output.vertex = UnityObjectToClipPos(v.vertex);
-	/// IF USE_VERTEX_COLORS_FRAG
-				output.vertexColor = v.vertexColor;
-	///
-	/// IF USE_CLIP_POSITION_VERTEX || USE_SCREEN_POSITION_FRAGMENT || USE_SCREEN_POSITION_VERTEX
-				float4 clipPos = output.vertex;
-	///
-	/// IF USE_SCREEN_POSITION_FRAGMENT || USE_SCREEN_POSITION_VERTEX
-
-				//Screen Position
-				float4 screenPos = ComputeScreenPos(clipPos);
-		/// IF USE_SCREEN_POSITION_FRAGMENT
-				output.screenPosition = screenPos;
-		///
-	///
-				[[MODULE:VERTEX:Screen Space UV(screenPos, clipPos, output)]]
-				return output;
-			}
-
-#INPUT = input
-#OUTPUT = no_output
-#FRAGMENT
-			half4 fragment_silhouette (v2f_sil input) : SV_Target
-			{
-				[[MODULE:FRAGMENT:Screen Space UV(input.screenPosition, input)]]
-				[[SAMPLE_CUSTOM_PROPERTIES]]
-				[[SAMPLE_SHADER_PROPERTIES]]
-				return [[VALUE:Silhouette Color]];
-			}
-			ENDCG
-		}
-
-///
-#PASS
 		// Main Surface Shader
 /// IF ALPHA_BLENDING
 		Blend SrcAlpha OneMinusSrcAlpha
@@ -941,9 +929,6 @@ Shader "@%SHADER_NAME%@"
 ///
 /// IF BLEND_OP
 		BlendOp [[VALUE:Blend Operation]]
-///
-/// IF ALPHA_TESTING && ALPHA_TO_COVERAGE
-		AlphaToMask On
 ///
 /// IF ZWRITE
 		ZWrite [[VALUE:Depth Write]]
@@ -1004,8 +989,6 @@ Shader "@%SHADER_NAME%@"
 		[[MODULE:SHADER_FEATURES_BLOCK:Sketch]]
 		[[MODULE:SHADER_FEATURES_BLOCK:NdotL Stylization]]
 		[[MODULE:SHADER_FEATURES_BLOCK:Dissolve]]
-		[[MODULE:SHADER_FEATURES_BLOCK:Vertical Fog]]
-		[[MODULE:SHADER_FEATURES_BLOCK:Aura2]]
 	#end_not_empty_block
 	#end_not_empty
 
@@ -1088,7 +1071,6 @@ Shader "@%SHADER_NAME%@"
 
 			[[MODULE:VERTEX:VertExmotion(v.vertex, v.normal, v.tangent)]]
 			[[MODULE:VERTEX:CurvedWorld(v.vertex, v.normal, v.tangent)]]
-			[[MODULE:VERTEX:Aura2(v.vertex, output)]]
 
 /// IF HOOK_VERTEX_POSITION
 			v.vertex.xyz = [[SAMPLE_VALUE_SHADER_PROPERTY:Vertex Position]];
@@ -1240,18 +1222,13 @@ Shader "@%SHADER_NAME%@"
 			[[MODULE:FRAGMENT:Dissolve(output.Emission)]]
 		/// IF ALPHA_TESTING
 
-		  /// IF !ALPHA_TO_COVERAGE
 			//Alpha Testing
 			clip(output.Alpha - [[VALUE:Cutoff]]);
-		  /// ELIF !ALPHA_TO_COVERAGE_RAW
-			//Sharpen Alpha-to-Coverage
-			output.Alpha = (output.Alpha - [[VALUE:Cutoff]]) / max(fwidth(output.Alpha), 0.0001) + 0.5;
-		  ///
 		///
 /// IF TEXTURE_BLENDING || TRIPLANAR
 			half4 albedoAlpha = half4(output.Albedo, output.Alpha);
 			[[MODULE:FRAGMENT:Triplanar:INPUT(input.worldPos, worldNormal, input.objPos, input.objNormal)]]
-			[[MODULE:FRAGMENT:Triplanar(albedoAlpha, input.worldPos)]]
+			[[MODULE:FRAGMENT:Triplanar(albedoAlpha)]]
 			[[MODULE:FRAGMENT:Texture Blending(albedoAlpha)]]
 			output.Albedo = albedoAlpha.rgb;
 ///
@@ -1360,11 +1337,6 @@ Shader "@%SHADER_NAME%@"
 				ramp = lerp([[VALUE:Shadow Color]], [[VALUE:Highlight Color]], ramp);
 			#endif
 ///
-
-/// IF HOOK_RAMP
-			ramp = [[SAMPLE_VALUE_SHADER_PROPERTY:Shading Ramp]];
-///
-
 #ENABLE_IMPL: float3 ramp, lbl = "Special/N·L Ramp (With Colors)", compat = "all", help = "N·L with the ramp modification with the highlight/shadow colors applied."
 			[[MODULE:FRAGMENT:NdotL Stylization:AFTER_RAMP(ndl, ramp)]]
 
@@ -1403,31 +1375,27 @@ Shader "@%SHADER_NAME%@"
 			[[MODULE:FRAGMENT:Reflection(color, surface.worldNormal, viewDir)]]
 	#if_not_empty
 			// ForwardBase pass only
-			#if !defined(UNITY_PASS_FORWARADD)
+			#if defined(UNITY_PASS_FORWARDBASE)
 	#start_not_empty_block
 /// IF GLOSSY_REFLECTIONS
 
 	/// IF GLOSSY_REFLECTIONS && REFLECTION_SHADER_FEATURE
-				#if defined(TCP2_REFLECTIONS)
+			#if defined(TCP2_REFLECTIONS)
 	///
-					//Reflection probes/skybox
-					half3 reflections = gi.indirect.specular * occlusion * [[VALUE:Reflection Color]];
-					color.rgb += reflections;
+			//Reflection probes/skybox
+			half3 reflections = gi.indirect.specular * occlusion * [[VALUE:Reflection Color]];
+			color.rgb += reflections;
 	/// IF GLOSSY_REFLECTIONS && REFLECTION_SHADER_FEATURE
-				#endif
+			#endif
 	///
-///
-
-				[[MODULE:FRAGMENT:Aura2(color.rgb, surface.input)]]
-/// IF HOOK_FINAL_COLOR
-
-			color.rgba = [[SAMPLE_VALUE_SHADER_PROPERTY:Final Color]];
 ///
 	#end_not_empty_block
-
 			#endif
 	#end_not_empty
-			[[MODULE:FRAGMENT:Vertical Fog(color.rgb, surface.input.worldPos)]]
+
+/// IF HOOK_FINAL_COLOR
+			color.rgba = [[SAMPLE_VALUE_SHADER_PROPERTY:Final Color]];
+///
 #DISABLE_IMPL_ALL
 			return color;
 		}

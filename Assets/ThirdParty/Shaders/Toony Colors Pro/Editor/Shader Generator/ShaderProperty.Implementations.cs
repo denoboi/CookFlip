@@ -4,9 +4,6 @@ using System.Globalization;
 using UnityEditor;
 using UnityEngine;
 using ToonyColorsPro.Utilities;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Text;
 
 // Implementations that can be used for Shader Properties
 
@@ -37,7 +34,6 @@ namespace ToonyColorsPro
 					typeof(Imp_GenericFromTemplate),
 				};
 
-				[Serialization.SerializeAs("guid")] public string guid;
 				[Serialization.SerializeAs("op")] public Operator @operator = Operator.Multiply;      //How this implementation is calculated compared to the previous one
 				[Serialization.SerializeAs("lbl"), ExcludeFromCopy] public string Label = "Property Label";
 				[Serialization.SerializeAs("gpu_inst")] public bool IsGpuInstanced = false;
@@ -53,14 +49,11 @@ namespace ToonyColorsPro
 
 				public ShaderProperty ParentShaderProperty;
 
-
 				public virtual void CheckErrors() { }
 				public virtual bool HasErrors { get { return false; } }
 
 				public Implementation(ShaderProperty shaderProperty)
 				{
-					this.guid = Guid.NewGuid().ToString();
-
 					if (shaderProperty != null)
 					{
 						ParentShaderProperty = shaderProperty;
@@ -68,8 +61,6 @@ namespace ToonyColorsPro
 					}
 				}
 
-				// Defines if the implementation can be copied
-				internal virtual bool CanBeCopied() { return true; }
 				public virtual void WillBeRemoved() { }
 				public virtual void OnPasted() { }
 
@@ -80,22 +71,21 @@ namespace ToonyColorsPro
 
 				public virtual string ToHashString()
 				{
-					var result = new StringBuilder();
+					var result = "";
 
 					var props = GetType().GetProperties();
 					foreach (var prop in props)
 					{
-						result.Append(prop.GetValue(this, null));
+						result += prop.GetValue(this, null);
 					}
 
 					var fields = GetType().GetFields();
 					foreach (var field in fields)
 					{
-						if (field.Name == "guid") continue;
-						result.Append(field.GetValue(this));
+						result += field.GetValue(this);
 					}
 
-					return result.ToString();
+					return result;
 				}
 
 				virtual public Implementation Clone()
@@ -147,7 +137,7 @@ namespace ToonyColorsPro
 				internal virtual string[] NeededFeaturesExtra() { return new string[0]; }
 
 				//GUI that goes on the line(s) under the drop-down
-				internal virtual void NewLineGUI(bool usedByCustomCode) { }
+				internal virtual void NewLineGUI() { }
 
 				internal virtual bool HasOperator() { return true; }
 
@@ -182,8 +172,6 @@ namespace ToonyColorsPro
 			[Serialization.SerializeAs("imp_hook")]
 			public class Imp_Hook : Implementation
 			{
-				internal override bool CanBeCopied() { return false; }
-
 				public static VariableType VariableCompatibility { get { return VariableTypeAll; } }
 				public static string MenuLabel { get { return "Hook"; } }
 				internal override string GUILabel() { return MenuLabel; }
@@ -197,7 +185,7 @@ namespace ToonyColorsPro
 					return this.Label;
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					{
@@ -287,14 +275,13 @@ namespace ToonyColorsPro
 
 				protected abstract string PropertyTypeName();
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					{
 						ShaderGenerator2.ContextualHelpBox(string.Format("Will create a {0} property that you can tweak in the Material Inspector, or with scripts with the Material or Shader APIs.", PropertyTypeName()));
 					}
 					EndHorizontal();
-					GUILayout.Space(4f);
 
 					if (IsCustomMaterialProperty)
 					{
@@ -306,7 +293,7 @@ namespace ToonyColorsPro
 							string label = isReferenced ? "<b><color={0}>Referenced by:</color></b> " + CustomMaterialPropertyReferences :
 								"<i>This Material Property isn't referenced in any Shader Property, it won't be included in the generated shader.</i>";
 
-							GUILayout.Label(string.Format(label, color), SGUILayout.Styles.GrayMiniLabelWrap, GUILayout.ExpandWidth(true));
+							GUILayout.Label(string.Format(label, color), SGUILayout.Styles.GrayMiniLabelWrap);
 						}
 						EndHorizontal();
 
@@ -388,9 +375,9 @@ namespace ToonyColorsPro
 				internal override string PrintVariableDeclare(string indent) { return string.Format("float {0};", PropertyName); }
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments) { return PropertyName; }
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
@@ -425,9 +412,9 @@ namespace ToonyColorsPro
 				internal override string PrintVariableDeclare(string indent) { return string.Format("float {0};", PropertyName); }
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments) { return PropertyName; }
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
@@ -511,9 +498,7 @@ namespace ToonyColorsPro
 				internal override string PrintProperty(string indent) { return base.PrintProperty(indent) + string.Format(CultureInfo.InvariantCulture, "{0} (\"{1}\", Vector) = ({2},{3},{4},{5})", PropertyName, Label, DefaultValue.x, DefaultValue.y, DefaultValue.z, DefaultValue.w); }
 				internal override string PrintVariableDeclare(string indent)
 				{
-					// Always declare a float4, even if all channels aren't necessarily used, as they could still be used for custom code
-					//var channels = ChannelsCount > 1 ? ChannelsCount.ToString() : "";
-					string channels = "4";
+					var channels = ChannelsCount > 1 ? ChannelsCount.ToString() : "";
 					return string.Format("{0}{1} {2};", FloatPrec, channels, PropertyName);
 				}
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments)
@@ -523,16 +508,15 @@ namespace ToonyColorsPro
 					return string.Format("{0}{1}", PropertyName, channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
 						bool highlighted = !IsDefaultImplementation ? DefaultValue != Vector4.zero : DefaultValue != GetDefaultImplementation<Imp_MaterialProperty_Vector>().DefaultValue;
 						SGUILayout.InlineLabel("Default Value", highlighted);
-						int channelsCount = usedByCustomCode ? 4 : ChannelsCount;
-						switch (channelsCount)
+						switch (ChannelsCount)
 						{
 							case 4: DefaultValue = SGUILayout.Vector4Field(DefaultValue); break;
 							case 3: DefaultValue = SGUILayout.Vector3Field(DefaultValue); break;
@@ -547,21 +531,10 @@ namespace ToonyColorsPro
 						{
 							bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_MaterialProperty_Vector>().Channels;
 							SGUILayout.InlineLabel("Swizzle", highlighted);
-
-							if (usedByCustomCode)
-							{
-								using (new EditorGUI.DisabledScope(true))
-								{
-									GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-								}
-							}
+							if (ChannelsCount == 1)
+								Channels = SGUILayout.XYZWSelector(Channels);
 							else
-							{
-								if (ChannelsCount == 1)
-									Channels = SGUILayout.XYZWSelector(Channels);
-								else
-									Channels = SGUILayout.XYZWSwizzle(Channels, ChannelsCount);
-							}
+								Channels = SGUILayout.XYZWSwizzle(Channels, ChannelsCount);
 						}
 						EndHorizontal();
 					}
@@ -624,9 +597,7 @@ namespace ToonyColorsPro
 				internal override string PrintProperty(string indent) { return base.PrintProperty(indent) + string.Format(CultureInfo.InvariantCulture, "{7}{6}{0} (\"{1}\", Color) = ({2},{3},{4},{5})", PropertyName, Label, DefaultValue.r, DefaultValue.g, DefaultValue.b, DefaultValue.a, Hdr ? "[HDR] " : "", ChannelsCount < 4 ? "[TCP2ColorNoAlpha] " : ""); }
 				internal override string PrintVariableDeclare(string indent)
 				{
-					// Always declare a float4, even if all channels aren't necessarily used, as they could still be used for custom code
-					//var channels = ChannelsCount > 1 ? ChannelsCount.ToString() : "";
-					string channels = "4";
+					var channels = ChannelsCount > 1 ? ChannelsCount.ToString() : "";
 					return string.Format("{0}{1} {2};", Hdr ? FloatPrecision.half : FloatPrecision.@fixed, channels, PropertyName);
 				}
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments)
@@ -636,15 +607,15 @@ namespace ToonyColorsPro
 					return string.Format("{0}{1}", PropertyName, channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
 						bool highlighted = !IsDefaultImplementation ? DefaultValue != Color.white : DefaultValue != GetDefaultImplementation<Imp_MaterialProperty_Color>().DefaultValue;
 						SGUILayout.InlineLabel("Default Value", highlighted);
-						var showAlpha = ChannelsCount >= 4 || usedByCustomCode;
+						var showAlpha = ChannelsCount >= 4;
 						DefaultValue = SGUILayout.ColorField(DefaultValue, showAlpha, Hdr);
 					}
 					EndHorizontal();
@@ -663,21 +634,10 @@ namespace ToonyColorsPro
 						{
 							bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_MaterialProperty_Color>().Channels;
 							SGUILayout.InlineLabel("Swizzle", highlighted);
-
-							if (usedByCustomCode)
-							{
-								using (new EditorGUI.DisabledScope(true))
-								{
-									GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-								}
-							}
+							if (ChannelsCount == 1)
+								Channels = SGUILayout.RGBASelector(Channels);
 							else
-							{
-								if (ChannelsCount == 1)
-									Channels = SGUILayout.RGBASelector(Channels);
-								else
-									Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
-							}
+								Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
 						}
 						EndHorizontal();
 					}
@@ -727,14 +687,10 @@ namespace ToonyColorsPro
 						}
 					}
 
-					if (UseWorldPosUV)
-					{
-						list.Add(OptionFeatures.World_Pos_UV);
-					}
-
 					return list.ToArray();
 				}
 
+				[Serialization.SerializeAs("guid")] public string guid;
 				[Serialization.SerializeAs("uto")] public bool UseTilingOffset;
 				[Serialization.SerializeAs("tov")] public string TilingOffsetVariable = "";
 				[Serialization.SerializeAs("gto")] public bool GlobalTilingOffset;
@@ -755,8 +711,6 @@ namespace ToonyColorsPro
 				[Serialization.SerializeAs("ssuv")] public bool UseScreenSpaceUV;
 				[Serialization.SerializeAs("ssuv_vert")] public bool ScreenSpaceUVVertex;
 				[Serialization.SerializeAs("ssuv_obj")] public bool ScreenSpaceUVObjectOffset;
-				[Serialization.SerializeAs("wpuv")] public bool UseWorldPosUV;
-				[Serialization.SerializeAs("wpuv_chan")] public string WorldPosUVChannels = "XZ";
 				string DefaultChannels = "RGB";
 
 				ProgramType program = ProgramType.Undefined;
@@ -778,6 +732,8 @@ namespace ToonyColorsPro
 
 				public Imp_MaterialProperty_Texture(ShaderProperty shaderProperty) : base(shaderProperty)
 				{
+					this.guid = Guid.NewGuid().ToString();
+
 					program = shaderProperty != null ? shaderProperty.Program : ProgramType.Undefined;
 					PropertyName = "_" + SGUILayout.Utils.RemoveWhitespaces(Label);
 					Label = shaderProperty.Name + " Texture";
@@ -835,23 +791,18 @@ namespace ToonyColorsPro
 					UvChannel = Array.IndexOf(SGUILayout.Constants.UvChannelOptions, SGUILayout.Constants.screenSpaceUVLabel);
 				}
 
-				string GetUV(string input, string output, ProgramType programType)
+				string GetUV(string input, string output)
 				{
 					if (UseScreenSpaceUV)
 					{
 						return "screenUV";
-					}
-					else if(UseWorldPosUV)
-					{
-						bool isURP = ShaderGenerator2.TemplateID == "TEMPLATE_URP" || ShaderGenerator2.TemplateID == "TEMPLATE_LWRP";
-						return string.Format("{0}.{1}", isURP ? "positionWS" : input + ".worldPos", WorldPosUVChannels.ToLowerInvariant());
 					}
 					else
 					{
 						string coord = ShaderGenerator2.VariablesManager.GetVariable("texcoord" + UvChannel);
 						if (string.IsNullOrEmpty(coord))
 						{
-							if (programType == ProgramType.Vertex)
+							if (program == ProgramType.Vertex)
 							{
 								// no packed variable and in vertex program, so it must be a texcoord only used in the vertex function
 								return string.Format("{0}.{1}.xy", input, "texcoord" + UvChannel);
@@ -864,7 +815,7 @@ namespace ToonyColorsPro
 						}
 						else
 						{
-							return string.Format("{0}.{1}.xy", programType == ProgramType.Vertex ? output : input, coord);
+							return string.Format("{0}.{1}.xy", program == ProgramType.Vertex ? output : input, coord);
 						}
 					}
 				}
@@ -1045,16 +996,15 @@ namespace ToonyColorsPro
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments)
 				{
 					var tilingOffsetVariable = UseCustomTilingOffsetVariable() ? TilingOffsetVariable : GetDefaultTilingOffsetVariable();
-					var tilingMod = ScaleByTexelSize ? string.Format(" * {0}_TexelSize.xy", PropertyName) : "";
+					var tilingOffsetMod = ScaleByTexelSize ? string.Format(" * {0}_TexelSize.xy", PropertyName) : "";
 					if (UseScreenSpaceUV)
 					{
-						tilingMod += ScaleByTexelSize ? " * _ScreenParams.xy" : " * _ScreenParams.zw";
+						tilingOffsetMod += ScaleByTexelSize ? " * _ScreenParams.xy" : " * _ScreenParams.zw";
 					}
-					tilingMod += (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV || UseWorldPosUV)) ? string.Format(" * {0}.xy", tilingOffsetVariable) : "";
-					var offsetMod = (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV || UseWorldPosUV)) ? string.Format(" + {0}.zw", tilingOffsetVariable) : "";
+					tilingOffsetMod += (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV)) ? string.Format(" * {0}.xy + {0}.zw", tilingOffsetVariable) : "";
 					var scrollingVariable = UseCustomScrollingVariable() ? ScrollingVariable : GetDefaultScrollingVariable();
 					var scrollingMod = (UseScrolling && !GlobalScrolling) ? string.Format(" + {1}(_Time.yy * {0}.xy)", scrollingVariable, NoTile ? "" : "frac") : "";
-					var randomOffsetMod = (RandomOffset && !GlobalRandomOffset) ? string.Format(" + hash22(floor(_Time.xx * {0}_OffsetSpeed.xx) / {0}_OffsetSpeed.xx)", PropertyName) : "";
+					var offsetMod = (RandomOffset && !GlobalRandomOffset) ? string.Format(" + hash22(floor(_Time.xx * {0}_OffsetSpeed.xx) / {0}_OffsetSpeed.xx)", PropertyName) : "";
 
 					// uv coordinates
 					string coords = null;
@@ -1068,7 +1018,7 @@ namespace ToonyColorsPro
 					}
 					if (coords == null)
 					{
-						coords = GetUV(inputSource, outputSource, ProgramType.Fragment);
+						coords = GetUV(inputSource, outputSource);
 					}
 
 					// function
@@ -1078,30 +1028,29 @@ namespace ToonyColorsPro
 					var hideChannels = TryGetArgument("hide_channels", arguments);
 					var channels = string.IsNullOrEmpty(hideChannels) ? "." + Channels.ToLowerInvariant() : "";
 
-					return string.Format("{0}({1}, {2}{3}{4}{5}{6}){7}", function, PropertyName, coords, tilingMod, scrollingMod, offsetMod, randomOffsetMod, channels);
+					return string.Format("{0}({1}, ({2}{3}){4}{5}){6}", function, PropertyName, coords, scrollingMod, tilingOffsetMod, offsetMod, channels);
 				}
 				internal override string PrintVariableVertex(string inputSource, string outputSource, string arguments)
 				{
 					var tilingOffsetVariable = UseCustomTilingOffsetVariable() ? TilingOffsetVariable : GetDefaultTilingOffsetVariable();
-					var tilingMod = ScaleByTexelSize ? string.Format(" * {0}_TexelSize.xy", PropertyName) : "";
+					var tilingOffsetMod = ScaleByTexelSize ? string.Format(" * {0}_TexelSize.xy", PropertyName) : "";
 					if (UseScreenSpaceUV)
 					{
-						tilingMod += ScaleByTexelSize ? " * _ScreenParams.xy" : " * _ScreenParams.zw";
+						tilingOffsetMod += ScaleByTexelSize ? " * _ScreenParams.xy" : " * _ScreenParams.zw";
 					}
-					tilingMod += (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV || UseWorldPosUV)) ? string.Format(" * {0}.xy", tilingOffsetVariable) : "";
-					var offsetMod = (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV || UseWorldPosUV)) ? string.Format(" + {0}.zw", tilingOffsetVariable) : "";
+					tilingOffsetMod += (UseTilingOffset && (!GlobalTilingOffset || UseScreenSpaceUV)) ? string.Format(" * {0}.xy + {0}.zw", tilingOffsetVariable) : "";
 					var scrollingVariable = UseCustomScrollingVariable() ? ScrollingVariable : GetDefaultScrollingVariable();
 					var scrollingMod = (UseScrolling && !GlobalScrolling) ? string.Format(" + {1}(_Time.yy * {0}.xy)", scrollingVariable, NoTile ? "" : "frac") : "";
-					var randomOffsetMod = (RandomOffset && !GlobalRandomOffset) ? string.Format(" + hash22(floor(_Time.xx * {0}_OffsetSpeed.xx) / {0}_OffsetSpeed.xx)", PropertyName) : "";
-					var coords = GetUV(inputSource, outputSource, ProgramType.Vertex);
+					var offsetMod = (RandomOffset && !GlobalRandomOffset) ? string.Format(" + hash22(floor(_Time.xx * {0}_OffsetSpeed.xx) / {0}_OffsetSpeed.xx)", PropertyName) : "";
+					var coords = GetUV(inputSource, outputSource);
 					var hideChannels = TryGetArgument("hide_channels", arguments);
 					var channels = string.IsNullOrEmpty(hideChannels) ? "." + Channels.ToLowerInvariant() : "";
-					return string.Format("tex2Dlod({0}, float4({1}{2}{3}{4}{5}, 0, {6})){7}", PropertyName, coords, tilingMod, scrollingMod, offsetMod, randomOffsetMod, GetMipValue(), channels);
+					return string.Format("tex2Dlod({0}, float4(({1}{2}){3}{4}, 0, {5})){6}", PropertyName, coords, scrollingMod, tilingOffsetMod, offsetMod, GetMipValue(), channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
@@ -1124,21 +1073,10 @@ namespace ToonyColorsPro
 						{
 							bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_MaterialProperty_Texture>().Channels;
 							SGUILayout.InlineLabel("Swizzle", highlighted);
-
-							if (usedByCustomCode)
-							{
-								using (new EditorGUI.DisabledScope(true))
-								{
-									GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-								}
-							}
+							if (ChannelsCount == 1)
+								Channels = SGUILayout.RGBASelector(Channels);
 							else
-							{
-								if (ChannelsCount == 1)
-									Channels = SGUILayout.RGBASelector(Channels);
-								else
-									Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
-							}
+								Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
 						}
 						EndHorizontal();
 					}
@@ -1173,17 +1111,7 @@ namespace ToonyColorsPro
 							if (GUI.changed)
 							{
 								UseScreenSpaceUV = Array.IndexOf(SGUILayout.Constants.UvChannelOptions, SGUILayout.Constants.screenSpaceUVLabel) == UvChannel && !IsUvLocked;
-								UseWorldPosUV = Array.IndexOf(SGUILayout.Constants.UvChannelOptions, SGUILayout.Constants.worldPosUVLabel) == UvChannel && !IsUvLocked;
 							}
-						}
-
-						if (UseWorldPosUV)
-						{
-							var gc = TCP2_GUI.TempContent(".");
-							var rect = GUILayoutUtility.GetRect(gc, EditorStyles.label, GUILayout.ExpandWidth(false));
-							rect.y -= 2;
-							GUI.Label(rect, gc);
-							WorldPosUVChannels = SGUILayout.GenericSwizzle(WorldPosUVChannels, 2, "XYZ", 30, showAvailableChannels: false);
 						}
 					}
 					EndHorizontal();
@@ -1226,7 +1154,7 @@ namespace ToonyColorsPro
 						}
 						EndHorizontal();
 
-						bool showTilingOptions = UseTilingOffset && !UseScreenSpaceUV && !UseWorldPosUV;
+						bool showTilingOptions = UseTilingOffset && !UseScreenSpaceUV;
 						if ((GlobalOptions.data.ShowDisabledFeatures || showTilingOptions) && !IsUvLocked)
 						{
 							using (new EditorGUI.DisabledGroupScope(!showTilingOptions))
@@ -1241,7 +1169,7 @@ namespace ToonyColorsPro
 							}
 						}
 
-						showTilingOptions = UseTilingOffset && !(!UseScreenSpaceUV && !UseWorldPosUV && GlobalTilingOffset);
+						showTilingOptions = UseTilingOffset && !(!UseScreenSpaceUV && GlobalTilingOffset);
 						if ((GlobalOptions.data.ShowDisabledFeatures || showTilingOptions))
 						{
 							using (new EditorGUI.DisabledGroupScope(!showTilingOptions))
@@ -1352,7 +1280,7 @@ namespace ToonyColorsPro
 						}
 						EndHorizontal();
 
-						bool showScrollingOptions = (UseScrolling || RandomOffset) && !UseScreenSpaceUV && !UseWorldPosUV;
+						bool showScrollingOptions = (UseScrolling || RandomOffset) && !UseScreenSpaceUV;
 						if ((GlobalOptions.data.ShowDisabledFeatures || showScrollingOptions) && !IsUvLocked)
 						{
 							using (new EditorGUI.DisabledGroupScope(!showScrollingOptions))
@@ -1368,7 +1296,7 @@ namespace ToonyColorsPro
 									}
 									EndHorizontal();
 
-									bool showScrollingVariable = UseScrolling && !(!UseScreenSpaceUV && !UseWorldPosUV && GlobalScrolling);
+									bool showScrollingVariable = UseScrolling && !(!UseScreenSpaceUV && GlobalScrolling);
 									if ((GlobalOptions.data.ShowDisabledFeatures || showScrollingVariable))
 									{
 										using (new EditorGUI.DisabledGroupScope(!showScrollingVariable))
@@ -1565,7 +1493,7 @@ namespace ToonyColorsPro
 					return null;
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Uses a constant value in the shader.\nIf your shader property will keep the same value, this will be faster than using a Material Property.");
@@ -1690,7 +1618,7 @@ namespace ToonyColorsPro
 					return string.Format("{0}.vertexColor{1}", inputSource, channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Fetch the mesh's vertex colors.");
@@ -1700,21 +1628,10 @@ namespace ToonyColorsPro
 					{
 						bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_VertexColor>().Channels;
 						SGUILayout.InlineLabel("Swizzle", highlighted);
-
-						if (usedByCustomCode)
-						{
-							using (new EditorGUI.DisabledScope(true))
-							{
-								GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-							}
-						}
+						if (ChannelsCount == 1)
+							Channels = SGUILayout.RGBASelector(Channels);
 						else
-						{
-							if (ChannelsCount == 1)
-								Channels = SGUILayout.RGBASelector(Channels);
-							else
-								Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
-						}
+							Channels = SGUILayout.RGBASwizzle(Channels, ChannelsCount);
 					}
 					EndHorizontal();
 				}
@@ -1777,7 +1694,7 @@ namespace ToonyColorsPro
 					return string.Format("{0}.texcoord{1}{2}", inputSource, TexcoordChannel, channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Fetch the mesh's specified UV coordinates.");
@@ -1800,21 +1717,10 @@ namespace ToonyColorsPro
 					{
 						bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_VertexTexcoord>().Channels;
 						SGUILayout.InlineLabel("Swizzle", highlighted);
-
-						if (usedByCustomCode)
-						{
-							using (new EditorGUI.DisabledScope(true))
-							{
-								GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-							}
-						}
+						if (ChannelsCount == 1)
+							Channels = SGUILayout.XYZWSelector(Channels);
 						else
-						{
-							if (ChannelsCount == 1)
-								Channels = SGUILayout.XYZWSelector(Channels);
-							else
-								Channels = SGUILayout.XYZWSwizzle(Channels, ChannelsCount);
-						}
+							Channels = SGUILayout.XYZWSwizzle(Channels, ChannelsCount);
 					}
 					EndHorizontal();
 				}
@@ -2343,7 +2249,7 @@ namespace ToonyColorsPro
 					return VariableName;
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Special implementation defined in the template" + (HelpMessage != null ? ":\n" + HelpMessage : "."));
@@ -2353,21 +2259,10 @@ namespace ToonyColorsPro
 					{
 						bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_GenericFromTemplate>().Channels;
 						SGUILayout.InlineLabel("Swizzle", highlighted);
-
-						if (usedByCustomCode)
-						{
-							using (new EditorGUI.DisabledScope(true))
-							{
-								GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-							}
-						}
+						if (ChannelsCount == 1)
+							Channels = SGUILayout.GenericSelector(ChannelsOptions, Channels);
 						else
-						{
-							if (ChannelsCount == 1)
-								Channels = SGUILayout.GenericSelector(ChannelsOptions, Channels);
-							else
-								Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, ChannelsOptions);
-						}
+							Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, ChannelsOptions);
 					}
 					EndHorizontal();
 
@@ -2538,9 +2433,9 @@ namespace ToonyColorsPro
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments) { return PropertyName; }
 				*/
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
-					base.NewLineGUI(usedByCustomCode);
+					base.NewLineGUI();
 
 					BeginHorizontal();
 					{
@@ -2604,63 +2499,17 @@ namespace ToonyColorsPro
 				internal override string GUILabel() { return MenuLabel; }
 				internal override bool HasOperator() { return false; }
 
-				public enum PrependType
-				{
-					Disabled,
-					Embedded,
-					ExternalFile
-				}
-
-				[Serialization.SerializeAs("prepend_type")] public PrependType prependType = PrependType.Disabled;
-				[Serialization.SerializeAs("prepend_code")] public string prependCode = "";
-				[Serialization.SerializeAs("prepend_file")] public string prependFileGuid = "";
-				[Serialization.SerializeAs("prepend_file_block")] public string prependFileBlock = "";
-				[Serialization.SerializeAs("preprend_params")] public Dictionary<string, string> prependParametersValues = new Dictionary<string, string>(); // values for the parameters of the defined block in the prepend file
-
-				TextAsset prependFile;
-				bool prependFileBlockFound;
-				string[] prependBlocks;
-
-				struct PrependReference
-				{
-					public ShaderProperty.VariableType variableType;
-					public string variableName;
-					public string defaultValueOrComment;
-					public bool isComment;
-
-					public PrependReference(ShaderProperty.VariableType type, string name, string value, bool comment)
-					{
-						variableType = type;
-						variableName = name;
-						defaultValueOrComment = value;
-						isComment = comment;
-
-						label = string.Format("{0} ({1})", name, type);
-					}
-
-					public string label { get; private set; }
-				}
-				List<PrependReference> prependReferences;
-				List<string> prependLines;
-
 				[Serialization.SerializeAs("code")] public string code = "";
 				public bool usesReplacementTags = false;
-				Dictionary<string, List<string>> replacementParts = new Dictionary<string, List<string>>();
-				List<int> usedImplementations = new List<int>();
+				string[] replacementParts = null;
+				int[] usedImplementations = null;
 				public string tagError = null;
 
-				public override bool HasErrors { get { return base.HasErrors | !string.IsNullOrEmpty(tagError) | (prependType == PrependType.ExternalFile && prependFile != null && !prependFileBlockFound); } }
+				public override bool HasErrors { get { return base.HasErrors | !string.IsNullOrEmpty(tagError); } }
 
 				public Imp_CustomCode(ShaderProperty shaderProperty) : base(shaderProperty)
 				{
-					ParentShaderProperty.onImplementationsChanged += onImplementationsChanged;
-					ShaderGenerator2.onProjectChange += onProjectChanged;
-				}
-
-				public override void WillBeRemoved()
-				{
-					ParentShaderProperty.onImplementationsChanged -= onImplementationsChanged;
-					ShaderGenerator2.onProjectChange -= onProjectChanged;
+					shaderProperty.onImplementationsChanged += onImplementationsChanged;
 				}
 
 				void onImplementationsChanged()
@@ -2668,159 +2517,13 @@ namespace ToonyColorsPro
 					CheckReplacementTags();
 				}
 
-				void onProjectChanged()
-				{
-					if (prependType == PrependType.ExternalFile)
-					{
-						TryToFindPrependCodeBlock();
-					}
-					CheckReplacementTags();
-				}
-
-				[Serialization.OnDeserializeCallback]
-				void OnDeserialized()
-				{
-					TryFindPrependFileFromGuid();
-					CheckReplacementTags();
-				}
-
-				public override void OnPasted()
-				{
-					TryFindPrependFileFromGuid();
-					CheckReplacementTags();
-				}
-				
-				void TryFindPrependFileFromGuid()
-				{
-					if (!string.IsNullOrEmpty(prependFileGuid))
-					{
-						var file = AssetDatabase.LoadAssetAtPath<TextAsset>(AssetDatabase.GUIDToAssetPath(prependFileGuid));
-						if (file != null)
-						{
-							prependFile = file;
-							TryToFindPrependCodeBlock();
-						}
-						else
-						{
-							prependFileGuid = "";
-							prependFile = null;
-						}
-					}
-				}
-
-				Dictionary<string, string> shaderUniqueVariableNamesMapping;
-
-				void PrintPrependCodeIfNeeded()
-				{
-					PrintPrependCodeIfNeeded(null, null, null, null);
-				}
-				Dictionary<string, string> PrintPrependCodeIfNeeded(Dictionary<Implementation, string> cachedVariables, string inputSource, string outputSource, string arguments)
-				{
-					if (prependType == PrependType.Disabled)
-					{
-						return null;
-					}
-
-					if (prependType == PrependType.Embedded && !string.IsNullOrEmpty(prependCode))
-					{
-						string pCode = prependCode;
-						if (replacementParts.ContainsKey("prependCode"))
-						{
-							var list = replacementParts["prependCode"];
-							pCode = ParseReplacementParts(list, cachedVariables, inputSource, outputSource, arguments);
-						}
-
-						var lines = pCode.Split(new string[] { "\r\n", "\n" }, System.StringSplitOptions.None);
-						foreach (var l in lines)
-						{
-							ShaderGenerator2.AppendLineBefore(l);
-						}
-					}
-					else if (prependType == PrependType.ExternalFile && prependFile != null && prependFileBlockFound)
-					{
-						if (shaderUniqueVariableNamesMapping == null && prependReferences != null)
-						{
-							shaderUniqueVariableNamesMapping = new Dictionary<string, string>();
-							foreach (var reference in prependReferences)
-							{
-								if (reference.isComment) continue;
-								shaderUniqueVariableNamesMapping.Add(reference.variableName, string.Format("{0}_{1}", reference.variableName, ShaderGenerator2.GlobalUniqueId));
-							}
-						}
-
-						string header = string.Format("// {0} : {1}", prependFile.name, prependFileBlock);
-						string commentLine = "//" + new string('-', header.Length - 2);
-						ShaderGenerator2.AppendLineBefore(commentLine);
-						ShaderGenerator2.AppendLineBefore(header);
-
-						// generate declaration of each parameter with its value
-						for (int i = 0; i < prependReferences.Count; i++)
-						{
-							var reference = prependReferences[i];
-							if (reference.isComment)
-							{
-								continue;
-							}
-
-							var value = prependParametersValues[reference.variableName];
-
-							if (replacementParts.ContainsKey(reference.variableName))
-							{
-								var list = replacementParts[reference.variableName];
-								value = ParseReplacementParts(list, cachedVariables, inputSource, outputSource, arguments);
-							}
-
-							ShaderGenerator2.AppendLineBefore(string.Format("{0} {1} = {2};", 
-								ShaderProperty.VariableTypeToShaderCode(reference.variableType),
-								shaderUniqueVariableNamesMapping[reference.variableName],
-								value));
-						}
-
-						// process and append the block lines
-						var variableRegex = new Regex(@"[^\w](_(\w+)_)[^\w]+?", RegexOptions.ECMAScript);
-						Dictionary<string, string> uniqueVariableReplacements = new Dictionary<string, string>();
-						foreach (var l in prependLines)
-						{
-							string line = l;
-
-							// replace the variable names with their unique id counterpart to avoid duplicate declarations
-							foreach (var reference in prependReferences)
-							{
-								if (reference.isComment) continue;
-								line = line.Replace(reference.variableName, shaderUniqueVariableNamesMapping[reference.variableName]);
-							}
-
-							// find and replace variables with the _name_ format, to avoid duplicate declarations
-							var matches = variableRegex.Matches(line);
-							foreach (Match match in matches)
-							{
-								string toReplace = match.Groups[1].Value;
-								if (!uniqueVariableReplacements.ContainsKey(toReplace))
-								{
-									uniqueVariableReplacements.Add(toReplace, match.Groups[2].Value + "_" + ShaderGenerator2.GlobalUniqueId);
-								}
-
-								line = line.Replace(toReplace, uniqueVariableReplacements[toReplace]);
-							}
-
-							ShaderGenerator2.AppendLineBefore(line);
-						}
-						ShaderGenerator2.AppendLineBefore(commentLine);
-
-						return uniqueVariableReplacements;
-					}
-
-					return null;
-				}
-
 				internal override string PrintVariableFragment(string inputSource, string outputSource, string arguments)
 				{
-					PrintPrependCodeIfNeeded();
 					return code.Length > 0 && !char.IsWhiteSpace(code[0]) ? " " + code : code;
 				}
 
-				//called if the custom code (or prepend code) use {n} tags, to directly use implementations within the custom code
-				public string PrintVariableReplacement(ref HashSet<Implementation> usedImplementations, string inputSource, string outputSource, string arguments)
+				//called if the custom code use {n} tags, to directly use implementations within the custom code
+				public string PrintVariableReplacement(ref HashSet<Implementation> usedImplementations, List<Implementation> implementations, string inputSource, string outputSource, string arguments)
 				{
 					if (!string.IsNullOrEmpty(tagError))
 					{
@@ -2829,50 +2532,47 @@ namespace ToonyColorsPro
 						return null;
 					}
 
-					if (replacementParts.Count == 0)
+					if (replacementParts == null || replacementParts.Length == 0)
 					{
 						// This shouldn't happen because this error is checked beforehand (disables 'Generate' button)
 						Debug.LogError(ShaderGenerator2.ErrorMsg("Custom Code error: 'replacementParts' is null or empty"));
 						return null;
 					}
 
-					int customCodeIndex = ParentShaderProperty.implementations.IndexOf(this);
+					int customCodeIndex = implementations.IndexOf(this);
 					string output = "";
 
 					// First pass: see which implementations are sampled and how many times (to possibly cache them)
 					var usedImpsMultipleTimes = new List<Implementation>();
-					foreach (var partsList in replacementParts.Values)
+					foreach (var p in replacementParts)
 					{
-						foreach (var part in partsList)
+						if (p.StartsWith("tag:"))
 						{
-							if (part.StartsWith("tag:"))
+							var intStr = p.Substring("tag:".Length);
+							int impIndex = int.Parse(intStr) - 1;
+
+							if (impIndex == customCodeIndex)
 							{
-								var intStr = part.Substring("tag:".Length);
-								int impIndex = int.Parse(intStr) - 1;
-
-								if (impIndex == customCodeIndex)
-								{
-									// This shouldn't happen because this error is checked beforehand (disables 'Generate' button)
-									Debug.LogError(ShaderGenerator2.ErrorMsg("Custom Code error: the Custom Code implementation cannot reference itself!\nCustom Code index = " + customCodeIndex + ", Reference = {" + impIndex + "}"));
-									return null;
-								}
-
-								if (impIndex < customCodeIndex)
-								{
-									// This shouldn't happen because this error is checked beforehand (disables 'Generate' button)
-									Debug.LogError(ShaderGenerator2.ErrorMsg("Custom Code error: the Custom Code implementation cannot reference previous implementations!\nCustom Code index = " + customCodeIndex + ", Reference = {" + impIndex + "}"));
-									return null;
-								}
-
-								var imp = ParentShaderProperty.implementations[impIndex];
-
-								if (usedImplementations.Contains(imp) && !usedImpsMultipleTimes.Contains(imp))
-								{
-									usedImpsMultipleTimes.Add(imp);
-								}
-
-								usedImplementations.Add(imp);
+								// This shouldn't happen because this error is checked beforehand (disables 'Generate' button)
+								Debug.LogError(ShaderGenerator2.ErrorMsg("Custom Code error: the Custom Code implementation cannot reference itself!\nCustom Code index = " + customCodeIndex + ", Reference = {" + impIndex + "}"));
+								return null;
 							}
+
+							if (impIndex < customCodeIndex)
+							{
+								// This shouldn't happen because this error is checked beforehand (disables 'Generate' button)
+								Debug.LogError(ShaderGenerator2.ErrorMsg("Custom Code error: the Custom Code implementation cannot reference previous implementations!\nCustom Code index = " + customCodeIndex + ", Reference = {" + impIndex + "}"));
+								return null;
+							}
+
+							var imp = implementations[impIndex];
+
+							if (usedImplementations.Contains(imp) && !usedImpsMultipleTimes.Contains(imp))
+							{
+								usedImpsMultipleTimes.Add(imp);
+							}
+
+							usedImplementations.Add(imp);
 						}
 					}
 
@@ -2886,7 +2586,7 @@ namespace ToonyColorsPro
 							var imp = usedImpsMultipleTimes[i];
 
 							// unique variable name based on the implementation
-							string variableName = string.Format("imp_{0}", ShaderGenerator2.GlobalUniqueId);
+							string variableName = "imp" + ParentShaderProperty.GetVariableName() + "_" + i;
 							cachedVariables.Add(imp, variableName);
 
 							string variableType = "float";
@@ -2925,44 +2625,15 @@ namespace ToonyColorsPro
 						}
 					}
 
-					// Prepend code if any
-					var replacementDict = PrintPrependCodeIfNeeded(cachedVariables, inputSource, outputSource, arguments);
-
 					// Print the custom code with cached variables
 					arguments = AddArgument("hide_channels", "true", arguments);
-					if (replacementParts.ContainsKey("code"))
+					foreach (var p in replacementParts)
 					{
-						var list = replacementParts["code"];
-						output += ParseReplacementParts(list, cachedVariables, inputSource, outputSource, arguments);
-					}
-
-					// Replace unique variables (format _name_) from the external file, if any
-					if (replacementDict != null)
-					{
-						foreach (var kvp in replacementDict)
+						if (p.StartsWith("tag:"))
 						{
-							output = output.Replace(kvp.Key, kvp.Value);
-						}
-					}
-
-					if (output.Length > 0 && !char.IsWhiteSpace(output[0]))
-					{
-						output = " " + output;
-					}
-
-					return output;
-				}
-
-				string ParseReplacementParts(List<string> replacementPartsList, Dictionary<Implementation, string> cachedVariables, string inputSource, string outputSource, string arguments)
-				{
-					string output = "";
-					foreach (var part in replacementPartsList)
-					{
-						if (part.StartsWith("tag:"))
-						{
-							var intStr = part.Substring("tag:".Length);
+							var intStr = p.Substring("tag:".Length);
 							int impIndex = int.Parse(intStr) - 1;
-							var imp = ParentShaderProperty.implementations[impIndex];
+							var imp = implementations[impIndex];
 
 							if (cachedVariables.ContainsKey(imp))
 							{
@@ -2987,136 +2658,23 @@ namespace ToonyColorsPro
 						}
 						else
 						{
-							output += part;
+							output += p;
 						}
 					}
+
+					if (output.Length > 0 && !char.IsWhiteSpace(output[0]))
+					{
+						output = " " + output;
+					}
+
 					return output;
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Insert arbitrary custom shader code.");
 					EndHorizontal();
-
-					// Prepend system
-					BeginHorizontal();
-					{
-						SGUILayout.InlineLabel("Prepend Type");
-						EditorGUI.BeginChangeCheck();
-						prependType = (PrependType)SGUILayout.EnumPopup(prependType);
-						if (EditorGUI.EndChangeCheck())
-						{
-							CheckReplacementTags();
-							TryToFindPrependCodeBlock();
-						}
-					}
-					EndHorizontal();
-
-					if (prependType == PrependType.Embedded)
-					{
-						BeginHorizontal();
-						{
-							SGUILayout.InlineLabel("Prepend Code");
-							EditorGUI.BeginChangeCheck();
-							prependCode = SGUILayout.TextArea(prependCode, 90);
-							if (EditorGUI.EndChangeCheck())
-							{
-								CheckReplacementTags();
-							}
-						}
-						EndHorizontal();
-						GUILayout.Space(3);
-					}
-					else if (prependType == PrependType.ExternalFile)
-					{
-						BeginHorizontal();
-						{
-							SGUILayout.InlineLabel("Prepend File");
-							EditorGUI.BeginChangeCheck();
-							prependFile = SGUILayout.ObjectField<TextAsset>(prependFile);
-							if (EditorGUI.EndChangeCheck())
-							{
-								prependFileGuid = prependFile != null ? AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(prependFile)) : "";
-								TryToFindPrependCodeBlock();
-							}
-						}
-						EndHorizontal();
-						GUILayout.Space(4);
-
-						if (prependBlocks == null || prependBlocks.Length == 0)
-						{
-							BeginHorizontal();
-							{
-								EditorGUILayout.HelpBox("Please select a valid prepend file.", MessageType.Info);
-							}
-							EndHorizontal();
-						}
-						else
-						{
-							BeginHorizontal();
-							{
-								SGUILayout.InlineLabel("Block Name");
-								EditorGUI.BeginChangeCheck();
-
-								//prependFileBlock = SGUILayout.TextField(prependFileBlock, true);
-
-								int index = -1;
-								index = Array.IndexOf(prependBlocks, prependFileBlock);
-								index = SGUILayout.Popup(index, prependBlocks);
-
-								if (EditorGUI.EndChangeCheck())
-								{
-									prependFileBlock = prependBlocks[index];
-									TryToFindPrependCodeBlock();
-								}
-							}
-							EndHorizontal();
-
-							if (prependFileBlockFound)
-							{
-								for (int i = 0; i < prependReferences.Count; i++)
-								{
-									var reference = prependReferences[i];
-
-									if (reference.isComment)
-									{
-										BeginHorizontal(12);
-										{
-											EditorGUILayout.HelpBox(reference.defaultValueOrComment, MessageType.None);
-										}
-										EndHorizontal();
-									}
-									else
-									{
-										BeginHorizontal(12);
-										{
-											SGUILayout.InlineLabel(reference.label);
-
-											EditorGUI.BeginChangeCheck();
-											prependParametersValues[reference.variableName] = SGUILayout.TextField(prependParametersValues[reference.variableName], false);
-											if (EditorGUI.EndChangeCheck())
-											{
-												CheckReplacementTags();
-											}
-										}
-										EndHorizontal();
-									}
-								}
-							}
-
-							if (!prependFileBlockFound)
-							{
-								BeginHorizontal();
-								{
-									EditorGUILayout.HelpBox("Could not find the specified code block in the linked prepend file.", MessageType.Error);
-								}
-								EndHorizontal();
-							}
-						}
-
-						GUILayout.Space(8f);
-					}
 
 					BeginHorizontal();
 					{
@@ -3150,239 +2708,6 @@ namespace ToonyColorsPro
 					}
 				}
 
-				void TryToFindPrependCodeBlock()
-				{
-					if (prependType != PrependType.ExternalFile || string.IsNullOrEmpty(this.prependFileGuid))
-					{
-						return;
-					}
-
-					prependFileBlockFound = false;
-					string[] lines = System.IO.File.ReadAllLines(Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + AssetDatabase.GetAssetPath(prependFile));
-
-
-					// find all prepend blocks (not the best place to do it though)
-					var blockList = new List<string>();
-					for (int i = 0; i < lines.Length; i++)
-					{
-						var line = lines[i].Trim();
-						if (line.StartsWith("//#") && line.EndsWith(":"))
-						{
-							blockList.Add(line.Substring("//#".Length, line.Length - "//#:".Length).Trim());
-						}
-					}
-					prependBlocks = blockList.ToArray();
-
-					// find matching prepend block
-					for (int i = 0; i < lines.Length; i++)
-					{
-						var line = lines[i];
-						if (line.StartsWith("///"))
-						{
-							continue;
-						}
-
-						if (line.StartsWith("//#"))
-						{
-							if (prependFileBlockFound)
-							{
-								if (line.Contains(":"))
-								{
-									// marks the end of the current block
-									break;
-								}
-							}
-							else
-							{
-								// found matching block
-								var trimmed = line.Substring("//#".Length).Trim().TrimEnd(':');
-								if (trimmed == prependFileBlock)
-								{
-									prependFileBlockFound = true;
-									ParsePrependBlock(ref lines, i + 1);
-									return;
-								}
-							}
-						}
-					}
-				}
-
-				void ParsePrependBlock(ref string[] lines, int startIndex)
-				{
-					prependReferences = new List<PrependReference>();
-					prependLines = new List<string>();
-
-					for (int i = startIndex; i < lines.Length; i++)
-					{
-						string line = lines[i];
-
-						// end of block
-						if (line.StartsWith("//#"))
-						{
-							// prepend comment
-							if (line.StartsWith("//# !"))
-							{
-								string comment = line.Substring("//# !".Length).Trim();
-								prependReferences.Add(new PrependReference(VariableType.@float, "comment", comment, true));
-							}
-							// new block = end of this block
-							else if (line.Contains(":"))
-							{
-								break;
-							}
-							// prepend reference
-							else
-							{
-								// inputs description in the form:
-								// '//# type variableName [defaultValue]'
-								// will be translated into an UI where user can type the value they want, including {n} notation
-
-								string prependRefStr = line.Substring("//#".Length).Trim();
-								string[] parts = prependRefStr.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
-								if (parts.Length < 2)
-								{
-									Debug.LogError(ShaderGenerator2.ErrorMsg("Invalid prepend code reference, it should be in the following format:\n\"//# type name [defaultValue]\" (e.g. \"//# float4 myVariable (1.1, 2.0, 0.0, 4.0)\")\nParsed line:\n" + line));
-								}
-								else
-								{
-									var vType = (ShaderProperty.VariableType)System.Enum.Parse(typeof(ShaderProperty.VariableType), parts[0]);
-									if (!System.Enum.IsDefined(typeof(ShaderProperty.VariableType), vType))
-									{
-										Debug.LogError(ShaderGenerator2.ErrorMsg("Invalid variable type defined for prepend code reference:\n" + line));
-									}
-									else
-									{
-										string name = parts[1];
-										string defaultValue = parts.Length > 2 ? parts[2] : "";
-										prependReferences.Add(new PrependReference(vType, name, defaultValue, false));
-									}
-								}
-							}
-						}
-						else if (line.StartsWith("///"))
-						{
-							// ignore comments for the prepend file only
-							continue;
-						}
-						else
-						{
-							// add the line to the ones to be printed
-							prependLines.Add(line);
-						}
-					}
-
-					// trim all empty lines at the end of the list
-					for (int i = prependLines.Count-1; i >= 0; i--)
-					{
-						if (!string.IsNullOrEmpty(prependLines[i]))
-						{
-							break;
-						}
-						prependLines.RemoveAt(i);
-					}
-
-					// Initialize the prepend code references
-					if (prependReferences.Count > 0)
-					{
-						// new list
-						if (prependParametersValues == null)
-						{
-							prependParametersValues = new Dictionary<string, string>();
-						}
-
-						foreach (var reference in prependReferences)
-						{
-							if (reference.isComment) continue;
-							if (!prependParametersValues.ContainsKey(reference.variableName))
-							{
-								string defaultValue = string.IsNullOrEmpty(reference.defaultValueOrComment) ? getDefaultValueForType(reference.variableType) : reference.defaultValueOrComment;
-								prependParametersValues.Add(reference.variableName, defaultValue);
-							}
-						}
-
-						List<string> keysToRemove = new List<string>();
-						foreach (var kvp in prependParametersValues)
-						{
-							if (!prependReferences.Exists(reference => reference.variableName == kvp.Key))
-							{
-								keysToRemove.Add(kvp.Key);
-							}
-						}
-						foreach (var key in keysToRemove)
-						{
-							prependParametersValues.Remove(key);
-						}
-					}
-				}
-
-				string getDefaultValueForType(ShaderProperty.VariableType variableType)
-				{
-					switch(variableType)
-					{
-						case VariableType.@float:		return "0.0";
-						case VariableType.float2:		return "float2(0.0, 0.0)";
-						case VariableType.float3:
-						case VariableType.color: return "float3(0.0, 0.0, 0.0)";
-						case VariableType.float4:
-						case VariableType.color_rgba: return "float4(0.0, 0.0, 0.0, 0.0)";
-						default: return "";
-					}
-				}
-
-				string[] LoadPrependBlock()
-				{
-					bool inBlock = false;
-					var prepandBlockLines = new List<string>();
-					string[] lines = System.IO.File.ReadAllLines(Application.dataPath.Substring(0, Application.dataPath.Length - "Assets".Length) + AssetDatabase.GetAssetPath(prependFile));
-					for (int i = 0; i < lines.Length; i++)
-					{
-						var line = lines[i];
-
-						if (line.StartsWith("//#"))
-						{
-							if (inBlock)
-							{
-								if (line.Contains(":"))
-								{
-									// marks the end of the current block
-									break;
-								}
-								else
-								{
-									// inputs description in the form:
-									// "type variableName"
-									// will be translated into an UI where user can link an implementation to each input
-									// TODO
-								}
-							}
-							else
-							{
-								var trimmed = line.Substring("//#".Length).Trim().TrimEnd(':');
-								if (trimmed == prependFileBlock)
-								{
-									inBlock = true;
-								}
-							}
-						}
-						else if (inBlock)
-						{
-							prepandBlockLines.Add(line);
-						}
-					}
-
-					// trim all empty lines at the end of the list
-					for (int i = prepandBlockLines.Count-1; i >= 0; i--)
-					{
-						if (!string.IsNullOrEmpty(prepandBlockLines[i]))
-						{
-							break;
-						}
-						prepandBlockLines.RemoveAt(i);
-					}
-
-					return prepandBlockLines.ToArray();
-				}
-
 				void CheckReplacementTags()
 				{
 					if (usedImplementations != null)
@@ -3394,79 +2719,20 @@ namespace ToonyColorsPro
 					}
 
 					usesReplacementTags = false;
-					replacementParts.Clear();
-					usedImplementations.Clear();
+					replacementParts = null;
+					usedImplementations = null;
 					tagError = null;
 					int customCodeIndex = ParentShaderProperty.implementations.IndexOf(this);
 					int maxIndex = ParentShaderProperty.implementations.Count - 1;
 
-					// parse code
-					var codeReplacements = ReplaceNNotationWithReplacementTags(code, customCodeIndex, maxIndex);
-					if (codeReplacements != null)
-					{
-						replacementParts.Add("code", new List<string>());
-						replacementParts["code"].AddRange(codeReplacements.Value.parts);
-						usedImplementations.AddRange(codeReplacements.Value.usedImplementations);
-					}
-
-					// parse prepend code (embedded mode)
-					if (prependType == PrependType.Embedded)
-					{
-						var cr = ReplaceNNotationWithReplacementTags(prependCode, customCodeIndex, maxIndex);
-						if (cr != null)
-						{
-							replacementParts.Add("prependCode", new List<string>());
-							replacementParts["prependCode"].AddRange(cr.Value.parts);
-							usedImplementations.AddRange(cr.Value.usedImplementations);
-						}
-					}
-					// parse prepend code (external file mode)
-					else if (prependType == PrependType.ExternalFile && prependReferences != null && prependParametersValues != null)
-					{
-						for (int i = 0; i < prependReferences.Count; i++)
-						{
-							var reference = prependReferences[i];
-
-							if (reference.isComment)
-							{
-								continue;
-							}
-
-							string value = prependParametersValues[reference.variableName];
-							if (value.Contains("{"))
-							{
-								var cr = ReplaceNNotationWithReplacementTags(value, customCodeIndex, maxIndex);
-								if (cr != null)
-								{
-									string key = prependReferences[i].variableName;
-									replacementParts.Add(key, new List<string>());
-									replacementParts[key].AddRange(cr.Value.parts);
-									usedImplementations.AddRange(cr.Value.usedImplementations);
-								}
-							}
-						}
-					}
-
-					usedImplementations = usedImplementations.Distinct().ToList();
-					ParentShaderProperty.usedImplementationsForCustomCode.AddRange(usedImplementations);
-				}
-
-				struct ReplacementTagsResult
-				{
-					public List<string> parts;
-					public List<int> usedImplementations;
-				}
-
-				ReplacementTagsResult? ReplaceNNotationWithReplacementTags(string input, int customCodeIndex, int maxIndex)
-				{
 					//explore the string and find all '{n}' where n = number, and construct list of parts
 					bool tag = false;
 					string currentPart = null;
 					var parts = new List<string>();
 					var usedImps = new List<int>();
-					for (int i = 0; i < input.Length; i++)
+					for (int i = 0; i < code.Length; i++)
 					{
-						char c = input[i];
+						char c = code[i];
 
 						//inside tag (maybe)
 						if (tag)
@@ -3477,50 +2743,52 @@ namespace ToonyColorsPro
 								if (string.IsNullOrEmpty(currentPart))
 								{
 									tagError = "Invalid code: empty replacement tag";
-									return null;
+									return;
 								}
 
 								tag = false;
 								parts.Add("tag:" + currentPart);
 
 								int usedImpIndex;
-								if (int.TryParse(currentPart, out usedImpIndex))
+								if (int.TryParse(currentPart, out usedImpIndex) && !usedImps.Contains(usedImpIndex))
 								{
 									usedImpIndex -= 1;
-									if (!usedImps.Contains(usedImpIndex))
-									{
-										usedImps.Add(usedImpIndex);
+									usedImps.Add(usedImpIndex);
 
-										if (usedImpIndex == customCodeIndex)
+									if (usedImpIndex == customCodeIndex)
+									{
+										tagError = "Invalid code: the Custom Code implementation cannot reference itself";
+										return;
+									}
+									else if (usedImpIndex < customCodeIndex)
+									{
+										tagError = "Invalid code: the Custom Code implementation cannot reference previous implementations";
+										return;
+									}
+									else if (usedImpIndex > maxIndex)
+									{
+										tagError = "Invalid code: can't find implementation for index '" + (usedImpIndex+1) + "'";
+										return;
+									}
+									else
+									{
+										// Custom Code can't reference special implementations
+										var imp = ParentShaderProperty.implementations[usedImpIndex];
+										if (!ParentShaderProperty.deferredSampling && imp is Imp_GenericFromTemplate)
 										{
-											tagError = "Invalid code: the Custom Code implementation cannot reference itself";
-											return null;
-										}
-										else if (usedImpIndex < customCodeIndex)
-										{
-											tagError = "Invalid code: the Custom Code implementation cannot reference previous implementations";
-											return null;
-										}
-										else if (usedImpIndex > maxIndex)
-										{
-											tagError = "Invalid code: can't find implementation for index '" + (usedImpIndex+1) + "'";
-											return null;
-										}
-										else
-										{
-											// Custom Code can't reference special implementations
-											var imp = ParentShaderProperty.implementations[usedImpIndex];
-											if (!ImplementationCanBeReferenced(imp))
+											if (!((Imp_GenericFromTemplate)imp).WorksWithCustomCode)
 											{
 												tagError = "Invalid code: the Custom Code implementation cannot reference certain Special implementations";
-												return null;
+												return;
 											}
 										}
+										else if (!ParentShaderProperty.deferredSampling
+											&& (imp is Imp_HSV || imp is Imp_CustomCode))
+										{
+											tagError = "Invalid code: the Custom Code implementation cannot reference certain Special implementations";
+											return;
+										}
 									}
-								}
-								else
-								{
-									Debug.LogWarning(ShaderGenerator2.ErrorMsg("Couldn't parse custom code tag content: \"" + currentPart + "\""));
 								}
 
 								currentPart = "";
@@ -3532,7 +2800,7 @@ namespace ToonyColorsPro
 							else
 							{
 								tagError = "Invalid replacement tag: it should only contains digits";
-								return null;
+								return;
 							}
 						}
 						//outside tag
@@ -3557,37 +2825,16 @@ namespace ToonyColorsPro
 					if (tag)
 					{
 						tagError = "Invalid code: replacement tag isn't closed";
-						return null;
+						return;
 					}
 
 					//add last part if any
 					if (!string.IsNullOrEmpty(currentPart))
 						parts.Add(currentPart);
 
-					return new ReplacementTagsResult()
-					{
-						parts = parts,
-						usedImplementations = usedImps
-					};
-				}
-
-				bool ImplementationCanBeReferenced(Implementation imp)
-				{
-					// Custom Code can't reference special implementations
-					if (!ParentShaderProperty.deferredSampling && imp is Imp_GenericFromTemplate)
-					{
-						if (!((Imp_GenericFromTemplate)imp).WorksWithCustomCode)
-						{
-							return false;
-						}
-					}
-					else if (!ParentShaderProperty.deferredSampling
-						&& (imp is Imp_HSV || imp is Imp_CustomCode))
-					{
-						return false;
-					}
-
-					return true;
+					replacementParts = parts.ToArray();
+					usedImplementations = usedImps.ToArray();
+					ParentShaderProperty.usedImplementationsForCustomCode.AddRange(usedImps);
 				}
 			}
 
@@ -3743,7 +2990,7 @@ namespace ToonyColorsPro
 					return string.Format("{0}{1}{2}", colorizeHue ? "H" : "", colorizeSat ? "S" : "", colorizeVal ? "V" : "");
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Applies hue, saturation, value correction to this Shader Property.\nThe HSV modifier will be applied to all implementations that preceed it.\nThe corresponding material properties to adjust each HSV value will be automatically created.");
@@ -3837,7 +3084,7 @@ namespace ToonyColorsPro
 
 				public override string ToHashString()
 				{
-					var result = new StringBuilder();
+					var result = "";
 
 					var props = GetType().GetProperties();
 					foreach (var prop in props)
@@ -3851,22 +3098,21 @@ namespace ToonyColorsPro
 						if (prop.PropertyType == typeof(ShaderProperty))
 						{
 							var spRef = (ShaderProperty)prop.GetValue(this, null);
-							result.Append(spRef != null ? spRef.Name : "EmptyShaderPropertyRef");
+							result += spRef != null ? spRef.Name : "EmptyShaderPropertyRef";
 						}
 						else
 						{
-							result.Append(prop.GetValue(this, null));
+							result += prop.GetValue(this, null);
 						}
 					}
 
 					var fields = GetType().GetFields();
 					foreach (var field in fields)
 					{
-						if (field.Name == "guid") continue;
-						result.Append(field.GetValue(this));
+						result += field.GetValue(this);
 					}
 
-					return result.ToString();
+					return result;
 				}
 
 				public override bool HasErrors
@@ -3939,7 +3185,7 @@ namespace ToonyColorsPro
 						return string.Format("{0}{1}", LinkedShaderProperty.GetVariableName(), channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Reference another Shader Property as a source for this one.\nFor example, you could reference the Albedo's alpha channel as a source mask for another property like specular.");
@@ -3950,7 +3196,7 @@ namespace ToonyColorsPro
 						bool highlighted = !IsDefaultImplementation ? false : LinkedShaderPropertyName != GetDefaultImplementation<Imp_ShaderPropertyReference>().LinkedShaderPropertyName;
 						SGUILayout.InlineLabel("Shader Property", highlighted);
 
-						if (GUILayout.Button((LinkedShaderProperty != null) ? LinkedShaderProperty.Name : "None", SGUILayout.Styles.ShurikenPopup))
+						if (GUILayout.Button((LinkedShaderProperty != null) ? LinkedShaderProperty.Name : "None", "ShurikenPopup"))
 						{
 							var menu = CreateShaderPropertiesMenu();
 							if (menu != null)
@@ -4006,23 +3252,12 @@ namespace ToonyColorsPro
 							bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_ShaderPropertyReference>().Channels;
 							SGUILayout.InlineLabel("Swizzle", highlighted);
 
-							if (usedByCustomCode)
-							{
-								using (new EditorGUI.DisabledScope(true))
-								{
-									GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-								}
-							}
+							string optionsStr = sourceIsColor ? "RGBA" : "XYZW";
+							optionsStr = optionsStr.Substring(0, SourceChannelsCount);
+							if (ChannelsCount == 1)
+								Channels = SGUILayout.GenericSelector(optionsStr, Channels);
 							else
-							{
-
-								string optionsStr = sourceIsColor ? "RGBA" : "XYZW";
-								optionsStr = optionsStr.Substring(0, SourceChannelsCount);
-								if (ChannelsCount == 1)
-									Channels = SGUILayout.GenericSelector(optionsStr, Channels);
-								else
-									Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, optionsStr);
-							}
+								Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, optionsStr);
 						}
 						EndHorizontal();
 
@@ -4257,13 +3492,6 @@ namespace ToonyColorsPro
 						{
 							errorMessage = "You can't use a texture with screen-space UV on a vertex Shader Property.";
 						}
-
-						if (this.ParentShaderProperty.Program == ProgramType.Vertex
-							&& imp_texture != null
-							&& imp_texture.UseWorldPosUV)
-						{
-							errorMessage = "You can't use a texture with world position UV on a vertex Shader Property.";
-						}
 					}
 				}
 
@@ -4344,7 +3572,7 @@ namespace ToonyColorsPro
 					return string.Format("{0}{1}", LinkedCustomMaterialProperty.PrintVariableVertex(), channels);
 				}
 
-				internal override void NewLineGUI(bool usedByCustomCode)
+				internal override void NewLineGUI()
 				{
 					BeginHorizontal();
 					ShaderGenerator2.ContextualHelpBox("Reference a Custom Material Property for this Shader Property. This is an easy way to define material properties that can be reused across the shader.\nFor example, you can embed 4 different masks into one texture, each mask being mapped to the R,G,B,A channels.");
@@ -4354,7 +3582,7 @@ namespace ToonyColorsPro
 					{
 						SGUILayout.InlineLabel("Custom Property");
 
-						if (GUILayout.Button((LinkedCustomMaterialProperty != null) ? LinkedCustomMaterialProperty.Label : "None", SGUILayout.Styles.ShurikenPopup))
+						if (GUILayout.Button((LinkedCustomMaterialProperty != null) ? LinkedCustomMaterialProperty.Label : "None", "ShurikenPopup"))
 						{
 							var menu = CreateCustomMaterialPropertiesMenu();
 							menu.ShowAsContext();
@@ -4368,21 +3596,10 @@ namespace ToonyColorsPro
 					{
 						bool highlighted = !IsDefaultImplementation ? Channels != DefaultChannels : Channels != GetDefaultImplementation<Imp_CustomMaterialProperty>().Channels;
 						SGUILayout.InlineLabel("Swizzle", highlighted);
-
-						if (usedByCustomCode)
-						{
-							using (new EditorGUI.DisabledScope(true))
-							{
-								GUILayout.Label(TCP2_GUI.TempContent("Defined in Custom Code"), SGUILayout.Styles.ShurikenValue, GUILayout.Height(16), GUILayout.ExpandWidth(false));
-							}
-						}
+						if (ChannelsCount == 1)
+							Channels = SGUILayout.GenericSelector(AvailableChannels, Channels);
 						else
-						{
-							if (ChannelsCount == 1)
-								Channels = SGUILayout.GenericSelector(AvailableChannels, Channels);
-							else
-								Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, AvailableChannels);
-						}
+							Channels = SGUILayout.GenericSwizzle(Channels, ChannelsCount, AvailableChannels);
 					}
 					EndHorizontal();
 
