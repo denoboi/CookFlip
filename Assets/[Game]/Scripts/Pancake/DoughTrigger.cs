@@ -83,7 +83,7 @@ public class DoughTrigger : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             pancake.transform.parent = plate.transform;
-            Debug.Log("Added to the plate");
+            
 
         }
 

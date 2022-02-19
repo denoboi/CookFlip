@@ -28,8 +28,10 @@ public class PancakeStats : MonoBehaviour
 
         public bool isCooked;
         public bool isBurnt;
-    
-    
+
+    public PanRollController panRollController;
+
+
 
     private void CheckStats()
     {
@@ -56,6 +58,9 @@ public class PancakeStats : MonoBehaviour
         if(CheckCooking())
         {
             EventManager.OnPancakeCooked.Invoke();
+            panRollController.enabled = false;
+
+
         }
     }
 
@@ -63,7 +68,11 @@ public class PancakeStats : MonoBehaviour
     {
         if(cookingLevel[0] >= 30 && cookingLevel[0] <=70 && cookingLevel[1] >= 30 && cookingLevel[1] <= 70)
         {
+            
             return isCooked = true;
+            
+
+
         }
 
         else
