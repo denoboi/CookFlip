@@ -81,7 +81,7 @@ public class DoughTrigger : MonoBehaviour
 
     private void Update()
     {
-        //changing its parent obj
+        //changing its parent object
         MakeChild();
 
 
@@ -94,6 +94,11 @@ public class DoughTrigger : MonoBehaviour
         {
             pancake.transform.parent = plate.transform;
             Debug.Log("Plated");
+            CookProcess cookProcess = pancake.GetComponentInChildren<CookProcess>();
+            if(cookProcess != null)
+            {
+                Destroy(cookProcess);
+            }
         }
     }
 

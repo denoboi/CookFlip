@@ -63,7 +63,14 @@ public class CookProcess : MonoBehaviour
 
    
     
-   
+    public void DisableMaterial()
+    {
+        if(PancakeStats.Instance.cookLevel >= 30)
+        {
+            pancakeMaterialScript.enabled = false;
+        }
+                    
+    }
 
 
    }
