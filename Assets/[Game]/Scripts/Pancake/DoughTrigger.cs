@@ -10,7 +10,11 @@ public class DoughTrigger : MonoBehaviour
     [SerializeField] private GameObject panCakeDoughPrefab;
     [SerializeField] private PanAnimation panAnimation;
     [SerializeField] private Transform plate;
-    private GameObject pancake;
+    public GameObject pancake;
+
+
+    public PancakeMaterial pancakeMaterialScript;
+    public CookProcess cookProcessScript;
 
 
     private void OnTriggerEnter(Collider other)
@@ -73,21 +77,24 @@ public class DoughTrigger : MonoBehaviour
         panAnimation.animator = pancake.GetComponent<Animator>();
 
         
-        
-        
     }
 
     private void Update()
     {
-        //Invoked when a button is clicked.
+        //changing its parent obj
+        MakeChild();
+
+
+    }
+
+
+    void MakeChild()
+    {
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             pancake.transform.parent = plate.transform;
-            
-
+            Debug.Log("Plated");
         }
-
-        //PancakeStats.Instance.isCooked = false;
     }
 
 

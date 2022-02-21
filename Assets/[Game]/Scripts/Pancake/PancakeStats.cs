@@ -68,11 +68,7 @@ public class PancakeStats : MonoBehaviour
     {
         if(cookingLevel[0] >= 30 && cookingLevel[0] <=70 && cookingLevel[1] >= 30 && cookingLevel[1] <= 70)
         {
-            
             return isCooked = true;
-            
-
-
         }
 
         else
@@ -94,5 +90,11 @@ public class PancakeStats : MonoBehaviour
             return false;
         }
     }
+
+
+    //private bool NewCooking()
+    //{
+
+    //}
 
 }

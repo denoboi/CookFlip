@@ -7,6 +7,7 @@ public class PanManager : Singleton<PanManager>
 {
     
     public GameObject CurrentPanCake;
+    
 
 
 

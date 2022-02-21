@@ -139,6 +139,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b29bea315d4b39644bb9055c6403fbb7, type: 2}
   - {fileID: 2100000, guid: 5482bd3e53857f8449a66ad888fd074f, type: 2}
   - {fileID: 2100000, guid: d6f33ff470ddc0941a3066d456d64344, type: 2}
+  doughTriggerScript: {fileID: 0}
 --- !u!1 &4063599642972717545
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba89cf0a9544e9742825911e9a7ff614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pancakeMaterialScript: {fileID: 0}
+  pancakeMaterialScript: {fileID: 2491677354201857931}
 --- !u!114 &2491677354201857927
 MonoBehaviour:
   m_ObjectHideFlags: 0

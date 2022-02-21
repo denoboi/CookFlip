@@ -10,6 +10,8 @@ public class PancakeMaterial : MonoBehaviour
     SkinnedMeshRenderer meshRenderer;
 
 
+    public DoughTrigger doughTriggerScript;
+
 
     // Start is called before the first frame update
     void Start()
@@ -56,4 +58,6 @@ public class PancakeMaterial : MonoBehaviour
         meshRenderer.materials = mats;
     }
 
+    
+   
 }
