@@ -29,6 +29,7 @@ public class PanAnimation : MonoBehaviour
         PanThrowLeftAnimation();
         PlateAnimation();
         
+        
 
     }
 
@@ -57,14 +58,14 @@ public class PanAnimation : MonoBehaviour
             animator.SetTrigger("BackFace");
         }
 
-
+        
         PancakeStats.Instance.ChangeFace();
     }
 
 
     void PanThrowLeftAnimation()
     {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
         {
             anim.SetTrigger("IfCooked");
             
@@ -74,12 +75,15 @@ public class PanAnimation : MonoBehaviour
 
     public void PlateAnimation()
     {
-        if (doughTriggerScript.pancake != null && Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
         {
             animator.SetTrigger("PancakeLeftAnim");
-            PancakeStats.Instance.isCooked = false;
-
+     
         }
+
+        //PancakeStats.Instance.isInitialStates = true;
+
+
 
     }
 

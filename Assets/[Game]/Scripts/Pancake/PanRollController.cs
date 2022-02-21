@@ -43,7 +43,7 @@ public class PanRollController : MonoBehaviour
 
         Roll();
     }
-    private void OnHit() 
+    public void OnHit() 
     {
         if (_isHitTweenRunnig)
             return;
@@ -65,7 +65,7 @@ public class PanRollController : MonoBehaviour
             _isHitTweenRunnig = false;
         });
     }
-    private void Roll() 
+    public void Roll() 
     {
         RollBody.localRotation = Quaternion.Slerp(RollBody.localRotation, Quaternion.Euler(_rollTargetRotation), Time.deltaTime * ROLL_ROTATE_SPEED);
         _rollTargetRotation.z = Mathf.Lerp(_rollTargetRotation.z, 0f, Time.deltaTime * RECOVERY_SPEED);

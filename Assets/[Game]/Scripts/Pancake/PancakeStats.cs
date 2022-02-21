@@ -26,8 +26,9 @@ public class PancakeStats : MonoBehaviour
      private const float MIN_COOKLEVEL = 0f;
      private const float MAX_COOKLEVEL = 70f;
 
-        public bool isCooked;
-        public bool isBurnt;
+    public bool isCooked;
+    public bool isBurnt;
+    public bool isInitialStates;
 
     public PanRollController panRollController;
 
@@ -58,22 +59,28 @@ public class PancakeStats : MonoBehaviour
         if(CheckCooking())
         {
             EventManager.OnPancakeCooked.Invoke();
+            panRollController.OnHit();
             panRollController.enabled = false;
 
 
+        }
+
+        //if(InitialStates())
+        {
+            //panRollController.enabled = true;
         }
     }
 
     private bool CheckCooking()
     {
-        if(cookingLevel[0] >= 30 && cookingLevel[0] <=70 && cookingLevel[1] >= 30 && cookingLevel[1] <= 70)
+        if(cookingLevel[0] >= 30 & cookingLevel[0] <=70 && cookingLevel[1] >= 30 & cookingLevel[1] <= 70)
         {
             return isCooked = true;
         }
 
         else
         {
-            return false;
+            return isCooked = false;
         }
 
     }
@@ -92,9 +99,18 @@ public class PancakeStats : MonoBehaviour
     }
 
 
-    //private bool NewCooking()
+    //private bool InitialStates()
     //{
-
+        
+    //    if(cookingLevel[0] >= 0 && cookingLevel[0] < 30 && cookingLevel[1] >= 0 && cookingLevel[1] < 30)
+    //    {
+    //        return isInitialStates = true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+        
     //}
 
 }

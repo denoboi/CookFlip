@@ -49,6 +49,10 @@ public class DoughTrigger : MonoBehaviour
     public void EnableDough()
     {
         dough.SetActive(true);
+        PancakeStats.Instance.currentFace = 0;
+
+        //add rollbody again
+
     }
 
     //basic dough
@@ -73,8 +77,23 @@ public class DoughTrigger : MonoBehaviour
     private IEnumerator EnablePancakeCo(GameObject pancakeDough)
     {
         yield return new WaitForSeconds(delay);
+        
         pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
+        
         panAnimation.animator = pancake.GetComponent<Animator>();
+        
+        PancakeStats.Instance.cookingLevel[0] = 0;
+        PancakeStats.Instance.cookingLevel[1] = 0;
+        
+        PanRollController panRollController = pancake.GetComponentInChildren<PanRollController>();
+
+        if (panRollController == null)
+            panRollController.enabled = true;
+
+       
+
+
+
 
         
     }
@@ -95,10 +114,16 @@ public class DoughTrigger : MonoBehaviour
             pancake.transform.parent = plate.transform;
             Debug.Log("Plated");
             CookProcess cookProcess = pancake.GetComponentInChildren<CookProcess>();
+            PancakeMaterial pancakeMaterial = pancake.GetComponentInChildren<PancakeMaterial>();
             if(cookProcess != null)
             {
                 Destroy(cookProcess);
+                Destroy(pancakeMaterial);
             }
+
+          
+
+            
         }
     }
 

@@ -16,16 +16,16 @@ public class PancakeThrowLeft : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlateAnimation();
+        //PlateAnimation();
     }
 
-    public void PlateAnimation()
-    {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
-        {
-            PancakeLeftAnim.SetTrigger("PancakeLeftAnim");
+    //public void PlateAnimation()
+    //{
+    //    if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
+    //    {
+    //        PancakeLeftAnim.SetTrigger("PancakeLeftAnim");
+    //        PancakeStats.Instance.isCooked = false;
+    //    }
 
-        }
-
-    }
+    //}
 }
