@@ -11,6 +11,8 @@ public class PanAnimation : MonoBehaviour
 
     PancakeStats _stats;
 
+    public Animator panThrowLeftAnimation;
+
 
 
     private void Start()
@@ -23,6 +25,7 @@ public class PanAnimation : MonoBehaviour
     {
         PanFlipAnimation();
         
+
     }
 
     void PanFlipAnimation()
@@ -31,6 +34,7 @@ public class PanAnimation : MonoBehaviour
         {
             anim.SetTrigger("PanFlip");
             PancakeFlipAnimation();
+
         }
 
         
@@ -52,5 +56,8 @@ public class PanAnimation : MonoBehaviour
 
         PancakeStats.Instance.ChangeFace();
     }
+
+
+    void
 
 }

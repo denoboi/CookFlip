@@ -504,7 +504,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7338219021929344371}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.089, y: -0.203, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2840539743365656334}
@@ -573,7 +573,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7892269691182407772}
-  - component: {fileID: 2809405545723733045}
   m_Layer: 0
   m_Name: PancakeMachine
   m_TagString: Untagged
@@ -599,18 +598,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2809405545723733045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7407622954956241638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd7811a3ae908044782e1df44b7a2907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8528296764027055271
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,7 +691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1951159654015465088, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.042666435
+      value: -0.043
       objectReference: {fileID: 0}
     - target: {fileID: 1951159654015465088, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
       propertyPath: m_LocalPosition.y
@@ -712,7 +699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1951159654015465088, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.2040002
+      value: 0.053
       objectReference: {fileID: 0}
     - target: {fileID: 1951159654015465088, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
       propertyPath: m_LocalRotation.w
@@ -742,6 +729,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -180
       objectReference: {fileID: 0}
+    - target: {fileID: 2056266722199523724, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.08
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
 --- !u!4 &3258897213260753345 stripped
@@ -758,15 +749,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 903296997481389056, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_Radius
-      value: 0.3894822
+      value: 1.0330554
       objectReference: {fileID: 0}
     - target: {fileID: 903296997481389056, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_Center.x
-      value: -1.9552072e-11
+      value: 0.9799904
       objectReference: {fileID: 0}
     - target: {fileID: 903296997481389056, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_Center.y
-      value: -0.00000000628156
+      value: -0.0000000061250134
       objectReference: {fileID: 0}
     - target: {fileID: 903296997481389056, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_Center.z
@@ -778,15 +769,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2473093884001034653, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.089
       objectReference: {fileID: 0}
     - target: {fileID: 2473093884001034653, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.029
+      value: -0.129
       objectReference: {fileID: 0}
     - target: {fileID: 2473093884001034653, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.002
       objectReference: {fileID: 0}
     - target: {fileID: 2473093884001034653, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_LocalRotation.w

@@ -24,6 +24,7 @@ public class PancakeThrowLeft : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             PancakeLeftAnim.SetTrigger("PancakeLeftAnim");
+            
         }
         
     }

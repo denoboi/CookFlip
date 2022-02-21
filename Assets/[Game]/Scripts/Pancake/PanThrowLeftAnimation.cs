@@ -16,7 +16,11 @@ public class PanThrowLeftAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PanThrowAnimation();
+       if(PancakeStats.Instance.isCooked == true)
+         PanThrowAnimation();
+
+       
+
     }
 
     void PanThrowAnimation()
@@ -24,7 +28,12 @@ public class PanThrowLeftAnimation : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             anim.SetTrigger("IfCooked");
+            PancakeStats.Instance.isCooked = false;
         }
+
+        
+
+        
     }
 
 
