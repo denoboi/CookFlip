@@ -44,8 +44,6 @@ public class CookProcess : MonoBehaviour
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 1)
         {
             pancakeMaterialScript.CookedDown();
-            
-
         }
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 70 && PancakeStats.Instance.currentFace == 0) 

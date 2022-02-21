@@ -16,26 +16,24 @@ public class DoughTrigger : MonoBehaviour
     public PancakeMaterial pancakeMaterialScript;
     public CookProcess cookProcessScript;
 
+    private bool isDoughAvailable;
+
 
     private void OnTriggerEnter(Collider other)
     {
 
         Debug.Log("DoughSpilled");
-        if (other.CompareTag("PancakeDoughBone"))
+        if (other.CompareTag("PancakeDoughBone") && isDoughAvailable == false)
         {
             //basic dough
             EnableDough();
 
             //flippable dough
             EnablePancakeDough();
-        }
-            
-        
-        
-        DisableDough();
 
-        
-       
+        }
+
+        DisableDough();
     }
     
 
@@ -48,15 +46,8 @@ public class DoughTrigger : MonoBehaviour
     //basic dough
     public void EnableDough()
     {
-        if(pancake == null)
-        {
-            dough.SetActive(true);
-            PancakeStats.Instance.currentFace = 0;
-        }
-       
-
-        //add rollbody again
-
+        dough.SetActive(true);
+        PancakeStats.Instance.currentFace = 0;
     }
 
     //basic dough
@@ -82,28 +73,20 @@ public class DoughTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        if (pancake == null)
-        {
-            pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
-        }
-             
+        pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
+        isDoughAvailable = true; 
         
         panAnimation.animator = pancake.GetComponent<Animator>();
         
         PancakeStats.Instance.cookingLevel[0] = 0;
         PancakeStats.Instance.cookingLevel[1] = 0;
-        
+
+
+        //add rollbody again
         PanRollController panRollController = transform.root.GetComponentInChildren<PanRollController>();
 
         if (panRollController != null)
             panRollController.enabled = true;
-
-       
-
-
-
-
-        
     }
 
     private void Update()
@@ -120,6 +103,9 @@ public class DoughTrigger : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             pancake.transform.parent = plate.transform;
+
+            isDoughAvailable = false;
+            
             Debug.Log("Plated");
             CookProcess cookProcess = pancake.GetComponentInChildren<CookProcess>();
             PancakeMaterial pancakeMaterial = pancake.GetComponentInChildren<PancakeMaterial>();
@@ -128,11 +114,11 @@ public class DoughTrigger : MonoBehaviour
                 Destroy(cookProcess);
                 Destroy(pancakeMaterial);
             }
-
-          
-
             
         }
+
+
+
     }
 
 

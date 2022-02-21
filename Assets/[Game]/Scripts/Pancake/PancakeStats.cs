@@ -36,10 +36,10 @@ public class PancakeStats : MonoBehaviour
 
     private void CheckStats()
     {
-       if(cookLevel > 70f)
-        {
-            GameManager.Instance.CompeleteStage(false);
-        }
+       //if(cookLevel > 70f)
+       // {
+       //     //GameManager.Instance.CompeleteStage(false);
+       // }
     }
 
 
@@ -62,13 +62,9 @@ public class PancakeStats : MonoBehaviour
             panRollController.OnHit();
             panRollController.enabled = false;
 
-
         }
 
-        //if(InitialStates())
-        {
-            //panRollController.enabled = true;
-        }
+      
     }
 
     private bool CheckCooking()
@@ -99,18 +95,5 @@ public class PancakeStats : MonoBehaviour
     }
 
 
-    //private bool InitialStates()
-    //{
-        
-    //    if(cookingLevel[0] >= 0 && cookingLevel[0] < 30 && cookingLevel[1] >= 0 && cookingLevel[1] < 30)
-    //    {
-    //        return isInitialStates = true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-        
-    //}
 
 }
