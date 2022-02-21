@@ -48,8 +48,12 @@ public class DoughTrigger : MonoBehaviour
     //basic dough
     public void EnableDough()
     {
-        dough.SetActive(true);
-        PancakeStats.Instance.currentFace = 0;
+        if(pancake == null)
+        {
+            dough.SetActive(true);
+            PancakeStats.Instance.currentFace = 0;
+        }
+       
 
         //add rollbody again
 
@@ -77,17 +81,21 @@ public class DoughTrigger : MonoBehaviour
     private IEnumerator EnablePancakeCo(GameObject pancakeDough)
     {
         yield return new WaitForSeconds(delay);
-        
-        pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
+
+        if (pancake == null)
+        {
+            pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
+        }
+             
         
         panAnimation.animator = pancake.GetComponent<Animator>();
         
         PancakeStats.Instance.cookingLevel[0] = 0;
         PancakeStats.Instance.cookingLevel[1] = 0;
         
-        PanRollController panRollController = pancake.GetComponentInChildren<PanRollController>();
+        PanRollController panRollController = transform.root.GetComponentInChildren<PanRollController>();
 
-        if (panRollController == null)
+        if (panRollController != null)
             panRollController.enabled = true;
 
        
