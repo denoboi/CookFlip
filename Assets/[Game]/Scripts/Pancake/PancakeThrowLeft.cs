@@ -47,7 +47,7 @@ public class PancakeThrowLeft : MonoBehaviour
         {
             transform.SetParent(StackManager.instance._parent);
             StackManager.instance.AddStack(gameObject);
-            transform.DOLocalJump(new Vector3(0, 0, 0.085f * StackManager.instance.StackCount()), 1.5f, 1, 0.5f);
+            transform.DOLocalJump(new Vector3(0, 0, 0.095f * StackManager.instance.StackCount()), 1.5f, 1, 0.5f);
             StackManager.instance.CurrentPanCake = null;
 
         }
