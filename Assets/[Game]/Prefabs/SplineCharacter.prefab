@@ -663,7 +663,8 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0.000000010536715, z: -0.000000031610135, w: 0.7071067}
   m_LocalPosition: {x: 0.53879416, y: 0.19071355, z: 0.122230716}
   m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
-  m_Children: []
+  m_Children:
+  - {fileID: 8346566427726710496}
   m_Father: {fileID: 8628925987069821995}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -878,6 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8796440475757216979}
+  doughTriggerScript: {fileID: 0}
 --- !u!114 &4416837520337025567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1309,11 +1311,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3774587594304571047}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.043, y: 0.192, z: 0.812}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8628925987069821995}
-  m_RootOrder: 3
+  m_Father: {fileID: 1331266793970526059}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3982026158670378650
 GameObject:
@@ -1609,6 +1611,10 @@ MonoBehaviour:
   panCakeDoughPrefab: {fileID: 4801528576090686344, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
   panAnimation: {fileID: 4416837520337025566}
   plate: {fileID: 6736260559436385436}
+  pancake: {fileID: 0}
+  pancakeMaterialScript: {fileID: 0}
+  cookProcessScript: {fileID: 0}
+  isDoughAvailable: 0
 --- !u!135 &8796440475757216965
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2235,7 +2241,6 @@ Transform:
   - {fileID: 2852034637029339361}
   - {fileID: 4332776969113587322}
   - {fileID: 1331266793970526059}
-  - {fileID: 8346566427726710496}
   m_Father: {fileID: 9050411696855593916}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -2857,6 +2862,7 @@ GameObject:
   - component: {fileID: 8796440476388376602}
   - component: {fileID: 8796440476388376606}
   - component: {fileID: 8796440476388376600}
+  - component: {fileID: 46638416475385955}
   - component: {fileID: 6881970190113839512}
   - component: {fileID: 8796440476388376601}
   - component: {fileID: 8796440476388376605}
@@ -2914,6 +2920,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementData: {fileID: 11400000, guid: a0702869188840143aa438bb44a1e6a0, type: 2}
   MainCollider: {fileID: 8796440474673062228}
+--- !u!114 &46638416475385955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8796440476388376603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccb2b13b0f6d439478c45751fd1b0714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _distanceBetweenObjects: 1.5
+  _prevObject: {fileID: 5325968768687774002, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
+  _parent: {fileID: 8346566427726710496}
+  pancakeList: []
 --- !u!114 &6881970190113839512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2931,6 +2953,8 @@ MonoBehaviour:
   currentFace: 0
   isCooked: 0
   isBurnt: 0
+  isInitialStates: 0
+  panRollController: {fileID: 0}
 --- !u!114 &8796440476388376601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3707,14 +3731,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
---- !u!4 &1256134016218899052 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5325968768687774002, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
-  m_PrefabInstance: {fileID: 6379079886915943262}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &8796440475757216979 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2491677354201857933, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
+  m_PrefabInstance: {fileID: 6379079886915943262}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1256134016218899052 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5325968768687774002, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
   m_PrefabInstance: {fileID: 6379079886915943262}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7173299659979693509
@@ -3927,13 +3951,13 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
   m_PrefabInstance: {fileID: 7173299659979693509}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &7207474047250627118 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
-  m_PrefabInstance: {fileID: 7173299659979693509}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2306156920005229011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4867744173144237078, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
+  m_PrefabInstance: {fileID: 7173299659979693509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7207474047250627118 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
   m_PrefabInstance: {fileID: 7173299659979693509}
   m_PrefabAsset: {fileID: 0}

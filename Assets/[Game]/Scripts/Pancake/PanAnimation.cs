@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HCB.Core;
 using HCB.SplineMovementSystem;
+using DG.Tweening;
 
 public class PanAnimation : MonoBehaviour
 {
@@ -20,14 +21,20 @@ public class PanAnimation : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        DOTween.Init();
     }
 
 
     private void Update()
     {
+
+
         PanFlipAnimation();
+
+
         PanThrowLeftAnimation();
-        PlateAnimation();
+
+       
         
         
 
@@ -65,10 +72,16 @@ public class PanAnimation : MonoBehaviour
 
     void PanThrowLeftAnimation()
     {
+        if (StackManager.instance.CurrentPanCake == null)
+            return;
+        
+
+
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
         {
             anim.SetTrigger("IfCooked");
             
+
         }
 
     }
@@ -77,14 +90,16 @@ public class PanAnimation : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
         {
-            animator.SetTrigger("PancakeLeftAnim");
-     
+            //transform.DOMoveX(5, 1);
+
         }
 
-        //PancakeStats.Instance.isInitialStates = true;
+        
 
 
 
     }
+
+    
 
 }
