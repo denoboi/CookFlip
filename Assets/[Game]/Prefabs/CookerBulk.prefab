@@ -52,8 +52,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7146103, y: 0.3517649, z: 3.9174538}
-  m_Center: {x: -0.35730517, y: -0.21885546, z: 1.4587269}
+  m_Size: {x: 1.6681333, y: 0.5558139, z: 3.9174538}
+  m_Center: {x: -0.45981264, y: -0.116830945, z: 1.4587269}
 --- !u!114 &1261473082162180830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,9 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c7ce196b8c24c4398c48cc2b317f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pancake: {fileID: 0}
-  delay: 2
-  cookLevel: 0
+  _pancakeFront: {fileID: 0}
+  _pancakeBack: {fileID: 0}
+  _delay: 2
 --- !u!1001 &1261473081545213487
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76,6 +76,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1261473082162180824}
     m_Modifications:
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.87951297
+      objectReference: {fileID: 0}
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.87951297
+      objectReference: {fileID: 0}
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.87951297
+      objectReference: {fileID: 0}
     - target: {fileID: 4824990838217589956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: m_Name
       value: Cooker (1)
@@ -298,6 +310,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1261473082162180824}
     m_Modifications:
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.83438575
+      objectReference: {fileID: 0}
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.83438575
+      objectReference: {fileID: 0}
+    - target: {fileID: 302647264431854956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.83438575
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.94074345
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.94074345
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.94074345
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0063318
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0176
+      objectReference: {fileID: 0}
+    - target: {fileID: 302723933110802074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0111
+      objectReference: {fileID: 0}
     - target: {fileID: 4824990838217589956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: m_Name
       value: Cooker
@@ -357,6 +405,22 @@ PrefabInstance:
     - target: {fileID: 5313718931004399230, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: CookingColor.g
+      value: 0.60060644
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: CookingColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: DefaultColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: DefaultColor.g
+      value: 0.64020157
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
@@ -668,13 +732,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1261473082162180824}
     m_Modifications:
+    - target: {fileID: 8956922443927128020, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_Size.x
+      value: 0.7155614
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128020, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_Size.z
+      value: 1.1102277
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128020, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_Center.x
+      value: 0.14221916
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128020, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_Center.z
+      value: 0.032204993
+      objectReference: {fileID: 0}
     - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.3872094
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.21350431
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4.0558486
+      objectReference: {fileID: 0}
+    - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.98999995
+      value: 1.29
       objectReference: {fileID: 0}
     - target: {fileID: 8956922443927128021, guid: b557c3dc3fb021943b9f3b6650a67bec, type: 3}
       propertyPath: m_LocalPosition.y

@@ -19,6 +19,8 @@ public class OvenTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Pan"))
         {
             Cooking();
+            HeatParticleColorController.instance.OnParticleEnter();
+
         }
 
 
@@ -27,6 +29,7 @@ public class OvenTrigger : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         StopCoroutine(_cookingCoroutine);
+        HeatParticleColorController.instance.OnParticleExit();
     }
 
 

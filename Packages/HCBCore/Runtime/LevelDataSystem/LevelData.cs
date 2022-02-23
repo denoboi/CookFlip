@@ -5,7 +5,9 @@ using Sirenix.OdinInspector;
 using HCB.Core;
 #if UNITY_EDITOR
 using UnityEditor;
+using HCB.Utilities;
 #endif
+
 
 namespace HCB
 {
@@ -25,6 +27,7 @@ namespace HCB
 
 		[ValueDropdown("LevelNames")]
 		public string LoadLevelID;
+		
 
 
 
@@ -113,4 +116,5 @@ namespace HCB
 			EventManager.OnLevelDataChange.Invoke();
 		}
 	}
+
 }
