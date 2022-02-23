@@ -325,7 +325,8 @@ Transform:
   m_LocalRotation: {x: -0.00000014732703, y: -0.00000011829177, z: -0.49997348, w: 0.8660407}
   m_LocalPosition: {x: -0.000000020489097, y: 0.057120744, z: -0.000000015832484}
   m_LocalScale: {x: 1.0000001, y: 0.9999999, z: 0.9999999}
-  m_Children: []
+  m_Children:
+  - {fileID: 4368783958588999146}
   m_Father: {fileID: 6618998697957627037}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.000021398135, y: -0.000003298619, z: -59.996487}
@@ -843,7 +844,6 @@ Transform:
   - {fileID: 6508961650165100305}
   - {fileID: 3287886867271909581}
   - {fileID: 1256134016218899052}
-  - {fileID: 4368783958588999146}
   m_Father: {fileID: 8796440475047052816}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1218,12 +1218,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3585381915969550167}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.13973755, y: 0.95422894, z: 0.25609204, w: -0.065858446}
+  m_LocalPosition: {x: -0.28370172, y: -0.5016041, z: 0.6069265}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6576335373832658768}
-  m_RootOrder: 4
+  m_Father: {fileID: 9082233450133179668}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3594031951506344878
 GameObject:
@@ -2935,6 +2935,7 @@ MonoBehaviour:
   _distanceBetweenObjects: 1.5
   _prevObject: {fileID: 5325968768687774002, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
   _parent: {fileID: 8346566427726710496}
+  CurrentPanCake: {fileID: 0}
   pancakeList: []
 --- !u!114 &6881970190113839512
 MonoBehaviour:
