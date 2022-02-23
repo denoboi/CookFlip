@@ -59,8 +59,10 @@ public class PancakeStats : MonoBehaviour
         if(CheckCooking())
         {
             EventManager.OnPancakeCooked.Invoke();
-            panRollController.OnHit();
-            panRollController.enabled = false;
+            
+            //panRollController.OnHit();
+            //panRollController.Rotate(new Vector2(0, 0));
+            //panRollController.enabled = false;
 
         }
 

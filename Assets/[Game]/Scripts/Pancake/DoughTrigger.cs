@@ -53,8 +53,6 @@ public class DoughTrigger : MonoBehaviour
     {
         dough.SetActive(true);
 
-        //PancakeStats.Instance.isCooked = false;
-
         PancakeStats.Instance.currentFace = 0;
 
         PancakeStats.Instance.cookingLevel[0] = 0;
@@ -101,10 +99,7 @@ public class DoughTrigger : MonoBehaviour
 
     private void Update()
     {
-        //changing its parent object
         MakeChild();
-
-
     }
 
 
@@ -112,18 +107,6 @@ public class DoughTrigger : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt)
         {
-
-
-            //transform.SetParent(StackManager.instance._parent);
-            //transform.DOLocalJump(new Vector3(0, .5f * StackManager.instance.StackCount(), 0), 0.2f, 1, 1f);
-            //StackManager.instance.AddStack(gameObject);
-
-            //StackManager.instance.StackList();
-            //Debug.Log("EventTrggered");
-
-
-            //pancake.transform.parent = plate.transform;
-
 
             isDoughAvailable = false;
             
@@ -140,16 +123,6 @@ public class DoughTrigger : MonoBehaviour
                 Destroy(pancakeMaterial);
 
             }
-
-           
-
-            //if(pancake.transform.parent == plate.transform)
-            //{
-            //    //Destroy(pancake.GetComponent<Animator>());
-            //}
-
-
-            //PancakeStats.Instance.isCooked = false;
 
         }
 
