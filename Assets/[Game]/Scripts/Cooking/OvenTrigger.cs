@@ -11,6 +11,17 @@ public class OvenTrigger : MonoBehaviour
 
     private Coroutine _cookingCoroutine;
 
+    
+
+
+    private HeatParticleColorController[] HeatParticleColorController;
+    private HeatParticleColorController[] particleColorControllers => HeatParticleColorController == null ? HeatParticleColorController = GetComponentsInChildren<HeatParticleColorController>() : HeatParticleColorController;
+
+    private void Start()
+    {
+        
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,8 +30,7 @@ public class OvenTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Pan"))
         {
             Cooking();
-            HeatParticleColorController.instance.OnParticleEnter();
-
+ 
         }
 
 
@@ -28,8 +38,13 @@ public class OvenTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        StopCoroutine(_cookingCoroutine);
-        HeatParticleColorController.instance.OnParticleExit();
+
+        if(other.gameObject.CompareTag("Pan"))
+        {
+            StopCoroutine(_cookingCoroutine);
+        }
+        
+        
     }
 
 

@@ -148,6 +148,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: CookingColor.g
+      value: 0.5411765
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
 --- !u!4 &6359003660977002577 stripped
@@ -346,6 +350,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.0111
       objectReference: {fileID: 0}
+    - target: {fileID: 495451762886014210, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: ShapeModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4824990838217589956, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: m_Name
       value: Cooker
@@ -407,6 +415,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: CookingColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: CookingColor.g
       value: 0.60060644
       objectReference: {fileID: 0}
@@ -415,12 +427,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
+      propertyPath: DefaultColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: DefaultColor.b
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6078569474289414074, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}
       propertyPath: DefaultColor.g
-      value: 0.64020157
+      value: 0.70356584
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e07ec4dc7a6c945847b3379057c480, type: 3}

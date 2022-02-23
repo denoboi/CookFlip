@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HCB.Core;
+using DG.Tweening;
 
 public class HeatParticleColorController : MonoBehaviour
 {
-    public static HeatParticleColorController instance;
+    
+    
+    public ParticleSystem _particleSystem;
+    public ParticleSystem ParticleSystem => _particleSystem == null ? _particleSystem = GetComponentInChildren<ParticleSystem>() : _particleSystem;
 
-    private ParticleSystem _particleSystem;
-    private ParticleSystem ParticleSystem => _particleSystem == null ? _particleSystem = GetComponent<ParticleSystem>() : _particleSystem;
+    private string _tweenID;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        
+
+        _tweenID = GetInstanceID() + "ParticleID";
 
        
         
@@ -24,18 +26,62 @@ public class HeatParticleColorController : MonoBehaviour
     public Color DefaultColor;
     public Color CookingColor;
 
+    private void OnTriggerEnter(Collider other)
+    {
+        DoughTrigger doughTrigger = other.GetComponent<DoughTrigger>();
+
+        if(doughTrigger != null)
+        {
+            OnParticleEnter();
+        }
+            
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        DoughTrigger doughTrigger = other.GetComponent<DoughTrigger>();
+
+        if (doughTrigger != null)
+        {
+            OnParticleExit();
+        }
+    }
+
 
     public void OnParticleEnter()
     {
-        Color color = Color.Lerp(DefaultColor, CookingColor, 0.1f);
+        float percentage = 0;
+
+        DOTween.Kill(_tweenID);
+
+        DOTween.To(() => percentage, (x) => percentage = x, 1, 0.1f).SetId(_tweenID).OnUpdate(() => {
+            Color color = Color.Lerp(DefaultColor, CookingColor, percentage);
+            var main = ParticleSystem.main;
+            main.startColor = color;
+        });
+
+        
+
+
         Debug.Log("ColorChanged");
         
     }
 
     public void OnParticleExit()
     {
-        Color color = Color.Lerp(CookingColor, DefaultColor, 0.1f);
+
+        float percentage = 0;
+
+        DOTween.Kill(_tweenID);
+        
         Debug.Log("ColorChanged2");
+
+        
+        DOTween.To(() => percentage, (x) => percentage = x, 1, 0.2f).SetId(_tweenID).OnUpdate(() => {
+            Color color = Color.Lerp(CookingColor, DefaultColor, percentage);
+            var main = ParticleSystem.main;
+            main.startColor = color;
+        });
     }
 }
 

@@ -13,9 +13,9 @@ public class PancakeStats : MonoBehaviour
         Instance = this;
     }
 
-    public ParticleSystem SmokeParticle;
 
     public static PancakeStats Instance;
+   
 
     [SerializeField] public float cookLevel = 0;
 
@@ -56,7 +56,7 @@ public class PancakeStats : MonoBehaviour
     {
         cookingLevel[currentFace] += 10;
 
-        SmokeParticle.Play();
+        
  
         if(CheckCooking())
         {

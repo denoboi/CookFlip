@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4788830973902344}
   - component: {fileID: 198805422326144400}
   - component: {fileID: 199251682189361358}
-  - component: {fileID: 5798687992336811816}
   m_Layer: 0
   m_Name: Stove_Flame_Particle 1
   m_TagString: Untagged
@@ -4775,20 +4774,6 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &5798687992336811816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222757194388906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34d67149a0d660b43b3927682852fc41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultColor: {r: 0, g: 0.83331347, b: 1, a: 0}
-  CookingColor: {r: 1, g: 0.54172015, b: 0, a: 0}
 --- !u!1 &1667168906685582
 GameObject:
   m_ObjectHideFlags: 0

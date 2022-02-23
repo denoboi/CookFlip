@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5313718931004399230}
+  - component: {fileID: 8133054533877079014}
+  - component: {fileID: 80191377220122829}
   m_Layer: 0
   m_Name: Cooker
   m_TagString: Untagged
@@ -33,6 +35,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8133054533877079014
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824990838217589956}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.33732864, y: 0.41899657, z: 0.40674907}
+  m_Center: {x: -0.007423699, y: 0.2540519, z: 0.0028931142}
+--- !u!114 &80191377220122829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824990838217589956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d67149a0d660b43b3927682852fc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultColor: {r: 0, g: 0.7603102, b: 1, a: 0.99607843}
+  CookingColor: {r: 1, g: 0.5762775, b: 0, a: 1}
 --- !u!1 &7735127758063089168
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +291,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5798687992336811816, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
 --- !u!4 &302723933110802074 stripped
 Transform:
