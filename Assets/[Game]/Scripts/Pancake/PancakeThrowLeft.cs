@@ -35,7 +35,7 @@ public class PancakeThrowLeft : MonoBehaviour
             return;
 
 
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
         {
             transform.SetParent(StackManager.instance._parent);
             StackManager.instance.AddStack(gameObject);

@@ -42,7 +42,7 @@ public class PanAnimation : MonoBehaviour
 
     void PanFlipAnimation()
     {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false && PancakeStats.Instance.isBurnt == false)
         {
             anim.SetTrigger("PanFlip");
             PancakeFlipAnimation();
@@ -77,7 +77,7 @@ public class PanAnimation : MonoBehaviour
         
 
 
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
         {
             anim.SetTrigger("IfCooked");
             
@@ -86,20 +86,5 @@ public class PanAnimation : MonoBehaviour
 
     }
 
-    public void PlateAnimation()
-    {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt == true)
-        {
-            //transform.DOMoveX(5, 1);
-
-        }
-
-        
-
-
-
-    }
-
-    
 
 }

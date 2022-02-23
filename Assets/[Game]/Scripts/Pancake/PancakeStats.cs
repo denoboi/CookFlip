@@ -56,9 +56,9 @@ public class PancakeStats : MonoBehaviour
     {
         cookingLevel[currentFace] += 10;
 
-        
- 
-        if(CheckCooking())
+
+
+        CheckCooking();
         {
             EventManager.OnPancakeCooked.Invoke();
             
@@ -67,6 +67,8 @@ public class PancakeStats : MonoBehaviour
             //panRollController.enabled = false;
 
         }
+
+        CheckBurnt();
 
       
     }
@@ -94,7 +96,7 @@ public class PancakeStats : MonoBehaviour
 
         else
         {
-            return false;
+            return isBurnt = false;
         }
     }
 

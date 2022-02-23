@@ -46,6 +46,7 @@ public class DoughTrigger : MonoBehaviour
     public void EnablePancakeDough()
     {
         StartCoroutine(EnablePancakeCo(creationPoint));
+        
     }
 
     //basic dough
@@ -85,6 +86,8 @@ public class DoughTrigger : MonoBehaviour
         pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
         isDoughAvailable = true;
 
+        PancakeStats.Instance.isCooked = false;
+
         StackManager.instance.CurrentPanCake = pancake;
         
         panAnimation.animator = pancake.GetComponent<Animator>();
@@ -105,7 +108,7 @@ public class DoughTrigger : MonoBehaviour
 
     void MakeChild()
     {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || PancakeStats.Instance.isBurnt)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
         {
 
             isDoughAvailable = false;

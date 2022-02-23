@@ -54,7 +54,7 @@ public class HeatParticleColorController : MonoBehaviour
 
         DOTween.Kill(_tweenID);
 
-        DOTween.To(() => percentage, (x) => percentage = x, 1, 0.1f).SetId(_tweenID).OnUpdate(() => {
+        DOTween.To(() => percentage, (x) => percentage = x, 1, 0.01f).SetId(_tweenID).OnUpdate(() => {
             Color color = Color.Lerp(DefaultColor, CookingColor, percentage);
             var main = ParticleSystem.main;
             main.startColor = color;

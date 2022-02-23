@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d67149a0d660b43b3927682852fc41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _particleSystem: {fileID: 0}
   DefaultColor: {r: 0, g: 0.7603102, b: 1, a: 0.99607843}
   CookingColor: {r: 1, g: 0.5762775, b: 0, a: 1}
 --- !u!1 &7735127758063089168
@@ -241,19 +242,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4788830973902344, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.8654594
+      value: 1.319739
       objectReference: {fileID: 0}
     - target: {fileID: 4788830973902344, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.8654594
+      value: 1.319739
       objectReference: {fileID: 0}
     - target: {fileID: 4788830973902344, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.8654594
+      value: 1.319739
       objectReference: {fileID: 0}
     - target: {fileID: 4788830973902344, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0062978
+      value: 0.0065022
       objectReference: {fileID: 0}
     - target: {fileID: 4788830973902344, guid: ce9c8e5e9dc690049bb0094b66c8130c, type: 3}
       propertyPath: m_LocalPosition.y
