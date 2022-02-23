@@ -34,7 +34,7 @@ public class CookingArea : MonoBehaviour
         {
             Debug.Log("Entered");
             isEntered = true;
-            controller.SetSpeed(controller.MovementData.CookingSpeed);
+            
 
         }
     }
@@ -51,7 +51,7 @@ public class CookingArea : MonoBehaviour
         {
             Debug.Log("Exited");
             isExited = true;
-            controller.SetSpeed(controller.MovementData.DefaultSpeed);
+            
             
             
         }
