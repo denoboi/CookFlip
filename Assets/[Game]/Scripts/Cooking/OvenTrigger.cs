@@ -37,7 +37,7 @@ public class OvenTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Pan"))
         {
             Cooking();
-
+            //HapticManager.Haptic(HapticTypes.RigidImpact);
             controller.SetSpeed(controller.MovementData.CookingSpeed);
             ParticleManager.instance.SmokeParticleMethod();
 

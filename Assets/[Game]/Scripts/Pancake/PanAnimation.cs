@@ -80,8 +80,7 @@ public class PanAnimation : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
         {
             anim.SetTrigger("IfCooked");
-            
-
+    
         }
 
     }

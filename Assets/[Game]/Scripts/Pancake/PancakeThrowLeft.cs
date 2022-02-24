@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using HCB.Core;
 
 public class PancakeThrowLeft : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class PancakeThrowLeft : MonoBehaviour
 
             ParticleManager.instance.HappyParticleMethod();
 
+            HapticManager.Haptic(HapticTypes.RigidImpact);
+
         }
 
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
@@ -59,6 +62,8 @@ public class PancakeThrowLeft : MonoBehaviour
 
             StackManager.instance.CurrentPanCake = null;
             ParticleManager.instance.UnhappyParticleMethod();
+
+            HapticManager.Haptic(HapticTypes.SoftImpact);
         }
 
     }

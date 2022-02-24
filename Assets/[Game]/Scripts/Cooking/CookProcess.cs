@@ -52,12 +52,18 @@ public class CookProcess : MonoBehaviour
         {
             Debug.Log("burned");
             ParticleManager.instance.BurntParticleMethod();
+
+            HapticManager.Haptic(HapticTypes.SoftImpact);
+
             pancakeMaterialScript.BurntUp();
         }
 
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 1 )
         {
             pancakeMaterialScript.BurntDown();
+
+            HapticManager.Haptic(HapticTypes.SoftImpact);
+
             ParticleManager.instance.BurntParticleMethod();
         }
     }
