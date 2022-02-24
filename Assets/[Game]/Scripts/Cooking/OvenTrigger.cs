@@ -39,6 +39,7 @@ public class OvenTrigger : MonoBehaviour
             Cooking();
 
             controller.SetSpeed(controller.MovementData.CookingSpeed);
+            ParticleManager.instance.SmokeParticleMethod();
 
         }
 
@@ -53,6 +54,8 @@ public class OvenTrigger : MonoBehaviour
             StopCoroutine(_cookingCoroutine);
 
             controller.SetSpeed(controller.MovementData.DefaultSpeed);
+            ParticleManager.instance.SmokeParticleMethodStop();
+            ParticleManager.instance.BurntParticleMethodStop();
         }
         
         

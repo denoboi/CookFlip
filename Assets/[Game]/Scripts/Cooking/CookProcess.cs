@@ -31,7 +31,7 @@ public class CookProcess : MonoBehaviour
     public void CookingCakes()
     {
         PancakeStats.Instance.CookFace();
-        ParticleManager.instance.SmokeParticleMethod();
+        
 
         Debug.Log(PancakeStats.Instance.cookLevel);
 
@@ -51,13 +51,14 @@ public class CookProcess : MonoBehaviour
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 0) 
         {
             Debug.Log("burned");
-
+            ParticleManager.instance.BurntParticleMethod();
             pancakeMaterialScript.BurntUp();
         }
 
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 1 )
         {
             pancakeMaterialScript.BurntDown();
+            ParticleManager.instance.BurntParticleMethod();
         }
     }
 

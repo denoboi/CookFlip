@@ -35,7 +35,7 @@ public class PancakeThrowLeft : MonoBehaviour
             return;
 
 
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true || Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == true)
         {
             transform.SetParent(StackManager.instance._parent);
             StackManager.instance.AddStack(gameObject);
@@ -45,6 +45,20 @@ public class PancakeThrowLeft : MonoBehaviour
             
             StackManager.instance.CurrentPanCake = null;
 
+            ParticleManager.instance.HappyParticleMethod();
+
+        }
+
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
+        {
+            transform.SetParent(StackManager.instance._parent);
+            StackManager.instance.AddStack(gameObject);
+            transform.DOLocalJump(new Vector3(0, 0, 0.095f * StackManager.instance.StackCount()), 1f, 1, 0.5f);
+
+            transform.DORotate(Vector3.down * 180, 0.5f);
+
+            StackManager.instance.CurrentPanCake = null;
+            ParticleManager.instance.UnhappyParticleMethod();
         }
 
     }
