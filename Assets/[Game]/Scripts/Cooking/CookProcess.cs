@@ -31,6 +31,8 @@ public class CookProcess : MonoBehaviour
     public void CookingCakes()
     {
         PancakeStats.Instance.CookFace();
+        ParticleManager.instance.SmokeParticleMethod();
+
         Debug.Log(PancakeStats.Instance.cookLevel);
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 0)

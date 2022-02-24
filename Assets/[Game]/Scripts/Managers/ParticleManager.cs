@@ -7,7 +7,7 @@ public class ParticleManager : MonoBehaviour
 
     public static ParticleManager instance;
 
-    public ParticleSystem SmokeParticle, BurntParticle, UnhappyParticle, HappyParticle;
+    public ParticleSystem SmokeParticle1, SmokeParticle2, SmokeParticle3, SmokeParticle4, BurntParticle, UnhappyParticle, HappyParticle;
     
 
     private void Awake()
@@ -24,7 +24,10 @@ public class ParticleManager : MonoBehaviour
 
     public void SmokeParticleMethod()
     {
-        SmokeParticle.Play();
+        SmokeParticle1.Play();
+        SmokeParticle2.Play();
+        SmokeParticle3.Play();
+        SmokeParticle4.Play();
     }
 
     public void BurntParticleMethod()

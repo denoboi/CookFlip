@@ -21,14 +21,10 @@ public class CookingArea : MonoBehaviour
 
     }
 
- 
-
     private void OnTriggerEnter(Collider other)
     {
         PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
         controller = stats.GetComponent<SplineCharacterMovementController>();
-
-
 
         if (!isEntered)
         {
@@ -41,19 +37,13 @@ public class CookingArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-
         PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
-        
-
-
 
         if (!isExited)
         {
             Debug.Log("Exited");
             isExited = true;
-            
-            
-            
+   
         }
     }
 }
