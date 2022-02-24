@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HCB.Core;
+using HCB.SplineMovementSystem;
 
 public class OvenTrigger : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class OvenTrigger : MonoBehaviour
 
     private Coroutine _cookingCoroutine;
 
-    
+    SplineCharacterMovementController controller;
+
+
 
 
     private HeatParticleColorController[] HeatParticleColorController;
@@ -25,12 +28,18 @@ public class OvenTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+        PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
+        controller = stats.GetComponent<SplineCharacterMovementController>();
+
         Debug.Log("Cooking");
 
         if (other.gameObject.CompareTag("Pan"))
         {
             Cooking();
- 
+
+            controller.SetSpeed(controller.MovementData.CookingSpeed);
+
         }
 
 
@@ -42,6 +51,8 @@ public class OvenTrigger : MonoBehaviour
         if(other.gameObject.CompareTag("Pan"))
         {
             StopCoroutine(_cookingCoroutine);
+
+            controller.SetSpeed(controller.MovementData.DefaultSpeed);
         }
         
         
