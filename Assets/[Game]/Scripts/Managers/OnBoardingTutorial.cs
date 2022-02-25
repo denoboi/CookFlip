@@ -56,12 +56,7 @@ public class OnBoardingTutorial : MonoBehaviour
 
             ShowTutorial();
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                HideTutorial();
-                Debug.Log("doughout");
-            }
-
+            
 
        
            
@@ -69,20 +64,20 @@ public class OnBoardingTutorial : MonoBehaviour
 
 
 
-    //private void OnTriggerExit(Collider other)
-    //{
+    private void OnTriggerExit(Collider other)
+    {
 
-    //    SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
+        SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
 
-    //    if (splineCharacter == null) return;
-        
+        if (splineCharacter == null) return;
 
-            
-    //                HideTutorial();
-                
-            
-        
-    //}
+
+
+        HideTutorial();
+
+
+
+    }
     private void Update()
     {
         if (!isTutorialShowing) return;
