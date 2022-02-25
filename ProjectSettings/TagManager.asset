@@ -10,6 +10,7 @@ TagManager:
   - LoopHole
   - Pan
   - Cake
+  - SplineCharacter
   layers:
   - Default
   - TransparentFX

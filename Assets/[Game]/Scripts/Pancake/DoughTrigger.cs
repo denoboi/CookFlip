@@ -55,6 +55,8 @@ public class DoughTrigger : MonoBehaviour
     {
         dough.SetActive(true);
 
+        isDoughAvailable = true;
+
         PancakeStats.Instance.currentFace = 0;
 
         HapticManager.Haptic(HapticTypes.RigidImpact);
@@ -87,7 +89,7 @@ public class DoughTrigger : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         pancake = Instantiate(panCakeDoughPrefab, creationPoint.transform.position, creationPoint.transform.rotation, creationPoint.transform.parent);
-        isDoughAvailable = true;
+        
 
         PancakeStats.Instance.isCooked = false;
 
