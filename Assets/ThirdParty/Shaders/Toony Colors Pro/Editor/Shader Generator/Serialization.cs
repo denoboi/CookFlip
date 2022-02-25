@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 // Reflection-based serialization system: serialize simple value types, and specific classes (either those with the SerializeAs attribute, or special ones like Vector2, Vector3, ...)
@@ -18,7 +17,7 @@ namespace ToonyColorsPro
 			/// <summary>
 			/// Declare a class or field as serializable, and set its serialized short name
 			/// </summary>
-			[AttributeUsage(AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Property)]
+			[AttributeUsage(AttributeTargets.Field | AttributeTargets.Class)]
 			public class SerializeAsAttribute : Attribute
 			{
 				/// <summary>
@@ -103,19 +102,6 @@ namespace ToonyColorsPro
 					output = name + "(";
 				}
 
-				// properties with [SerializeAs] attribute
-				// note: only used for unityVersion currently; see Config.cs
-				var properties = new List<PropertyInfo>(obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public));
-				foreach (var prop in properties)
-				{
-					var attributes = prop.GetCustomAttributes(typeof(SerializeAsAttribute), true);
-					if (attributes != null && attributes.Length == 1)
-					{
-						var name = (attributes[0] as SerializeAsAttribute).serializedName;
-						output += string.Format("{0}:\"{1}\";", name, prop.GetValue(obj, null));
-					}
-				}
-
 				//get all fields, and look for [SerializeAs] attribute
 				var fields = new List<FieldInfo>(obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public));
 				foreach (var field in fields)
@@ -131,8 +117,7 @@ namespace ToonyColorsPro
 						{
 							if (@object == null)
 							{
-								// Debug.LogError("Serialization error!\nTrying to get the string value of a null object.");
-								return "__NULL__";
+								Debug.LogError("Serialization error!\nTrying to get the string value of a null object.");
 							}
 
 							var type = @object.GetType();
@@ -291,12 +276,6 @@ namespace ToonyColorsPro
 					//object types
 					if (!t.IsValueType && t != typeof(string))
 					{
-						// handle null values
-						if (strValue == "__NULL__")
-						{
-							return null;
-						}
-
 						//list
 						if (typeof(IList).IsAssignableFrom(t))
 						{
@@ -397,12 +376,6 @@ namespace ToonyColorsPro
 					//string: remove quotes to extract value
 					if (t == typeof(string))
 					{
-						// handle null values
-						if (strValue == "__NULL__")
-						{
-							return null;
-						}
-
 						return strValue.Trim('"');
 					}
 
@@ -464,7 +437,7 @@ namespace ToonyColorsPro
 				var insideBlock = 0;
 				var insideQuotes = false;
 				var i = 0;
-				var currentWord = new StringBuilder();
+				var currentWord = "";
 				var words = new List<string>();
 
 				//get opening/ending chars for blocks
@@ -494,24 +467,20 @@ namespace ToonyColorsPro
 
 					if (input[i] == separator && insideBlock == 0)
 					{
-						if (!removeEmptyEntries || currentWord.Length != 0)
-						{
-							words.Add(currentWord.ToString());
-						}
-						currentWord.Length = 0;
+						if (!removeEmptyEntries || currentWord != "")
+							words.Add(currentWord);
+						currentWord = "";
 					}
 					else
 					{
-						currentWord.Append(input[i]);
+						currentWord += input[i];
 					}
 
 					i++;
 				}
 
-				if (!removeEmptyEntries || currentWord.Length != 0)
-				{
-					words.Add(currentWord.ToString());
-				}
+				if (!removeEmptyEntries || currentWord != "")
+					words.Add(currentWord);
 
 				return words.ToArray();
 			}

@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 // Shader Generator Module: Specular
 
@@ -10,7 +10,7 @@ sngl	lbl="Visible over Shadows"	kw=SPECULAR_NO_ATTEN																needs=SPECUL
 sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECULAR								indent		tt="Will make specular optional in the material inspector, using a shader keyword"
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_NEW
 /// IF SPECULAR
@@ -19,7 +19,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 	/// IF SPECULAR_ANISOTROPIC || (SPEC_LEGACY && !SPECULAR_RAMP && !SPECULAR_TOON)
 		float		Specular Smoothness			lighting, imp(float, label = "Smoothness", default = 0.2)
 	/// ELIF SPEC_PBR_BLINNPHONG || SPEC_PBR_GGX
-		float		Specular Roughness PBR		lighting, imp(range, label = "Roughness", default = 0.5, min = 0, max = 1)
+		float		Specular Smoothness PBR		lighting, imp(range, label = "Smoothness", default = 0.5, min = 0, max = 1)
 	///
 	/// IF SPECULAR_ANISOTROPIC
 		float		Anisotropic Spread			lighting, imp(range, label = "Anisotropic Spread", default = 1.0, min = 0, max = 2)
@@ -34,7 +34,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #KEYWORDS
 /// IF SPECULAR
@@ -47,7 +47,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #SHADER_FEATURES_BLOCK
 /// IF SPECULAR && SPECULAR_SHADER_FEATURE
@@ -55,7 +55,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #PROPERTIES_BLOCK
 /// IF SPECULAR
@@ -71,7 +71,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 	/// IF SPECULAR_ANISOTROPIC || (SPEC_LEGACY && !SPECULAR_RAMP && !SPECULAR_TOON)
 		[[PROP:Specular Smoothness]]
 	/// ELIF SPEC_PBR_BLINNPHONG || SPEC_PBR_GGX
-		[[PROP:Specular Roughness PBR]]
+		[[PROP:Specular Smoothness PBR]]
 	///
 	/// IF SPECULAR_ANISOTROPIC
 		[[PROP:Anisotropic Spread]]
@@ -86,7 +86,7 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VARIABLES
 /// IF (SPEC_LEGACY || SPECULAR_ANISOTROPIC) && SPECULAR_RAMP
@@ -140,17 +140,17 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 ///
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #INPUT
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #VERTEX
 #END
 
-//================================================================
+//================================================================================================================================================================================================================================================================
 
 #LIGHTING(float4 color, float3 normal, float3 tangent, float3 lightDir, float3 viewDir, float ndl, float ndv, float atten)
 /// IF SPECULAR
@@ -185,19 +185,19 @@ sngl	lbl="Make Optional"			kw=SPECULAR_SHADER_FEATURE															needs=SPECUL
 	/// ELIF SPEC_PBR_BLINNPHONG
 		//Specular: PBR Blinn-Phong
 		half3 halfDir = SafeNormalize(lightDir + viewDir);
-		half roughness = [[VALUE:Specular Roughness PBR]]*[[VALUE:Specular Roughness PBR]];
+		half roughness = [[VALUE:Specular Smoothness PBR]]*[[VALUE:Specular Smoothness PBR]];
 		half nh = saturate(dot(normal, halfDir));
 		half spec = NDFBlinnPhong(nh, PercRoughnessToSpecPower(roughness));
 	/// ELIF SPEC_PBR_GGX
 		//Specular: GGX
 		half3 halfDir = SafeNormalize(lightDir + viewDir);
-		half roughness = [[VALUE:Specular Roughness PBR]]*[[VALUE:Specular Roughness PBR]];
+		half roughness = [[VALUE:Specular Smoothness PBR]]*[[VALUE:Specular Smoothness PBR]];
 		half nh = saturate(dot(normal, halfDir));
 		half spec = GGX(nh, saturate(roughness));
 		spec *= TCP2_PI * 0.05;
 		#ifdef UNITY_COLORSPACE_GAMMA
 			spec = max(0, sqrt(max(1e-4h, spec)));
-			half surfaceReduction = 1.0 - 0.28 * roughness * [[VALUE:Specular Roughness PBR]];
+			half surfaceReduction = 1.0 - 0.28 * roughness * [[VALUE:Specular Smoothness PBR]];
 		#else
 			half surfaceReduction = 1.0 / (roughness*roughness + 1.0);
 		#endif

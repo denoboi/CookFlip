@@ -1,4 +1,6 @@
-﻿// Toony Colors Pro+Mobile 2
+﻿// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
+
+// Toony Colors Pro+Mobile 2
 // (c) 2014-2019 Jean Moreno
 
 Shader "Toony Colors Pro 2/Examples/Default/Dissolve"

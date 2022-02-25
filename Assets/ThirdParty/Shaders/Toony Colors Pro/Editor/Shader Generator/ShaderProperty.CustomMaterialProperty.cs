@@ -277,7 +277,7 @@ namespace ToonyColorsPro
 					{
 						GUILayout.Space(4);
 
-						implementation.NewLineGUI(false);
+						implementation.NewLineGUI();
 					}
 
 					EditorGUILayout.EndVertical();

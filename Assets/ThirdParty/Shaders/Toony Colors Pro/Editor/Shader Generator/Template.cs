@@ -1,5 +1,5 @@
 ﻿// Toony Colors Pro 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -209,31 +209,28 @@ namespace ToonyColorsPro
 				{
 					var line = textLines[i];
 
-					if (line.Length > 0 && line[0] == '#')
+					if (line.StartsWith("#PASS"))
 					{
-						if (line.StartsWith("#PASS"))
-						{
-							//new pass: get the specific features for this pass
-							passIndex++;
-							features = new List<string>(config.Features);
-							features.AddRange(config.GetHooksNeededFeatures());
-							features.AddRange(config.GetShaderPropertiesNeededFeaturesForPass(passIndex));
+						//new pass: get the specific features for this pass
+						passIndex++;
+						features = new List<string>(config.Features);
+						features.AddRange(config.GetHooksNeededFeatures());
+						features.AddRange(config.GetShaderPropertiesNeededFeaturesForPass(passIndex));
 
-							var passKeywordsFeatures = new List<string>();
-							ProcessKeywordsBlock(config, features, passKeywordsFeatures, flags);
-							features.AddRange(passKeywordsFeatures);
-						}
+						var passKeywordsFeatures = new List<string>();
+						ProcessKeywordsBlock(config, features, passKeywordsFeatures, flags);
+						features.AddRange(passKeywordsFeatures);
+					}
 
-						//Skip #FEATURES block
-						if (line.StartsWith("#FEATURES"))
+					//Skip #FEATURES block
+					if (line.StartsWith("#FEATURES"))
+					{
+						while (i < textLines.Length)
 						{
-							while (i < textLines.Length)
-							{
-								i++;
-								line = textLines[i];
-								if (line == "#END")
-									break;
-							}
+							i++;
+							line = textLines[i];
+							if (line == "#END")
+								break;
 						}
 					}
 
@@ -918,11 +915,6 @@ namespace ToonyColorsPro
 				{
 					var line = textLines[i];
 
-					if (line.Length <= 0 || line[0] != '#')
-					{
-						continue;
-					}
-
 					if (line.StartsWith("#KEYWORDS"))
 					{
 						int keywordsStartIndex = i+1;
@@ -932,10 +924,8 @@ namespace ToonyColorsPro
 							line = textLines[i];
 							i++;
 
-							if (line.Length > 0 && line[0] == '#' && line.StartsWith("#END"))
-							{
+							if (line.StartsWith("#END"))
 								return;
-							}
 
 							//Conditions
 							if (line.Contains("///"))

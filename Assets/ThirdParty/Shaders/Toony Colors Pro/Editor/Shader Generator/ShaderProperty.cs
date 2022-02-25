@@ -5,7 +5,6 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using ToonyColorsPro.Utilities;
-using System.Linq;
 
 // Represents a user-modifiable shader property, that will be generated and injected in the code.
 // It can be defined as a Material Property, Constant, or fetched from another source (e.g. Vertex Color),
@@ -192,8 +191,7 @@ namespace ToonyColorsPro
 				Screen_Space_UV_Fragment,
 				Screen_Space_UV_Object_Offset,
 				UV_Anim_Random_Offset,
-				Scale_By_Texel_Size,
-				World_Pos_UV
+				Scale_By_Texel_Size
 			}
 
 			[Flags]
@@ -549,7 +547,7 @@ namespace ToonyColorsPro
 					if (imp_cc != null && imp_cc.usesReplacementTags && string.IsNullOrEmpty(imp_cc.tagError))
 					{
 						//special case: use custom code with replacement tags
-						result += imp_cc.PrintVariableReplacement(ref usedImplementations, inputSource, outputSource, arguments);
+						result += imp_cc.PrintVariableReplacement(ref usedImplementations, implementations, inputSource, outputSource, arguments);
 					}
 					else if (imp_hsv != null)
 					{
@@ -688,7 +686,6 @@ namespace ToonyColorsPro
 					case OptionFeatures.Screen_Space_UV_Fragment: return new[] { "USE_SCREEN_SPACE_UV_FRAGMENT" };
 					case OptionFeatures.Screen_Space_UV_Object_Offset: return new[] { "SCREEN_SPACE_UV_OBJECT_OFFSET" };
 					case OptionFeatures.UV_Anim_Random_Offset: return new[] { "HASH_22" };
-					case OptionFeatures.World_Pos_UV: return new[] { "USE_WORLD_POSITION_FRAGMENT" };
 				}
 
 				return new string[0];
@@ -1181,24 +1178,14 @@ namespace ToonyColorsPro
 
 			void OnCopyImplementations()
 			{
-				s_copiedImplementationsBuffer = new List<Implementation>();
-
-				foreach (var imp in implementations)
-				{
-					if (imp.CanBeCopied())
-					{
-						s_copiedImplementationsBuffer.Add(imp);
-					}
-				}
-
+				s_copiedImplementationsBuffer = new List<Implementation>(implementations);
 				s_copiedImplementationsType = this.Type;
 			}
 
 			void OnPasteImplementations(object newImplementations)
 			{
-				// Clear implementations except hooks
-				implementations = implementations.Where(imp =>imp is Imp_Hook).ToList();
-
+				// replace the implementations
+				implementations.Clear();
 				foreach (var imp in (List<Implementation>)newImplementations)
 				{
 					imp.OnPasted();
@@ -1326,9 +1313,6 @@ namespace ToonyColorsPro
 				float programLabelWidth = SGUILayout.Styles.GrayMiniLabel.CalcSize(programLabel).x;
 				float rightMenuButtonWidth = 16;
 
-				// hover
-				TCP2_GUI.DrawHoverRect(rect);
-
 				// main foldout
 				var foldoutRect = rect;
 				foldoutRect.width -= rightMenuButtonWidth;
@@ -1397,8 +1381,6 @@ namespace ToonyColorsPro
 					//lambda function so that we can reorder drawing when one is selected
 					Action<int, float> DrawImplementation = (index, indent) =>
 					{
-						bool usedByCustomCode = usedImplementationsForCustomCode.Contains(index);
-
 						if (index > 0)
 						{
 							GUILayout.Space(1);
@@ -1412,7 +1394,7 @@ namespace ToonyColorsPro
 						GUILayout.Space(indent);
 
 						// button with implementation name, show imp menu on click
-						if (index > 0 && implementations[index].HasOperator() && !usedByCustomCode)
+						if (index > 0 && implementations[index].HasOperator() && !usedImplementationsForCustomCode.Contains(index))
 						{
 							var op = (int)implementations[index].@operator;
 							if (GUILayout.Button(OperatorSymbols[op], EditorStyles.popup, GUILayout.Width(35)))
@@ -1425,7 +1407,7 @@ namespace ToonyColorsPro
 								menu.ShowAsContext();
 							}
 						}
-						else if (usedByCustomCode)
+						else if (usedImplementationsForCustomCode.Contains(index))
 						{
 							using (new EditorGUI.DisabledScope(true))
 							{
@@ -1472,7 +1454,7 @@ namespace ToonyColorsPro
 
 						//Parameters depending on property type
 						GUILayout.Space(1);
-						implementations[index].NewLineGUI(usedByCustomCode);
+						implementations[index].NewLineGUI();
 					};
 
 					//guiColor = GUI.color;

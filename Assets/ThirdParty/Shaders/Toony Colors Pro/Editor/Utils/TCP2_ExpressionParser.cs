@@ -1,10 +1,9 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 // Helper class to deal with template expressions
 
@@ -20,10 +19,8 @@ namespace ToonyColorsPro
 			public static string ProcessCondition(string line, List<string> features, ref int depth, ref List<bool> stack, ref List<bool> done)
 			{
 				//Safeguard for commented or special command lines
-				if (line.Length > 0 && line[0] == '#')
-				{
+				if (line.StartsWith("#"))
 					return null;
-				}
 
 				//Remove white spaces
 				line = line.Trim();
@@ -122,20 +119,20 @@ namespace ToonyColorsPro
 			public static bool EvaluateExpression(string expression, ExpressionLeaf.EvaluateFunction evalFunction)
 			{
 				//Remove white spaces and double && ||
-				var cleanExpr = new StringBuilder();
+				var cleanExpr = "";
 				for (var i = 0; i < expression.Length; i++)
 				{
 					switch (expression[i])
 					{
 						case ' ': break;
-						case '&': cleanExpr.Append(expression[i]); i++; break;
-						case '|': cleanExpr.Append(expression[i]); i++; break;
-						default: cleanExpr.Append(expression[i]); break;
+						case '&': cleanExpr += expression[i]; i++; break;
+						case '|': cleanExpr += expression[i]; i++; break;
+						default: cleanExpr += expression[i]; break;
 					}
 				}
 
 				var tokens = new List<Token>();
-				var reader = new StringReader(cleanExpr.ToString());
+				var reader = new StringReader(cleanExpr);
 				Token t = null;
 				do
 				{
@@ -157,42 +154,14 @@ namespace ToonyColorsPro
 
 			public class Token
 			{
-				bool StringToTokenType(char c)
-				{
-					switch (c)
-					{
-						case '(':
-							type = TokenType.OPEN_PAREN;
-							value = "(";
-							return true;
-
-						case ')':
-							type = TokenType.CLOSE_PAREN;
-							value = ")";
-							return true;
-
-						case '!':
-							type = TokenType.UNARY_OP;
-							value = "NOT";
-							return true;
-
-						case '&':
-							type = TokenType.BINARY_OP;
-							value = "AND";
-							return true;
-
-						case '|':
-							type = TokenType.BINARY_OP;
-							value = "OR";
-							return true;
-					}
-					return false;
-				}
-
-				bool IsControlCharacter(char c)
-				{
-					return c == '(' || c == ')' || c == '!' || c == '&' || c == '|';
-				}
+				static Dictionary<char, KeyValuePair<TokenType, string>> typesDict = new Dictionary<char, KeyValuePair<TokenType, string>>
+		{
+			{'(', new KeyValuePair<TokenType, string>(TokenType.OPEN_PAREN, "(")},
+			{')', new KeyValuePair<TokenType, string>(TokenType.CLOSE_PAREN, ")")},
+			{'!', new KeyValuePair<TokenType, string>(TokenType.UNARY_OP, "NOT")},
+			{'&', new KeyValuePair<TokenType, string>(TokenType.BINARY_OP, "AND")},
+			{'|', new KeyValuePair<TokenType, string>(TokenType.BINARY_OP, "OR")}
+		};
 
 				public enum TokenType
 				{
@@ -220,23 +189,24 @@ namespace ToonyColorsPro
 					var ch = (char)c;
 
 					//Special case: solve bug where !COND_FALSE_1 && COND_FALSE_2 would return True
-					bool embeddedNot = (ch == '!' && s.Peek() != '(');
+					var embeddedNot = (ch == '!' && s.Peek() != '(');
 
-					// Control character
-					if (!embeddedNot && StringToTokenType(ch))
+					if (typesDict.ContainsKey(ch) && !embeddedNot)
 					{
-						return;
+						type = typesDict[ch].Key;
+						value = typesDict[ch].Value;
 					}
-
-					// Literal expression
-					var sb = new StringBuilder();
-					sb.Append(ch);
-					while (s.Peek() != -1 && !IsControlCharacter((char)s.Peek()))
+					else
 					{
-						sb.Append((char)s.Read());
+						var str = "";
+						str += ch;
+						while (s.Peek() != -1 && !typesDict.ContainsKey((char)s.Peek()))
+						{
+							str += (char)s.Read();
+						}
+						type = TokenType.LITERAL;
+						value = str;
 					}
-					type = TokenType.LITERAL;
-					value = sb.ToString();
 				}
 
 				public static List<Token> TransformToPolishNotation(List<Token> infixTokenList)
@@ -310,7 +280,7 @@ namespace ToonyColorsPro
 				public override bool Evaluate()
 				{
 					//embedded not, see special case in Token declaration
-					if (content.Length > 0 && content[0] == '!')
+					if (content.StartsWith("!"))
 					{
 						return !evalFunction(content.Substring(1));
 					}

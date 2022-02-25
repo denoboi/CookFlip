@@ -1,6 +1,6 @@
 Toony Colors Pro, version 2.4
-2020/04/01
-Â© 2020 - Jean Moreno
+2019/10/08
+© 2019 - Jean Moreno
 =============================
 
 QUICK START
@@ -36,67 +36,8 @@ UPDATE NOTES
 
 See full and formatted changelog here: https://jeanmoreno.com/unity/toonycolorspro/doc/changelog
 
-2.4.33.2
-- [Shader Generator 2] (URP) Fixed possible compilation errors because of new "SRP Batcher Compatibility" option
-- [Shader Generator 2] Minor UI fixes
-
-2.4.33.1
-- [Shader Generator 2] (URP) Fixed broken additional passes because of new "SRP Batcher Compatibility" option
-
-2.4.33
-- [Shader Generator 2] (Default) (URP) Added "Shadow Line" feature in Stylization, to create a crisp line between highlighted and shadowed part. Can be used to create comic-book style shadows for example.
-- [Shader Generator 2] Added "World Position" UV option for textures: use the vertex world position as texture UV. This can allow different effects, like using a world-space texture blending map to control multiple objects (ground, grass), or add a scrolling clouds shadow map for example.
-- [Shader Generator 2] (URP) Added "SRP Batcher Compatibility" in the Options (experimental, let me know if it doesn't work!)
-- [Shader Generator 2] Modified Shader Properties are now retained when changing template; this should make it easier to convert a shader from the built-in pipeline to URP for example.
-- Added a few Sketch textures
-- [Shader Generator 2] Added ability to use a custom font in the Options
-- [Shader Generator 2] Improved UI and readability, especially in Unity 2019.3+
-- [Shader Generator 2] (URP) Fixed shadow coordinates calculation changes introduced in URP 7.2.0
-- [Shader Generator 2] (URP) Fixed Meta Pass
-- [Shader Generator 2] Fixed possible unwanted variable name changes when changing template on an existing shader.
-
-2.4.32
-- [Shader Generator 2] (Default) (LWRP/URP) Added "Shading Ramp" hook
-- [Shader Generator 2] (URP) Added options for "Silhouette" and "Outline" to make them explicitly use the "URP Render Features" and updated documentation about it
-- [Shader Generator 2] (Default) (LWRP/URP) Changed "smoothness" to "roughness" for Specular PBR/GGX
-- [Shader Generator 2] (LWRP/URP) Added GPU instancing and stereo rendering support
-- [Shader Generator 2] (LWRP/URP) Fixed error when using "Vertical Fog" and "Enable Fog" in the same shader
-- [Shader Generator 1] Fixed visual bug with spot light falloff bypass
-
-2.4.31
-- Added `Cat Demo URP` scene (extract it from the `Cat Demo URP.unitypackage` file)
-- [Shader Generator 2] (LWRP/URP) Fixed compilation error when using Specular GGX along with Reflection Probes
-- [Shader Generator 2] Fixed frequent compilation errors due to the new custom code prepend option
-- [Shader Generator 2] Reloading shaders from the current output directory now works
-- [Shader Generator 2] Fixed bug that was showing all Shader Properties as modified when copying a shader
-- [Shader Generator 2] Performance optimizations in the UI
-- Hopefully fixed mesh references that get lost when importing unitypackage in Cat demo scene
-
-2.4.3
-- [Shader Generator 2] Added 'Prepend Code' option for Custom Code implementation: add arbitrary code before the implementation to allow for more complex code insertion
-- [Shader Generator 2] (Default) (LWRP/URP) Added "Alpha to Coverage" option for "Alpha Testing"
-- [Shader Generator 2] (Default) Added "Aura 2" third-party support (experimental)
-- [Shader Generator 2] Add Unity version on generated shaders, will be useful for support
-- [Shader Generator 2] Changed how hash is calculated: old shaders opened in the tool will show a warning that they are modified externally, even though they are not. The warning will disappear once the shader is updated.
-- [Shader Generator] (Water) Enabled 'Add Shadow Pass' option to enable shadow receiving for water shaders (note: not compatible with depth-buffer effects)
-- [Shader Generator 2] Fixed UI bug that prevented some options from showing if `Show disabled fields` was disabled
-- [Shader Generator 2] Fixed possible compilation error with texture coordinates
-- [Shader Generator 2] Fixed "Vertical Fog" that was reapplied when using additional lights
-- "Demo TCP2 Cat LWRP" scene: water shader now also works with orthographic cameras
-- Fixed possible corrupted shaders when unpacking from the menu
-
-2.4.2
-- [Shader Generator 2] (Default) (LWRP/URP) Added "Vertical Fog" special effect
-- [Shader Generator 2] (LWRP/URP) Fixed shader compilation error when using features with world-space view direction (e.g. "Specular")
-- [Shader Generator 2] Fixed shader compilation error when using `Min Max Threshold` ceiling mode with "Triplanar Mapping"
-- [Shader Generator 2] `Custom Code` implementation: fixed reference bug and improved UI on referenced implementations
-- [Shader Generator 2] Fixed tiling and scrolling calculation order which could result in animation pops for Texture implementations
-- [Shader Generator 1] Fixed issues with non-US culture when using C# 4.x (when using constant float values in Shader Generator 1)
-- [Shader Generator 2] Fixed issue that produced a warning for generated shaders
-- Cat Demo Scene: fixed mesh references in Unity 2019.1+
-
 2.4.1
-- As of version 2.4.0, the "Shaders 2.0" folder has been renamed to "Shaders".
+- As of version 2.4.0, the "Shaders 2.0" has been renamed to "Shaders".
   Any shaders and files in "Shaders 2.0" or a sub-folder (e.g. "Variants") has to be moved there for the shaders to compile properly.
 - Added HTML formatted changelog
 - Fixed packed shaders that were unpacking in the wrong folder, causing an #include error

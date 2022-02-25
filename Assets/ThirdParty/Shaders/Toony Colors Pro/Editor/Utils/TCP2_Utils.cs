@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -555,7 +555,6 @@ namespace ToonyColorsPro
 				//Get properties
 				// Content
 				var content = File.ReadAllText(windowsPath, Encoding.UTF8);
-				content = content.Replace("\r\n", "\n");
 				// File relative path
 				var tcpRoot = FindReadmePath();
 				if (tcpRoot == null)
@@ -585,15 +584,15 @@ namespace ToonyColorsPro
 				var sbContent = new StringBuilder();
 
 				sbIndex.AppendLine("# TCP2 PACKED SHADERS");
-				var lineCursor = 0;
+				var cursor = 0;
 				foreach (var pf in packedFiles)
 				{
 					sbContent.Append(pf.content);
-					sbIndex.AppendLine(pf.path + ";" + lineCursor + ";" + pf.content.Length);   // PATH ; START ; LENGTH
-					lineCursor += pf.content.Length;
+					sbIndex.AppendLine(pf.path + ";" + cursor + ";" + pf.content.Length);   // PATH ; START ; LENGTH
+					cursor += pf.content.Length;
 				}
 
-				var archiveContent = sbIndex.ToString().Replace("\r\n", "\n") + "###\n" + sbContent.ToString().Replace("\r\n", "\n");
+				var archiveContent = sbIndex + "###\n" + sbContent;
 
 				var fullPath = Application.dataPath + "/" + outputFile;
 				var directory = Path.GetDirectoryName(fullPath);
@@ -610,7 +609,6 @@ namespace ToonyColorsPro
 			public static PackedFile[] ExtractArchive(string archivePath, string filter = null)
 			{
 				var archive = File.ReadAllText(archivePath);
-				archive = archive.Replace("\r\n", "\n");
 				var archiveLines = File.ReadAllLines(archivePath);
 
 				if (archiveLines[0] != "# TCP2 PACKED SHADERS")

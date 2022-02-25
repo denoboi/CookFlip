@@ -1,5 +1,5 @@
 // Toony Colors Pro+Mobile 2
-// (c) 2014-2020 Jean Moreno
+// (c) 2014-2019 Jean Moreno
 
 using System;
 using System.Collections.Generic;
@@ -760,7 +760,7 @@ namespace ToonyColorsPro
 
 						//Only enforce keyword if feature is enabled
 						if (Enabled(config))
-							config.SetKeyword(keyword, currentValue.ToString("0.0###############", CultureInfo.InvariantCulture));
+							config.SetKeyword(keyword, currentValue.ToString("0.0###############"));
 					}
 
 					EditorGUI.BeginChangeCheck();
@@ -770,7 +770,7 @@ namespace ToonyColorsPro
 					{
 						if (newValue != currentValue)
 						{
-							config.SetKeyword(keyword, newValue.ToString("0.0###############", CultureInfo.InvariantCulture));
+							config.SetKeyword(keyword, newValue.ToString("0.0###############"));
 						}
 					}
 				}
