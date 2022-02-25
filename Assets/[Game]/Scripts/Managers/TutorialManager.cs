@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HCB.Core;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -32,8 +33,11 @@ public class TutorialManager : MonoBehaviour
 
         if(popUpIndex == 0)
         {
+            Time.timeScale = 0.3f;
+
             if(doughTrigger.isDoughAvailable)
             {
+                Debug.Log("doughtut");
                 popUpIndex++;
             }
             else if(popUpIndex == 1)
@@ -49,6 +53,8 @@ public class TutorialManager : MonoBehaviour
                 {
                     popUpIndex++;
                 }
+
+                GameManager.Instance.GameConfig
             }
         }
     }

@@ -50,7 +50,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4874126678125670354, guid: 0c7034d4b4351314697391ed46f68512, type: 3}
+  - {fileID: 2100000, guid: cccb076ffbfd3024fb4738bec6bafb9a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,7 +177,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4874126678125670354, guid: 0c7034d4b4351314697391ed46f68512, type: 3}
+  - {fileID: 2100000, guid: b29bea315d4b39644bb9055c6403fbb7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -258,7 +258,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4874126678125670354, guid: 0c7034d4b4351314697391ed46f68512, type: 3}
+  - {fileID: 2100000, guid: 9bd3fecb41f910c47a9260fabdcf8f0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -339,7 +339,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4874126678125670354, guid: 0c7034d4b4351314697391ed46f68512, type: 3}
+  - {fileID: 2100000, guid: b29bea315d4b39644bb9055c6403fbb7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -665,6 +665,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7892269691182407772}
     m_Modifications:
+    - target: {fileID: 817620497485630959, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9bd3fecb41f910c47a9260fabdcf8f0d, type: 2}
     - target: {fileID: 1177755016368892986, guid: 19e42bf1f679453419249725ac6a3229, type: 3}
       propertyPath: m_Name
       value: Loophole
