@@ -26,7 +26,7 @@ public class OnBoardingTutorial : MonoBehaviour
 
     public OvenTrigger ovenTrigger => OvenTrigger == null ? OvenTrigger = GetComponentInChildren<OvenTrigger>() : OvenTrigger;
 
-    public SplineCharacter splineCharacter;
+    
 
     
 
@@ -47,13 +47,12 @@ public class OnBoardingTutorial : MonoBehaviour
 
         private void OnTriggerEnter(Collider other)
         {
+            SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
+        
 
+            if (splineCharacter == null) return;
+            Debug.Log("splineCharacter");
 
-        splineCharacter = other.GetComponentInChildren<SplineCharacter>();
-        Debug.Log("splineCharacter");
-
-       
-                
                     ShowTutorial();
                  Debug.Log("doughtut");
            
@@ -63,7 +62,10 @@ public class OnBoardingTutorial : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        splineCharacter = other.GetComponentInChildren<SplineCharacter>();
+
+        SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
+
+        if (splineCharacter == null) return;
         
                 HideTutorial();
                 

@@ -9,7 +9,7 @@ namespace HCB.UI
     public class LevelTimeCounter : MonoBehaviour
     {
         Text counterText;
-        Text CounterText { get { return (counterText == null) ? counterText = GetComponent<Text>() : counterText; } }
+        Text CounterText { get { return (counterText == null) ? counterText = GetComponentInChildren<Text>() : counterText; } }
 
         private float startTime = 0;
 

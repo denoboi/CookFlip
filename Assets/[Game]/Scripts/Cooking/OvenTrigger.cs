@@ -41,7 +41,7 @@ public class OvenTrigger : MonoBehaviour
             Cooking();
             //HapticManager.Haptic(HapticTypes.RigidImpact);
             controller.SetSpeed(controller.MovementData.CookingSpeed);
-            ParticleManager.instance.SmokeParticleMethod();
+            ParticleManager.instance ? .SmokeParticleMethod();
 
         }
 

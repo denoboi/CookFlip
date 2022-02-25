@@ -24,7 +24,12 @@ public class CookingArea : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PancakeStats stats = other.transform.root.GetComponentInChildren<PancakeStats>();
+
+        if (stats == null) return;
+
         controller = stats.GetComponent<SplineCharacterMovementController>();
+
+        
 
         if (!isEntered)
         {
