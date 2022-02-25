@@ -51,27 +51,38 @@ public class OnBoardingTutorial : MonoBehaviour
         
 
             if (splineCharacter == null) return;
+
             Debug.Log("splineCharacter");
 
-                    ShowTutorial();
-                 Debug.Log("doughtut");
+            ShowTutorial();
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                HideTutorial();
+                Debug.Log("doughout");
+            }
+
+
+       
            
         }
 
 
 
-    private void OnTriggerExit(Collider other)
-    {
+    //private void OnTriggerExit(Collider other)
+    //{
 
-        SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
+    //    SplineCharacter splineCharacter = other.GetComponentInParent<SplineCharacter>();
 
-        if (splineCharacter == null) return;
+    //    if (splineCharacter == null) return;
         
-                HideTutorial();
+
+            
+    //                HideTutorial();
                 
             
         
-    }
+    //}
     private void Update()
     {
         if (!isTutorialShowing) return;
@@ -87,7 +98,7 @@ public class OnBoardingTutorial : MonoBehaviour
     private void HideTutorial()
     {
         isTutorialShowing = false;
-        SetAnimation();
+        //SetAnimation();
         Time.timeScale = 1;
         Time.fixedDeltaTime = defaultFixedTime;
     }
