@@ -54,7 +54,7 @@ public class TutorialManager : MonoBehaviour
                     popUpIndex++;
                 }
 
-                GameManager.Instance.GameConfig
+                
             }
         }
     }

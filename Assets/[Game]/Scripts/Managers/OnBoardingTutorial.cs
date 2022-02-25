@@ -13,6 +13,10 @@ public class OnBoardingTutorial : MonoBehaviour
 
         private float defaultFixedTime;
         private bool isTutorialShowing = false;
+
+    DoughTrigger DoughTrigger;
+    public DoughTrigger doughTrigger => DoughTrigger == null ? DoughTrigger = GetComponentInChildren<DoughTrigger>() : DoughTrigger;
+   
         private void Awake()
         {
             Time.timeScale = 1;
@@ -27,27 +31,27 @@ public class OnBoardingTutorial : MonoBehaviour
 
         private void OnTriggerEnter(Collider other)
         {
-            Character character = other.GetComponent<Character>();
-            if (character)
+        DoughTrigger doughTrigger = other.GetComponent<DoughTrigger>();
+            if (doughTrigger)
             {
-                if (character.CharacterData.CharacterControlType == CharacterControlType.Player)
+                if (doughTrigger.isDoughAvailable)
                 {
                     ShowTutorial();
                 }
             }
         }
 
-        private void OnTriggerExit(Collider other)
-        {
-            Character character = other.GetComponent<Character>();
-            if (character)
-            {
-                if (character.CharacterData.CharacterControlType == CharacterControlType.Player)
-                {
-                    HideTutorial();
-                }
-            }
-        }
+        //private void OnTriggerExit(Collider other)
+        //{
+        //    Character character = other.GetComponent<Character>();
+        //    if (character)
+        //    {
+        //        if (character.CharacterData.CharacterControlType == CharacterControlType.Player)
+        //        {
+        //            HideTutorial();
+        //        }
+        //    }
+        //}
         private void Update()
         {
             if (!isTutorialShowing) return;
