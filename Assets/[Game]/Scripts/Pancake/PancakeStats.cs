@@ -61,10 +61,12 @@ public class PancakeStats : MonoBehaviour
         CheckCooking();
         {
             EventManager.OnPancakeCooked.Invoke();
-            
+
             //panRollController.OnHit();
             //panRollController.Rotate(new Vector2(0, 0));
             //panRollController.enabled = false;
+
+            HapticManager.Haptic(HapticTypes.RigidImpact);
 
         }
 
@@ -77,7 +79,10 @@ public class PancakeStats : MonoBehaviour
     {
         if(cookingLevel[0] >= 30 & cookingLevel[0] <=70 && cookingLevel[1] >= 30 & cookingLevel[1] <= 70)
         {
-            return isCooked = true;
+           
+            return isCooked = true; 
+            
+            
         }
 
         else

@@ -31,24 +31,33 @@ public class CookProcess : MonoBehaviour
     public void CookingCakes()
     {
         PancakeStats.Instance.CookFace();
+        
+
         Debug.Log(PancakeStats.Instance.cookLevel);
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 0)
         {
             Debug.Log("cooked");
 
-            pancakeMaterialScript.CookedUp();         
+            pancakeMaterialScript.CookedUp();
+
+            HapticManager.Haptic(HapticTypes.RigidImpact);
 
         }
 
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 1)
         {
             pancakeMaterialScript.CookedDown();
+
+            HapticManager.Haptic(HapticTypes.RigidImpact);
         }
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 0) 
         {
             Debug.Log("burned");
+            ParticleManager.instance.BurntParticleMethod();
+
+            HapticManager.Haptic(HapticTypes.SoftImpact);
 
             pancakeMaterialScript.BurntUp();
         }
@@ -56,6 +65,10 @@ public class CookProcess : MonoBehaviour
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 1 )
         {
             pancakeMaterialScript.BurntDown();
+
+            HapticManager.Haptic(HapticTypes.SoftImpact);
+
+            ParticleManager.instance.BurntParticleMethod();
         }
     }
 

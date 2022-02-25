@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using HCB.Core;
 
 public class DoughTrigger : MonoBehaviour
 {
@@ -55,6 +56,8 @@ public class DoughTrigger : MonoBehaviour
         dough.SetActive(true);
 
         PancakeStats.Instance.currentFace = 0;
+
+        HapticManager.Haptic(HapticTypes.RigidImpact);
 
         PancakeStats.Instance.cookingLevel[0] = 0;
         PancakeStats.Instance.cookingLevel[1] = 0;
