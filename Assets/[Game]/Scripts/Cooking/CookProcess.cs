@@ -39,13 +39,17 @@ public class CookProcess : MonoBehaviour
         {
             Debug.Log("cooked");
 
-            pancakeMaterialScript.CookedUp();         
+            pancakeMaterialScript.CookedUp();
+
+            HapticManager.Haptic(HapticTypes.RigidImpact);
 
         }
 
         else if(PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] >= 30 && PancakeStats.Instance.currentFace == 1)
         {
             pancakeMaterialScript.CookedDown();
+
+            HapticManager.Haptic(HapticTypes.RigidImpact);
         }
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 0) 

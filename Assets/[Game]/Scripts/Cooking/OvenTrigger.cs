@@ -14,6 +14,8 @@ public class OvenTrigger : MonoBehaviour
 
     SplineCharacterMovementController controller;
 
+    public bool isExited;
+
 
 
 
@@ -46,7 +48,7 @@ public class OvenTrigger : MonoBehaviour
 
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
 
         if(other.gameObject.CompareTag("Pan"))
@@ -56,6 +58,8 @@ public class OvenTrigger : MonoBehaviour
             controller.SetSpeed(controller.MovementData.DefaultSpeed);
             ParticleManager.instance.SmokeParticleMethodStop();
             ParticleManager.instance.BurntParticleMethodStop();
+
+            isExited = true;
         }
         
         
