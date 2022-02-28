@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HCB.Core;
 using HCB.SplineMovementSystem;
+using DG.Tweening;
 
 
 public class OnBoardingTutorial : MonoBehaviour
@@ -14,7 +15,8 @@ public class OnBoardingTutorial : MonoBehaviour
         private const float SPEED = 100f;
 
         private float defaultFixedTime;
-        private bool isTutorialShowing = false;
+        public bool isTutorialShowing = true;
+        [SerializeField] Ease easeType;
 
     DoughTrigger DoughTrigger;
     OvenTrigger OvenTrigger;
@@ -36,14 +38,15 @@ public class OnBoardingTutorial : MonoBehaviour
             Time.timeScale = 1;
             defaultFixedTime = Time.fixedDeltaTime;
             
+            
 
     }
 
     private void OnEnable()
-        {
+    {
             //if (GameManager.Instance.GameConfig.IsLooping)
                 //Destroy(gameObject);
-        }
+    }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -56,7 +59,7 @@ public class OnBoardingTutorial : MonoBehaviour
 
             ShowTutorial();
 
-       }
+        }
 
 
 
@@ -67,36 +70,36 @@ public class OnBoardingTutorial : MonoBehaviour
 
         if (splineCharacter == null) return;
 
-
-
         HideTutorial();
 
 
-
     }
+
     private void Update()
     {
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            HideTutorial();
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    HideTutorial();
             
-        }
+        //}
 
     }
     private void ShowTutorial()
     {
         isTutorialShowing = true;
-        tutorialText.SetActive(true);
+        tutorialText.transform.DOScale(Vector3.one, .2f).SetEase(easeType);
+        
 
         currentTargetTimeScale = Mathf.Lerp(currentTargetTimeScale, targetTimeScale, Time.unscaledDeltaTime * SPEED);
         DOSlowMotion(currentTargetTimeScale);
 
-        
     }
     private void HideTutorial()
     {
         isTutorialShowing = false;
+        tutorialText.SetActive(false);
+
         //SetAnimation();
         Time.timeScale = 1;
         Time.fixedDeltaTime = defaultFixedTime;
