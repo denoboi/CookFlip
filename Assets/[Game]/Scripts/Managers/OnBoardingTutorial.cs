@@ -10,8 +10,8 @@ public class OnBoardingTutorial : MonoBehaviour
     
         [SerializeField] GameObject tutorialText;
         private float currentTargetTimeScale = 1f;
-        private float targetTimeScale = .5f;
-        private const float SPEED = 10f;
+        private float targetTimeScale = 0.1f;
+        private const float SPEED = 100f;
 
         private float defaultFixedTime;
         private bool isTutorialShowing = false;
@@ -56,11 +56,7 @@ public class OnBoardingTutorial : MonoBehaviour
 
             ShowTutorial();
 
-            
-
-       
-           
-        }
+       }
 
 
 
@@ -80,15 +76,23 @@ public class OnBoardingTutorial : MonoBehaviour
     }
     private void Update()
     {
-        if (!isTutorialShowing) return;
 
-        currentTargetTimeScale = Mathf.Lerp(currentTargetTimeScale, targetTimeScale, Time.unscaledDeltaTime * SPEED);
-        DOSlowMotion(currentTargetTimeScale);
+        if (Input.GetMouseButtonUp(0))
+        {
+            HideTutorial();
+            
+        }
+
     }
     private void ShowTutorial()
     {
         isTutorialShowing = true;
         tutorialText.SetActive(true);
+
+        currentTargetTimeScale = Mathf.Lerp(currentTargetTimeScale, targetTimeScale, Time.unscaledDeltaTime * SPEED);
+        DOSlowMotion(currentTargetTimeScale);
+
+        
     }
     private void HideTutorial()
     {
@@ -100,7 +104,7 @@ public class OnBoardingTutorial : MonoBehaviour
     private void DOSlowMotion(float scale)
     {
         Time.timeScale = scale;
-        Time.fixedDeltaTime = Time.timeScale * .02f;
+        Time.fixedDeltaTime = Time.timeScale * 0f;
     }
 
     private void SetAnimation()
