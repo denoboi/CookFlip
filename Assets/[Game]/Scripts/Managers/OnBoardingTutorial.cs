@@ -59,6 +59,8 @@ public class OnBoardingTutorial : MonoBehaviour
 
             ShowTutorial();
 
+       
+
         }
 
 
@@ -72,21 +74,22 @@ public class OnBoardingTutorial : MonoBehaviour
 
         HideTutorial();
 
+        tutorialText.SetActive(false);
+
 
     }
 
     private void Update()
     {
 
-        //if (Input.GetMouseButtonUp(0))
-        //{
-        //    HideTutorial();
-            
-        //}
+       
 
     }
     private void ShowTutorial()
     {
+
+       
+
         isTutorialShowing = true;
         tutorialText.transform.DOScale(Vector3.one, .2f).SetEase(easeType);
         
@@ -94,11 +97,12 @@ public class OnBoardingTutorial : MonoBehaviour
         currentTargetTimeScale = Mathf.Lerp(currentTargetTimeScale, targetTimeScale, Time.unscaledDeltaTime * SPEED);
         DOSlowMotion(currentTargetTimeScale);
 
+
     }
     private void HideTutorial()
     {
-        isTutorialShowing = false;
-        tutorialText.SetActive(false);
+        //isTutorialShowing = false;
+        
 
         //SetAnimation();
         Time.timeScale = 1;

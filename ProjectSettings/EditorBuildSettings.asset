@@ -30,12 +30,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/[Game]/Scenes/Level 01.unity
     guid: dea0747cef1ab174eb0d9c046a875d7e
-  - enabled: 1
-    path: Assets/[Game]/Scenes/Level 02.unity
-    guid: bf0de247381803240a8e19188b5ec20d
-  - enabled: 1
-    path: Assets/[Game]/Scenes/Level 03.unity
-    guid: 26694ff441ffe7c47a29dc3157e786fc
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Packages/com.hyperboxgames.hcbsplinemovementsystem/Samples/Scenes/02 Level
       - JumpTest.unity
@@ -43,4 +43,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/[Game]/Scenes/Level-2.unity
     guid: 1857cdc26ed4a5f478d5bf436487b931
+  - enabled: 1
+    path: Assets/[Game]/Scenes/Level 02.unity
+    guid: 7c8abc3240daca14585a2ed5327ada1f
+  - enabled: 1
+    path: Assets/[Game]/Scenes/Level 03.unity
+    guid: 4e23bcd52a7404d44bd3caaf8da27010
+  - enabled: 1
+    path: Assets/[Game]/Scenes/Level 04.unity
+    guid: e5d958816adcf3b4d8879b0e4160e671
+  - enabled: 1
+    path: Assets/[Game]/Scenes/Level 05.unity
+    guid: 40e1028f60d2eab459b813ae23fefe90
   m_configObjects: {}
