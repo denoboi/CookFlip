@@ -2969,7 +2969,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b5bef2898986d441973b9a1158483f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SmokeParticle: {fileID: 0}
+  SmokeParticle1: {fileID: 0}
+  SmokeParticle2: {fileID: 0}
+  SmokeParticle3: {fileID: 0}
+  SmokeParticle4: {fileID: 0}
+  SmokeParticle5: {fileID: 0}
+  SmokeParticle6: {fileID: 0}
+  SmokeParticle7: {fileID: 0}
+  SmokeParticle8: {fileID: 0}
+  SmokeParticle9: {fileID: 0}
   BurntParticle: {fileID: 0}
   UnhappyParticle: {fileID: 0}
   HappyParticle: {fileID: 0}
@@ -3687,6 +3695,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6576335373832658768}
     m_Modifications:
+    - target: {fileID: 2491677354201857931, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
+      propertyPath: materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
     - target: {fileID: 2491677354201857932, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
       propertyPath: m_Radius
       value: 0.14
@@ -3747,6 +3759,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8829845805934581471, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
+    - target: {fileID: 8829845805934581471, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
 --- !u!95 &8796440475757216979 stripped
@@ -3901,7 +3921,11 @@ PrefabInstance:
     - target: {fileID: 3813129309057247238, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b29bea315d4b39644bb9055c6403fbb7, type: 2}
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
+    - target: {fileID: 3813129309057247238, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
     - target: {fileID: 3813129309057247238, guid: 5da02cb66b06dd94ca38648873418245, type: 3}
       propertyPath: m_BlendShapeWeights.Array.size
       value: 1

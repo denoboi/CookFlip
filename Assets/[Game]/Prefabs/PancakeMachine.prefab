@@ -822,7 +822,7 @@ PrefabInstance:
     - target: {fileID: 6665552353487077027, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: d15897a066fc1bd4e873db20d70da822, type: 2}
+      objectReference: {fileID: 2100000, guid: 5c9fd7fa654c55e4e9ee3b21b55fc2b1, type: 2}
     - target: {fileID: 8794737473256950739, guid: f25efa69076572243a8b81f484e0280d, type: 3}
       propertyPath: m_TagString
       value: PancakeDoughBone
