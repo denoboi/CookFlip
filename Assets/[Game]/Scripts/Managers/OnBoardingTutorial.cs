@@ -15,12 +15,13 @@ public class OnBoardingTutorial : MonoBehaviour
         private const float SPEED = 100f;
 
         private float defaultFixedTime;
-        public bool isTutorialShowing = true;
+        private bool isTutorialShowing = false;
         [SerializeField] Ease easeType;
 
     DoughTrigger DoughTrigger;
     OvenTrigger OvenTrigger;
     SplineCharacter SplineCharacter;
+
 
 
 
@@ -81,37 +82,47 @@ public class OnBoardingTutorial : MonoBehaviour
 
     private void Update()
     {
-
+        if(Input.GetMouseButtonUp(0))
+        {
+            HideTutorial();
+        }
        
 
     }
     private void ShowTutorial()
     {
 
-       
+        if (isTutorialShowing) return;
 
         isTutorialShowing = true;
-        tutorialText.transform.DOScale(Vector3.one, .2f).SetEase(easeType);
+        tutorialText.transform.DOScale(Vector3.one, .8f).SetEase(easeType).SetUpdate(true);
         
 
         currentTargetTimeScale = Mathf.Lerp(currentTargetTimeScale, targetTimeScale, Time.unscaledDeltaTime * SPEED);
-        DOSlowMotion(currentTargetTimeScale);
+        //DOSlowMotion(0);
+        Time.timeScale = 0;
+        
+
+        EventManager.OnMovementStop.Invoke();
+
+
 
 
     }
     private void HideTutorial()
     {
         //isTutorialShowing = false;
-        
 
+        EventManager.OnMovementStart.Invoke();
         //SetAnimation();
         Time.timeScale = 1;
         Time.fixedDeltaTime = defaultFixedTime;
+        GameObject.FindObjectOfType<FloatingJoystick>().gameObject.SetActive(true);
     }
     private void DOSlowMotion(float scale)
     {
         Time.timeScale = scale;
-        Time.fixedDeltaTime = Time.timeScale * 0f;
+        Time.fixedDeltaTime = Time.timeScale * .5f;
     }
 
     private void SetAnimation()

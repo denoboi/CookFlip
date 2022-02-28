@@ -14,6 +14,8 @@ namespace HCB.Core
         public static UnityEvent OnPlayerHit = new UnityEvent();
         public static UnityEvent OnPancakeCooked = new UnityEvent();
         public static UnityEvent OnPancakeCooking = new UnityEvent();
+        public static UnityEvent OnMovementStart = new UnityEvent();
+        public static UnityEvent OnMovementStop = new UnityEvent();
 
         #region Editor
         public static UnityEvent OnLevelDataChange = new UnityEvent();

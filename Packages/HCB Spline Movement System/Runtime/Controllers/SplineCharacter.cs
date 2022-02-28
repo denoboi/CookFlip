@@ -16,6 +16,8 @@ namespace HCB.SplineMovementSystem
         private bool _canMoveForward;
         public bool CanMoveForward { get { return _canMoveForward; } set { _canMoveForward = value; } }
 
+        
+
         private bool _isControlable;
         public bool IsControlable { get { return _isControlable; } set { _isControlable = value; } }
 
@@ -48,7 +50,10 @@ namespace HCB.SplineMovementSystem
 
             LevelManager.Instance.OnLevelStart.AddListener(OnLevelStart);
             GameManager.Instance.OnStageSuccess.AddListener(OnLevelEnd);
-            GameManager.Instance.OnStageFail.AddListener(OnLevelEnd);            
+            GameManager.Instance.OnStageFail.AddListener(OnLevelEnd);
+            EventManager.OnMovementStart.AddListener(() => IsControlable = true);
+            EventManager.OnMovementStop.AddListener(() => IsControlable = false);
+            
         }
 
         private void OnDisable()
@@ -59,6 +64,9 @@ namespace HCB.SplineMovementSystem
             LevelManager.Instance.OnLevelStart.RemoveListener(OnLevelStart);
             GameManager.Instance.OnStageSuccess.RemoveListener(OnLevelEnd);
             GameManager.Instance.OnStageFail.RemoveListener(OnLevelEnd);
+            EventManager.OnMovementStart.RemoveListener(() => IsControlable = true);
+            EventManager.OnMovementStop.RemoveListener(() => IsControlable = false);
+            
         }
 
         public void TryChangeLocationState(CharacterLocationState characterLocationState)
@@ -133,5 +141,7 @@ namespace HCB.SplineMovementSystem
             IsControlable = false;
             CanMoveForward = false;
         }
+
+        
     }
 }
