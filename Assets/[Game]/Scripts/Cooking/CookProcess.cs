@@ -41,7 +41,7 @@ public class CookProcess : MonoBehaviour
 
             pancakeMaterialScript.CookedUp();
 
-            HapticManager.Haptic(HapticTypes.RigidImpact);
+            //HapticManager.Haptic(HapticTypes.RigidImpact);
 
         }
 
@@ -49,7 +49,7 @@ public class CookProcess : MonoBehaviour
         {
             pancakeMaterialScript.CookedDown();
 
-            HapticManager.Haptic(HapticTypes.RigidImpact);
+            //HapticManager.Haptic(HapticTypes.RigidImpact);
         }
 
         if (PancakeStats.Instance.cookingLevel[PancakeStats.Instance.currentFace] > 70 && PancakeStats.Instance.currentFace == 0) 
@@ -57,7 +57,7 @@ public class CookProcess : MonoBehaviour
             Debug.Log("burned");
             ParticleManager.instance.BurntParticleMethod();
 
-            HapticManager.Haptic(HapticTypes.SoftImpact);
+           // HapticManager.Haptic(HapticTypes.SoftImpact);
 
             pancakeMaterialScript.BurntUp();
         }
@@ -66,7 +66,7 @@ public class CookProcess : MonoBehaviour
         {
             pancakeMaterialScript.BurntDown();
 
-            HapticManager.Haptic(HapticTypes.SoftImpact);
+           //HapticManager.Haptic(HapticTypes.SoftImpact);
 
             ParticleManager.instance.BurntParticleMethod();
         }

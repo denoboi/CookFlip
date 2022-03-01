@@ -67,6 +67,7 @@ public class PancakeStats : MonoBehaviour
             //panRollController.enabled = false;
 
             HapticManager.Haptic(HapticTypes.RigidImpact);
+            HapticManager.Haptic(HapticTypes.HeavyImpact);
 
         }
 
