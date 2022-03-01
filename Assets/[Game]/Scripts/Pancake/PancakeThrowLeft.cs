@@ -6,10 +6,10 @@ using HCB.Core;
 
 public class PancakeThrowLeft : MonoBehaviour
 {
-
+   
     private Animator PancakeLeftAnim;
 
-    [SerializeField] private Transform plate;
+    [SerializeField]  Transform _plate;
 
     // Start is called before the first frame update
     void Start()

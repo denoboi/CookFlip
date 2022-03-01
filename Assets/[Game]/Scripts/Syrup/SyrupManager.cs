@@ -22,5 +22,6 @@ public class SyrupManager : MonoBehaviour
     public void EnableSyrup()
     {
         _syrup.SetActive(true);
+        _syrup.transform.Rotate(Vector3.up * Random.Range(45, 90));
     }
 }

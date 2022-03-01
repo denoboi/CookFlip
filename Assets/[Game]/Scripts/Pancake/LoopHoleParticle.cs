@@ -36,4 +36,6 @@ public class LoopHoleParticle : MonoBehaviour
     //    }
     //}
 
+    public int MyProperty { get; set; }
+
 }
