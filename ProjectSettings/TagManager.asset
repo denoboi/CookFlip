@@ -11,6 +11,9 @@ TagManager:
   - Pan
   - Cake
   - SplineCharacter
+  - Syrup
+  - SyrupDoughBone
+  - SyrupBone
   layers:
   - Default
   - TransparentFX
