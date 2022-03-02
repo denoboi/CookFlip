@@ -65,8 +65,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _Cut_Height: 0.234
-    - _Cutoff: -2.25
+    - _Cut_Height: 0
+    - _Cutoff: -5.28
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Float0: -0.15
@@ -80,8 +80,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Rim_Power: 8.64
-    - _Rim_Scale: 0.19
+    - _Rim_Power: 1.09
+    - _Rim_Scale: 0.27
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -93,7 +93,7 @@ Material:
     - _Color: {r: 0.66518503, g: 0.66518503, b: 0.66518503, a: 1}
     - _Crepe_Color_A: {r: 0.8962264, g: 0.3884997, b: 0.35003555, a: 1}
     - _Crepe_Color_B: {r: 0.7735849, g: 0.47453982, b: 0.4189035, a: 1}
-    - _Direction: {r: 0.05, g: 0.05, b: 0, a: 0.05}
+    - _Direction: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Fresnel_Color: {r: 0, g: 0.29743648, b: 1, a: 0}
     - _Rim_Color: {r: 0.9056604, g: 0.64421505, b: 0.64421505, a: 1}
