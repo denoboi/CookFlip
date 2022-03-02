@@ -11,11 +11,14 @@ public class PancakeThrowLeft : MonoBehaviour
 
     [SerializeField]  Transform _plate;
 
+    public SyrupManager syrupManager;
+
     // Start is called before the first frame update
     void Start()
     {
         PancakeLeftAnim = GetComponent<Animator>();
         DOTween.Init();
+        syrupManager = GetComponent<SyrupManager>();
     }
 
 
@@ -50,6 +53,10 @@ public class PancakeThrowLeft : MonoBehaviour
 
             HapticManager.Haptic(HapticTypes.RigidImpact);
 
+            syrupManager.isOnPlate = true;
+
+            
+
         }
 
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isBurnt == true)
@@ -64,6 +71,8 @@ public class PancakeThrowLeft : MonoBehaviour
             ParticleManager.instance.UnhappyParticleMethod();
 
             HapticManager.Haptic(HapticTypes.SoftImpact);
+
+            
         }
 
     }

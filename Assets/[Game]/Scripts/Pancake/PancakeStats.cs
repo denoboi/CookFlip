@@ -7,6 +7,7 @@ using HCB.Core;
 public class PancakeStats : MonoBehaviour
 {
 
+    SyrupManager syrupManager;
 
     private void Awake()
     {
@@ -62,12 +63,11 @@ public class PancakeStats : MonoBehaviour
         {
             EventManager.OnPancakeCooked.Invoke();
 
-            //panRollController.OnHit();
-            //panRollController.Rotate(new Vector2(0, 0));
-            //panRollController.enabled = false;
+          
 
             //HapticManager.Haptic(HapticTypes.RigidImpact);
             HapticManager.Haptic(HapticTypes.HeavyImpact);
+            //syrupManager.isOnPlate = true;
 
         }
 

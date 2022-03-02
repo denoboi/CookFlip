@@ -6899,7 +6899,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637184075}
-  m_LocalRotation: {x: 0.23045567, y: -0.00037962882, z: 0.00008990767, w: 0.9730828}
+  m_LocalRotation: {x: 0.23045567, y: -0.00037966625, z: 0.00008991654, w: 0.9730828}
   m_LocalPosition: {x: -0.94, y: 0.648, z: -11.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -11193,7 +11193,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858300171}
-  m_LocalRotation: {x: 0.23045567, y: -0.00037962882, z: 0.00008990767, w: 0.9730828}
+  m_LocalRotation: {x: 0.23045567, y: -0.00037966625, z: 0.00008991654, w: 0.9730828}
   m_LocalPosition: {x: -0.94, y: 0.648, z: -11.354}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15315,6 +15315,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8796440475757216985, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
+      propertyPath: syrupManager
+      value: 
+      objectReference: {fileID: 1488021942214129885, guid: e7fae212c832e5a41ad1777031ecc7be, type: 3}
     - target: {fileID: 8796440476388376601, guid: 16f03b5970da5f94ea5ac4ea56c4b340, type: 3}
       propertyPath: _clipTo
       value: 1
