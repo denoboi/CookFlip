@@ -51,7 +51,7 @@ MonoBehaviour:
   HoverDirection: 1
   Ease: 1
   Duration: 2
-  HoverDistance: 0.8
+  HoverDistance: 0.6
 --- !u!1 &770307796942294306
 GameObject:
   m_ObjectHideFlags: 0
