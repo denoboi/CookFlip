@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8796440475757216979}
-  doughTriggerScript: {fileID: 0}
+  doughTriggerScript: {fileID: 7761261453042112133}
 --- !u!114 &4416837520337025567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2970,14 +2970,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmokeParticle1: {fileID: 0}
-  SmokeParticle2: {fileID: 0}
-  SmokeParticle3: {fileID: 0}
-  SmokeParticle4: {fileID: 0}
-  SmokeParticle5: {fileID: 0}
-  SmokeParticle6: {fileID: 0}
-  SmokeParticle7: {fileID: 0}
-  SmokeParticle8: {fileID: 0}
-  SmokeParticle9: {fileID: 0}
   BurntParticle: {fileID: 0}
   UnhappyParticle: {fileID: 0}
   HappyParticle: {fileID: 0}
