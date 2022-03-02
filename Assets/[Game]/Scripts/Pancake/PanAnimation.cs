@@ -42,7 +42,7 @@ public class PanAnimation : MonoBehaviour
 
     void PanFlipAnimation()
     {
-        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false && PancakeStats.Instance.isBurnt == false)
+        if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false && PancakeStats.Instance.isBurnt == false && doughTriggerScript.isDoughAvailable)
         {
             anim.SetTrigger("PanFlip");
             PancakeFlipAnimation();
