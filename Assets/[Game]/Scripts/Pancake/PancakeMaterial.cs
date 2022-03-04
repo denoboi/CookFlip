@@ -12,6 +12,8 @@ public class PancakeMaterial : MonoBehaviour
 
     public DoughTrigger doughTriggerScript;
 
+    public ParticleSystem cookedParticle;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +34,10 @@ public class PancakeMaterial : MonoBehaviour
         mats[1] = materials[1];
 
         meshRenderer.materials = mats;
+
+        cookedParticle.Play();
+
+
     }
 
     public void CookedDown()
@@ -40,6 +46,8 @@ public class PancakeMaterial : MonoBehaviour
         mats[0] = materials[1];
 
         meshRenderer.materials = mats;
+
+        cookedParticle.Play();
     }
 
     public void BurntUp()
@@ -48,6 +56,8 @@ public class PancakeMaterial : MonoBehaviour
         mats[1] = materials[2];
 
         meshRenderer.materials = mats;
+
+        cookedParticle.Stop();
     }
 
     public void BurntDown()
@@ -56,6 +66,8 @@ public class PancakeMaterial : MonoBehaviour
         mats[0] = materials[2];
 
         meshRenderer.materials = mats;
+
+        cookedParticle.Stop();
     }
 
     

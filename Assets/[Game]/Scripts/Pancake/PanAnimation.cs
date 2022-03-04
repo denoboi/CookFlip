@@ -42,6 +42,8 @@ public class PanAnimation : MonoBehaviour
 
     void PanFlipAnimation()
     {
+        if (GameManager.Instance.IsStageCompleted) return;
+
         if (Input.GetMouseButtonUp(0) && PancakeStats.Instance.isCooked == false && PancakeStats.Instance.isBurnt == false && doughTriggerScript.isDoughAvailable)
         {
             anim.SetTrigger("PanFlip");
